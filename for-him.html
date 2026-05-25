@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For Him | Adornme</title>
+  <link rel="stylesheet" href="assets/home-gallery-v24.css">
+  <style>
+    .for-him-hero h1 { font-size: clamp(32px, 5vw, 64px); }
+    .him-product { width: min(1120px, 100%); margin: 0 auto; }
+    .soft-rule { width: min(1120px, 100%); margin: 0 auto; border: 0; border-top: 1px solid var(--rule); }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="nav-left"><a href="trinity-collection.html">Gallery</a><a href="customize.html">Customize</a></div>
+    <a class="logo" href="index.html" aria-label="Adornme home"><strong>ADORNME</strong><span>A love story you can wear</span></a>
+    <div class="nav-right"><a href="our-story.html">Story</a><a href="for-him.html">For Him</a></div>
+  </nav>
+
+  <header class="gallery-hero for-him-hero">
+    <div class="narrow" style="max-width:780px">
+      <div class="eyebrow">For Him</div>
+      <h1><em>For the men who choose</em><br>meaning over the ordinary</h1>
+      <p class="lede">A signet pendant and a signet ring — both engraved with his initial, in the same metals as the Bleeding Heart designs.</p>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <article class="product-row him-product">
+        <div class="product-image"><img src="assets/products/for-him-signet-pendant-silver.png" alt="The Signet Pendant"></div>
+        <div class="product-copy">
+          <h3>The Signet Pendant</h3>
+          <p class="lede">A cushion-shaped signet on a fine chain. Engraved with his initial — or hers, if it's the name he carries close.</p>
+          <ul class="details">
+            <li>Metals. Sterling silver · gold vermeil · solid 14k gold</li>
+            <li>Chain. 20–22″ adjustable · 22–24″ adjustable</li>
+            <li>Dimensions. 22mm × 28mm cushion face</li>
+            <li>Ships in. 7–14 days</li>
+          </ul>
+          <p class="shown-choice">Shown: Sterling Silver · M · 20–22″ chain</p>
+          <div class="action-row">
+            <button class="button cart-button" type="button" data-cart="The Signet Pendant · Sterling Silver · M · 20–22″ chain">Add to cart</button>
+            <a class="button secondary" href="customize.html?piece=signet-pendant&metal=silver&initial=M&size=20%E2%80%9322%E2%80%B3">Design your own</a>
+          </div>
+        </div>
+      </article>
+      <hr class="soft-rule">
+      <article class="product-row reverse him-product">
+        <div class="product-image"><img src="assets/products/for-him-signet-ring-silver.png" alt="The Signet Ring"></div>
+        <div class="product-copy">
+          <h3>The Signet Ring</h3>
+          <p class="lede">A wide flat face on a substantial band. A classic men's signet in the Adornme register. Engraved deep enough to last decades of wear.</p>
+          <ul class="details">
+            <li>Metals. Sterling silver · gold vermeil · solid 14k gold</li>
+            <li>Face. 18mm flat oval, deep-engraved</li>
+            <li>Sizes. 8–13, including half-sizes</li>
+            <li>Ships in. 7–14 days</li>
+          </ul>
+          <p class="shown-choice">Shown: Sterling Silver · M · size 9</p>
+          <div class="action-row">
+            <button class="button cart-button" type="button" data-cart="The Signet Ring · Sterling Silver · M · size 9">Add to cart</button>
+            <a class="button secondary" href="customize.html?piece=signet-ring&metal=silver&initial=M&size=9">Design your own</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="cream">
+      <div class="narrow" style="max-width:680px">
+        <div class="eyebrow">Why For Him</div>
+        <p class="lede">The Gallery remains designed for women. For Him is a side door, opened deliberately — for the men who choose meaning over the ordinary.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div><div class="footer-mark"><img src="assets/adornme-symbol-mark-adornme.png" alt="Adornme flower-heart symbol"></div><div class="footer-logo">ADORNME</div><p class="footer-tag">A love story you can wear</p></div>
+      <div><h3>Shop</h3><a href="trinity-collection.html">Gallery</a><a href="for-him.html">For Him</a><a href="customize.html">Customize</a></div>
+      <div><h3>Brand</h3><a href="our-story.html">Our Story</a><a href="journal.html">Journal</a></div>
+      <div><h3>Care</h3><p>hello@adornme.ai</p><a href="shipping.html">Shipping</a><a href="materials.html">Sizing</a></div>
+    </div>
+    <div class="legal"><span>© 2026 Adornme · Dr. Mira "Mehraein" Mokhberi, Founder</span><span>Designed in Newport Beach · Made in Downtown Los Angeles</span></div>
+  </footer>
+  <script>
+    document.querySelectorAll(".cart-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        button.textContent = "Added to cart";
+        button.classList.add("added");
+        button.setAttribute("aria-label", `${button.dataset.cart} added to cart`);
+      });
+    });
+  </script>
+</body>
+</html>

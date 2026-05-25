@@ -1,0 +1,123 @@
+Adornme prototype — v30.7 update
+=================================
+Updated: May 25, 2026 — multi-page alignment pass
+
+LATEST ROUND OF EDITS
+
+1. NEW PIECE — THE DEVOTED HEART
+   Added as 4th piece in the Devotion Collection.
+   A cross at rest above an open heart, with a pearl below — the simplest
+   and most accessible devotional piece in the collection, designed to
+   bridge customers who want the cross+heart symbolism without the
+   figural Christ element.
+   File: assets/products/devoted-heart.jpeg
+   Visible on: index.html, trinity-collection.html
+
+2. HOMEPAGE — Devotion Collection grid expanded to 4 pieces
+   The .study-grid--four class was added to the CSS (4 columns desktop,
+   2 columns tablet, 1 column mobile). Pieces in order:
+   - Bleeding Heart Christ
+   - Flower Cross
+   - Heart Cross
+   - The Devoted Heart (new)
+
+3. GALLERY PAGE — Full rebuild
+   trinity-collection.html was rewritten to match the new architecture:
+
+   * Hero updated: "Heart. Flower. Devotion. — Three forms. One love story."
+     plus a second line about personalization
+
+   * Collection One renamed: "The Bleeding Heart Collection"
+     Now displays all 8 pieces with full product rows:
+       1. Necklace
+       2. Bracelet (five-motif chain)
+       3. Pearl Bracelet
+       4. Bangle
+       5. Cuff in Mother-of-Pearl
+       6. Earrings
+       7. Ring
+       8. Open Heart
+     All using no-initial images. Each row has details (metals, sizes,
+     personalization, ship time), shown-choice, Add to cart, Make it yours.
+
+   * Collection Two renamed: "The Devotion Collection"
+     Uses the new eyebrow "Symbols of What We Hold Sacred"
+     Lede: "The cross, Christ, and any sacred symbol of devotion worn as
+     reminders of divine love — and the peace, grace, and beauty that
+     flow from it."
+     Now displays 4 pieces with full product rows:
+       1. Bleeding Heart Christ
+       2. Flower Cross
+       3. Heart Cross
+       4. The Devoted Heart
+
+   * REMOVED: the "Cross Design Studies / Three directions" section
+     (these were design studies, no longer relevant — they became the
+     real Devotion Collection pieces)
+
+   * REMOVED: the four old "Bleeding Heart Cross" product rows
+     (Necklace/Bracelet/Earrings/Ring) — these are replaced by the
+     actual Devotion Collection above
+
+   * Quiet-note section updated: "Every piece can be made personal —
+     with an initial, an engraving, or a custom note."
+
+   * Footer location updated.
+
+4. OUR STORY PAGE — Vocabulary refresh, narrative preserved
+   our-story.html:
+   * Updated the philosophy paragraph to explicitly name the three forms:
+     "A brand built from three forms — Heart for divine love and every
+     love that flows from it, Flower for nature and the divine love
+     painted on earth, and Devotion for Christ, the cross, and every
+     symbol of devotion returning to its divine source."
+   * Updated the closing paragraph to reference "The Devotion Collection"
+     (formerly "The Bleeding Heart Cross")
+   * Footer location updated
+   * ALL personal narrative content preserved exactly — the powerful
+     immigration / divorce / USC / rebuilding / Divine Love story is
+     untouched. Only architectural vocabulary was updated.
+
+5. JOURNAL PAGE — Two entries refreshed + footer
+   journal.html:
+   * "The Bleeding Heart Cross" entry → "The Devotion Collection" entry,
+     with new copy referencing the four pieces today and future expansion
+   * "Manufacturing / Close to the studio" entry → "Designed in Newport
+     Beach · Made in Downtown LA / Close to the hand that draws them"
+     with new copy reflecting the design-in-Newport + make-in-LA story
+   * Footer location updated
+
+6. FOR HIM PAGE — Footer update only
+   for-him.html: footer location updated to Newport Beach + LA. Full
+   page rebuild deferred to a future session (currently aspirational
+   copy for unreleased line).
+
+7. CUSTOMIZE PAGE — Footer + announce strip update only
+   jewelry-designer/index.html: footer location and the announce strip
+   ("Hand-finished in Downtown LA · Free engraving · Ships in 7–14
+   days") were updated to include Newport Beach context. Full customizer
+   rebuild is a separate dedicated session — too big to handle in a
+   multi-page alignment pass.
+
+CSS ADDITIONS (appended to home-gallery-v24.css)
+- .study-grid--four — 4 columns desktop, 2 columns tablet, 1 column mobile,
+  used by the expanded Devotion Collection on the home page
+
+ASSETS ADDED IN THIS ROUND
+- assets/products/devoted-heart.jpeg
+
+PAGES NOW ALIGNED WITH NEW ARCHITECTURE
+✓ index.html (Home)
+✓ trinity-collection.html (Gallery)
+✓ our-story.html (Our Story)
+✓ journal.html (Journal)
+✓ for-him.html (For Him — footer only)
+✓ jewelry-designer/index.html (Customize — footer + announce only)
+
+STILL PENDING (separate sessions)
+- Full Customize page rebuild (jewelry-designer/index.html) to teach
+  the modular system and show initialed Bleeding Heart pieces as
+  personalization examples
+- Full For Him page expansion when the signet line is ready
+- The Bleeding Heart Pendant + Adornme Chain integration once Codex
+  delivers those images

@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Gallery | Adornme</title>
+  <link rel="stylesheet" href="assets/home-gallery-v24.css">
+  <style>
+    /* ============================================================
+       GALLERY PAGE — Shop grid (v30.11)
+       ============================================================ */
+
+    .gallery-hero {
+      padding: clamp(60px, 7vw, 96px) clamp(20px, 4vw, 56px) clamp(36px, 4vw, 56px);
+      text-align: center;
+      background: var(--ivory);
+    }
+    .gallery-hero h1 {
+      font: 400 clamp(40px, 5vw, 64px)/1.05 var(--serif);
+      color: var(--ink);
+      letter-spacing: .005em;
+    }
+    .gallery-hero .lede {
+      width: min(640px, 100%);
+      margin: 20px auto 0;
+      color: var(--ink-soft);
+      font: italic 400 clamp(16px, 1.8vw, 19px)/1.55 var(--serif);
+    }
+
+    /* --- Filter bar (single unified row) --- */
+    .filter-bar {
+      position: sticky;
+      top: 88px;
+      z-index: 10;
+      background: rgba(250, 246, 240, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--rule);
+      padding: 18px clamp(20px, 4vw, 56px);
+    }
+    .filter-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+    }
+    .filter-chip {
+      padding: 9px 18px;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--ink);
+      font: 600 11px/1 var(--sans);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .25s ease;
+    }
+    .filter-chip:hover {
+      border-color: var(--antique-gold);
+      color: var(--antique-gold);
+    }
+    .filter-chip.active {
+      background: var(--ink);
+      color: var(--ivory);
+      border-color: var(--ink);
+    }
+    .filter-count {
+      margin-left: 6px;
+      opacity: .55;
+      font-size: 10px;
+    }
+    .filter-divider {
+      display: inline-block;
+      width: 1px;
+      height: 18px;
+      background: var(--rule);
+      margin: 0 6px;
+    }
+
+    /* --- Product grid --- */
+    .shop-grid-section {
+      padding: clamp(40px, 5vw, 64px) clamp(20px, 4vw, 56px) clamp(60px, 8vw, 100px);
+      background: var(--ivory);
+    }
+    .shop-grid {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(20px, 3vw, 40px) clamp(16px, 2vw, 28px);
+    }
+    @media (max-width: 1000px) { .shop-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 720px) { .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 440px) { .shop-grid { grid-template-columns: 1fr; } }
+
+    .shop-card {
+      display: block;
+      text-decoration: none;
+      color: var(--ink);
+      transition: transform .35s ease;
+    }
+    .shop-card:hover { transform: translateY(-3px); }
+    .shop-card-image {
+      position: relative;
+      aspect-ratio: 1;
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .shop-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .6s ease;
+    }
+    .shop-card:hover .shop-card-image img { transform: scale(1.04); }
+    .shop-card-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 5px 10px;
+      background: rgba(45, 77, 88, 0.85);
+      color: var(--ivory);
+      font: 600 9px/1 var(--sans);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      border-radius: 4px;
+    }
+    .shop-card h3 {
+      font: 400 clamp(16px, 1.5vw, 18px)/1.3 var(--serif);
+      color: var(--ink);
+      letter-spacing: .005em;
+      margin-bottom: 6px;
+    }
+    .shop-card-price {
+      font: 500 13px/1.4 var(--sans);
+      color: var(--ink-soft);
+      letter-spacing: .01em;
+      margin-bottom: 8px;
+    }
+    .shop-card-metals {
+      display: flex;
+      gap: 5px;
+    }
+    .metal-swatch {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .metal-swatch.silver { background: #C9CDCF; border: 1px solid #999; }
+    .metal-swatch.vermeil { background: #D9A856; border: 1px solid #B07D2D; }
+    .metal-swatch.gold { background: #E9C66B; border: 1px solid #B98C24; }
+
+    /* --- Empty state when filter has no matches --- */
+    .shop-empty {
+      grid-column: 1 / -1;
+      padding: 60px 0;
+      text-align: center;
+      color: var(--ink-soft);
+      font: italic 400 18px/1.5 var(--serif);
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="nav-left">
+      <a href="trinity-collection.html">Gallery</a>
+      <a href="customize.html">Customize</a>
+    </div>
+    <a class="logo" href="index.html" aria-label="Adornme home">
+      <strong>ADORNME</strong>
+      <span>A love story you can wear</span>
+    </a>
+    <div class="nav-right">
+      <a href="our-story.html">Story</a>
+      <a href="for-him.html">For Him</a>
+    </div>
+  </nav>
+
+  <header class="gallery-hero">
+    <h1>The Gallery</h1>
+    <p class="lede">Heart. Flower. Devotion. — Three forms. One love story.<br>Each piece can be made yours with an initial or engraving.</p>
+  </header>
+
+  <section class="filter-bar" aria-label="Filter products">
+    <div class="filter-inner">
+      <div class="filter-group" id="filterGroup"></div>
+    </div>
+  </section>
+
+  <main>
+    <section class="shop-grid-section">
+      <div class="shop-grid" id="shopGrid">
+        <!-- Product cards rendered by JS -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-mark"><img src="assets/adornme-symbol-mark-adornme.png" alt="Adornme flower-heart symbol"></div>
+        <div class="footer-logo">ADORNME</div>
+        <p class="footer-tag">A love story you can wear</p>
+      </div>
+      <div>
+        <h3>Shop</h3>
+        <a href="trinity-collection.html">Gallery</a>
+        <a href="for-him.html">For Him</a>
+        <a href="customize.html">Customize</a>
+      </div>
+      <div>
+        <h3>Brand</h3>
+        <a href="our-story.html">Our Story</a>
+        <a href="journal.html">Journal</a>
+      </div>
+      <div>
+        <h3>Care</h3>
+        <p>hello@adornme.ai</p>
+        <a href="shipping.html">Shipping</a>
+        <a href="materials.html">Sizing</a>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Adornme · Dr. Mira "Mehraein" Mokhberi, Founder</span>
+      <span>Designed in Newport Beach · Made in Downtown Los Angeles</span>
+    </div>
+  </footer>
+
+  <script src="assets/products-data.js"></script>
+  <script>
+    // ============================================================
+    // GALLERY GRID — v30.13 — Single unified filter row
+    // ============================================================
+    //
+    // Each filter is an exclusive choice. Click "Necklaces" → see all necklaces.
+    // Click "The Bleeding Heart" → see all Bleeding Heart pieces.
+    // Click "All" → see everything. No intersection, no auto-reset, no confusion.
+    // ============================================================
+
+    // The unified filter list. Type "category" filters by p.category,
+    // type "collection" filters by p.collection. Visual divider between groups.
+    const FILTERS = [
+      { id: "all", label: "All", type: "all" },
+      // — piece-type filters —
+      { id: "necklaces", label: "Necklaces", type: "category" },
+      { id: "pendants", label: "Pendants", type: "category" },
+      { id: "bracelets", label: "Bracelets", type: "category" },
+      { id: "earrings", label: "Earrings", type: "category" },
+      { id: "rings", label: "Rings", type: "category" },
+      { id: "chains", label: "Chains", type: "category" },
+      { id: "_divider", label: "", type: "divider" },
+      // — collection filters —
+      { id: "bleeding-heart", label: "The Bleeding Heart Collection", type: "collection" },
+      { id: "devotion", label: "The Devotion Collection", type: "collection" },
+      { id: "for-him", label: "For Him", type: "collection" }
+    ];
+
+    let activeFilter = "all";
+
+    function countFor(filter) {
+      if (filter.id === "all") return PRODUCTS.length;
+      if (filter.type === "category") {
+        return PRODUCTS.filter((p) => p.category === filter.id).length;
+      }
+      if (filter.type === "collection") {
+        return PRODUCTS.filter((p) => p.collection === filter.id).length;
+      }
+      return 0;
+    }
+
+    function filteredProducts() {
+      if (activeFilter === "all") return PRODUCTS;
+      const filter = FILTERS.find((f) => f.id === activeFilter);
+      if (!filter) return PRODUCTS;
+      if (filter.type === "category") {
+        return PRODUCTS.filter((p) => p.category === activeFilter);
+      }
+      if (filter.type === "collection") {
+        return PRODUCTS.filter((p) => p.collection === activeFilter);
+      }
+      return PRODUCTS;
+    }
+
+    function renderFilters() {
+      const group = document.getElementById("filterGroup");
+      group.innerHTML = FILTERS.map((filter) => {
+        if (filter.type === "divider") {
+          return `<span class="filter-divider" aria-hidden="true"></span>`;
+        }
+        const isActive = filter.id === activeFilter;
+        const count = countFor(filter);
+        const countLabel = filter.id === "all" ? "" : `<span class="filter-count">(${count})</span>`;
+        return `<button class="filter-chip ${isActive ? "active" : ""}" data-filter="${filter.id}" type="button">${filter.label}${countLabel}</button>`;
+      }).join("");
+      group.querySelectorAll("[data-filter]").forEach((btn) =>
+        btn.addEventListener("click", () => {
+          activeFilter = btn.dataset.filter;
+          renderFilters();
+          renderGrid();
+        })
+      );
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById("shopGrid");
+      const products = filteredProducts();
+      if (!products.length) {
+        grid.innerHTML = `<div class="shop-empty">No pieces match that filter yet — try another.</div>`;
+        return;
+      }
+      grid.innerHTML = products.map((p) => {
+        const metals = (p.metals || ["gold"]).map((m) =>
+          `<span class="metal-swatch ${m}" title="${m}"></span>`
+        ).join("");
+        const tag = p.tag ? `<span class="shop-card-tag">${p.tag}</span>` : "";
+        return `
+          <a class="shop-card" href="product.html?id=${p.id}">
+            <div class="shop-card-image">
+              ${tag}
+              <img src="${p.image}" alt="${p.title}">
+            </div>
+            <h3>${p.title}</h3>
+            <p class="shop-card-price">From $${p.price}</p>
+            <div class="shop-card-metals">${metals}</div>
+          </a>
+        `;
+      }).join("");
+    }
+
+    renderFilters();
+    renderGrid();
+
+    // Handle hash navigation (e.g. trinity-collection.html#necklace from old links)
+    if (window.location.hash) {
+      const targetId = window.location.hash.slice(1);
+      const product = PRODUCTS.find((p) => p.id === targetId);
+      if (product) {
+        activeFilter = product.category;
+        renderFilters();
+        renderGrid();
+      }
+    }
+  </script>
+</body>
+</html>

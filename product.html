@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product | Adornme</title>
+  <link rel="stylesheet" href="assets/home-gallery-v24.css">
+  <style>
+    /* ============================================================
+       PRODUCT DETAIL PAGE — v30.11
+       ============================================================ */
+
+    .product-page {
+      padding: clamp(36px, 4vw, 60px) clamp(20px, 4vw, 56px) clamp(60px, 8vw, 100px);
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+    .breadcrumb {
+      margin-bottom: 28px;
+      font: 500 11px/1 var(--sans);
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .breadcrumb a {
+      color: var(--ink-soft);
+      transition: color .25s ease;
+    }
+    .breadcrumb a:hover { color: var(--antique-gold); }
+    .breadcrumb span { color: var(--ink); margin: 0 8px; }
+
+    .product-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: clamp(40px, 5vw, 80px);
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .product-layout { grid-template-columns: 1fr; }
+    }
+
+    /* --- Left: image --- */
+    .product-image-wrap {
+      position: sticky;
+      top: 112px;
+    }
+    .product-main-image {
+      aspect-ratio: 1;
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      overflow: hidden;
+      position: relative;
+    }
+    .product-main-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity .25s ease, filter .35s ease;
+    }
+    /* Metal retinting on the main product image */
+    .product-main-image img.metal-gold {
+      filter: none;
+    }
+    .product-main-image img.metal-vermeil {
+      filter: brightness(1.06) saturate(0.92) hue-rotate(-3deg);
+    }
+    .product-main-image img.metal-silver {
+      filter: saturate(0.04) brightness(1.08) contrast(1.02) hue-rotate(180deg);
+    }
+    .product-thumbnails {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+    }
+    .product-thumb {
+      width: 72px;
+      height: 72px;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color .2s ease;
+    }
+    .product-thumb.active { border-color: var(--ink); border-width: 2px; }
+    .product-thumb:hover { border-color: var(--antique-gold); }
+    .product-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    /* --- Right: details --- */
+    .product-info { padding-top: 4px; }
+    .product-info .eyebrow { color: var(--antique-gold); }
+    .product-info h1 {
+      margin-top: 12px;
+      font: 400 clamp(32px, 4vw, 48px)/1.1 var(--serif);
+      color: var(--ink);
+      letter-spacing: .005em;
+    }
+    .product-info h1 em {
+      font-style: italic;
+      color: var(--antique-gold);
+      font-weight: 400;
+    }
+    .product-lede {
+      margin-top: 18px;
+      color: var(--ink-soft);
+      font: italic 400 clamp(16px, 1.7vw, 18px)/1.55 var(--serif);
+    }
+    .product-price {
+      margin-top: 24px;
+      font: 500 clamp(24px, 2.8vw, 30px)/1 var(--serif);
+      color: var(--ink);
+      letter-spacing: .01em;
+    }
+
+    .product-controls {
+      margin-top: 36px;
+      display: grid;
+      gap: 28px;
+    }
+    .control-group { display: grid; gap: 12px; }
+    .control-group .label {
+      font: 600 11px/1 var(--sans);
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .control-group .label-detail {
+      font: 500 13px/1 var(--sans);
+      color: var(--ink-soft);
+      letter-spacing: .01em;
+      text-transform: none;
+      margin-left: 8px;
+    }
+    .control-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .opt {
+      padding: 10px 16px;
+      border: 1px solid var(--rule);
+      background: var(--ivory);
+      color: var(--ink);
+      font: 500 13px/1 var(--sans);
+      letter-spacing: .02em;
+      transition: all .2s ease;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .opt:hover { border-color: var(--antique-gold); color: var(--antique-gold); }
+    .opt.active {
+      background: var(--ink);
+      color: var(--ivory);
+      border-color: var(--ink);
+    }
+    .opt.active:hover { color: var(--ivory); }
+    .opt .dot {
+      width: 12px; height: 12px; border-radius: 50%; display: inline-block;
+    }
+    .opt .dot.silver { background: #C9CDCF; border: 1px solid #999; }
+    .opt .dot.vermeil { background: #D9A856; border: 1px solid #B07D2D; }
+    .opt .dot.gold { background: #E9C66B; border: 1px solid #B98C24; }
+
+    .engraving-input {
+      padding: 14px 16px;
+      width: 100%;
+      border: 1px solid var(--rule);
+      background: var(--ivory);
+      color: var(--ink);
+      font: 400 15px/1.5 var(--serif);
+      border-radius: 4px;
+    }
+    .engraving-input:focus { outline: none; border-color: var(--antique-gold); }
+    .helper {
+      color: var(--ink-soft);
+      font: italic 400 13px/1.55 var(--serif);
+    }
+
+    .product-actions {
+      margin-top: 36px;
+      display: grid;
+      gap: 12px;
+    }
+    .cta-primary {
+      padding: 18px 28px;
+      background: var(--ink);
+      color: var(--ivory);
+      border: none;
+      border-radius: 999px;
+      font: 600 14px/1 var(--sans);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .25s ease;
+      text-align: center;
+    }
+    .cta-primary:hover { background: var(--aegean-deep); }
+    .cta-primary.added { background: var(--antique-gold); }
+    .cta-secondary {
+      padding: 16px 24px;
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      font: 600 12px/1 var(--sans);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .25s ease;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+    .cta-secondary:hover { border-color: var(--antique-gold); color: var(--antique-gold); }
+
+    .product-meta {
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid var(--rule);
+    }
+    .product-meta h3 {
+      font: 500 14px/1 var(--serif);
+      letter-spacing: .04em;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .product-meta p {
+      color: var(--ink-soft);
+      font: 400 15px/1.7 var(--serif);
+      margin-bottom: 18px;
+    }
+    .product-meta-detail {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 8px 16px;
+      margin-top: 14px;
+      font: 400 14px/1.6 var(--sans);
+    }
+    .product-meta-detail dt {
+      color: var(--ink-soft);
+      font-weight: 500;
+    }
+    .product-meta-detail dd { margin: 0; color: var(--ink); }
+
+    .trust-strip {
+      margin-top: 32px;
+      padding: 20px;
+      background: var(--cream);
+      text-align: center;
+      color: var(--ink);
+      font: 400 13px/1.6 var(--sans);
+      letter-spacing: .01em;
+    }
+    .trust-strip em {
+      display: block;
+      margin-top: 6px;
+      color: var(--ink-soft);
+      font: italic 400 13px/1.5 var(--serif);
+    }
+
+    /* Related products */
+    .related-section {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: clamp(40px, 5vw, 64px) clamp(20px, 4vw, 56px) clamp(60px, 8vw, 100px);
+      border-top: 1px solid var(--rule);
+    }
+    .related-title {
+      text-align: center;
+      margin-bottom: 40px;
+      font: italic 400 clamp(26px, 3vw, 34px)/1.1 var(--serif);
+      color: var(--ink);
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(16px, 2vw, 28px);
+    }
+    @media (max-width: 720px) { .related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .related-card { display: block; text-decoration: none; color: var(--ink); }
+    .related-image {
+      aspect-ratio: 1;
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      overflow: hidden;
+      margin-bottom: 10px;
+      transition: transform .35s ease;
+    }
+    .related-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+    .related-card:hover .related-image img { transform: scale(1.04); }
+    .related-card h4 {
+      font: 400 14px/1.3 var(--serif);
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .related-card .price-small {
+      font: 500 12px/1.4 var(--sans);
+      color: var(--ink-soft);
+    }
+
+    /* Product not found */
+    .product-missing {
+      max-width: 600px;
+      margin: 80px auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .product-missing h1 {
+      font: italic 400 clamp(32px, 4vw, 44px)/1.1 var(--serif);
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+    .product-missing p {
+      color: var(--ink-soft);
+      font: 400 17px/1.6 var(--serif);
+      margin-bottom: 32px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="nav-left">
+      <a href="trinity-collection.html">Gallery</a>
+      <a href="customize.html">Customize</a>
+    </div>
+    <a class="logo" href="index.html" aria-label="Adornme home">
+      <strong>ADORNME</strong>
+      <span>A love story you can wear</span>
+    </a>
+    <div class="nav-right">
+      <a href="our-story.html">Story</a>
+      <a href="for-him.html">For Him</a>
+    </div>
+  </nav>
+
+  <main id="productMain">
+    <!-- Rendered by JS -->
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-mark"><img src="assets/adornme-symbol-mark-adornme.png" alt="Adornme flower-heart symbol"></div>
+        <div class="footer-logo">ADORNME</div>
+        <p class="footer-tag">A love story you can wear</p>
+      </div>
+      <div>
+        <h3>Shop</h3>
+        <a href="trinity-collection.html">Gallery</a>
+        <a href="for-him.html">For Him</a>
+        <a href="customize.html">Customize</a>
+      </div>
+      <div>
+        <h3>Brand</h3>
+        <a href="our-story.html">Our Story</a>
+        <a href="journal.html">Journal</a>
+      </div>
+      <div>
+        <h3>Care</h3>
+        <p>hello@adornme.ai</p>
+        <a href="shipping.html">Shipping</a>
+        <a href="materials.html">Sizing</a>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Adornme · Dr. Mira "Mehraein" Mokhberi, Founder</span>
+      <span>Designed in Newport Beach · Made in Downtown Los Angeles</span>
+    </div>
+  </footer>
+
+  <script src="assets/products-data.js"></script>
+  <script>
+    // ============================================================
+    // PRODUCT DETAIL PAGE — v30.11
+    // ============================================================
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id");
+    const product = PRODUCTS.find((p) => p.id === productId);
+
+    const main = document.getElementById("productMain");
+
+    if (!product) {
+      // Product not found
+      main.innerHTML = `
+        <div class="product-missing">
+          <h1>Piece not found</h1>
+          <p>We couldn't find the piece you were looking for. It may have moved or been renamed.</p>
+          <a class="cta-secondary" href="trinity-collection.html">Back to the Gallery</a>
+        </div>
+      `;
+    } else {
+      document.title = `${product.title} | Adornme`;
+
+      // State for this product page
+      const state = {
+        metal: "gold",
+        size: product.defaultSize || null,
+        initial: product.initialRequired ? "M" : "—",
+        engraving: ""
+      };
+
+      // Get related products: same category, max 4, excluding current
+      const related = PRODUCTS
+        .filter((p) => p.category === product.category && p.id !== product.id)
+        .slice(0, 4);
+
+      // Render the product page
+      function render() {
+        const currentImage = (product.canHaveInitial && state.initial !== "—" && product.imageInitial !== product.image)
+          ? product.imageInitial
+          : product.image;
+
+        const metalOptions = product.metals.map((m) => {
+          const label = m === "silver" ? "Sterling Silver" : m === "vermeil" ? "Gold Vermeil" : "Solid 14k Gold";
+          return `<button class="opt ${state.metal === m ? "active" : ""}" data-action="set-metal" data-value="${m}" type="button"><span class="dot ${m}"></span>${label}</button>`;
+        }).join("");
+
+        const sizeOptions = product.sizes
+          ? product.sizes.map((s) =>
+              `<button class="opt ${state.size === s ? "active" : ""}" data-action="set-size" data-value="${s}" type="button">${s}</button>`
+            ).join("")
+          : "";
+
+        let initialHtml = "";
+        if (product.canHaveInitial) {
+          const noInitialBtn = product.initialRequired
+            ? ""
+            : `<button class="opt ${state.initial === "—" ? "active" : ""}" data-action="set-initial" data-value="—" type="button" style="font-style:italic;">No initial</button>`;
+          const letterBtns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((L) =>
+            `<button class="opt ${state.initial === L ? "active" : ""}" data-action="set-initial" data-value="${L}" type="button" style="min-width:38px;justify-content:center;font-family:var(--serif);">${L}</button>`
+          ).join("");
+          initialHtml = `
+            <div class="control-group">
+              <div class="label">Initial ${product.initialRequired ? '<span class="label-detail">— required for this design</span>' : '<span class="label-detail">— or wear it without</span>'}</div>
+              <div class="control-options">${noInitialBtn}${letterBtns}</div>
+              <p class="helper">${product.initialRequired ? "The Open Heart is designed around its initial. Choose the letter that matters to you." : "Free engraved initial. Or wear the piece as the bloom alone."}</p>
+            </div>
+          `;
+        }
+
+        let engravingHtml = "";
+        if (product.canEngrave) {
+          engravingHtml = `
+            <div class="control-group">
+              <div class="label">Engraving <span class="label-detail">— optional, up to 25 characters</span></div>
+              <input class="engraving-input" data-action="set-engraving" maxlength="25" placeholder="e.g. always · 12.04.23 · Maman" value="${state.engraving}">
+              <p class="helper">Hand-engraved on the back by our LA studio. Free.</p>
+            </div>
+          `;
+        }
+
+        const metalMult = state.metal === "silver" ? 1.0 : state.metal === "vermeil" ? 1.25 : 3.1;
+        const finalPrice = Math.round(product.price * metalMult);
+
+        const summary = [
+          product.title,
+          state.metal === "silver" ? "Sterling Silver" : state.metal === "vermeil" ? "Gold Vermeil" : "Solid 14k Gold",
+          product.canHaveInitial ? (state.initial === "—" ? "No initial" : `Initial ${state.initial}`) : null,
+          state.size ? state.size : null
+        ].filter(Boolean).join(" · ");
+
+        main.innerHTML = `
+          <section class="product-page">
+            <p class="breadcrumb">
+              <a href="index.html">Home</a><span>·</span><a href="trinity-collection.html">Gallery</a><span>·</span>${product.title}
+            </p>
+
+            <div class="product-layout">
+              <div class="product-image-wrap">
+                <div class="product-main-image">
+                  <img id="productMainImg" class="metal-${state.metal}" src="${currentImage}" alt="${product.title}">
+                </div>
+              </div>
+
+              <div class="product-info">
+                <div class="eyebrow">${product.collection === "bleeding-heart" ? "The Bleeding Heart Collection" : product.collection === "devotion" ? "The Devotion Collection" : product.collection === "for-him" ? "For Him" : "The Adornme Chain"}</div>
+                <h1>${product.title}</h1>
+                <p class="product-lede">${product.lede}</p>
+                <p class="product-price" id="productPrice">From $${finalPrice}</p>
+
+                <div class="product-controls">
+                  <div class="control-group">
+                    <div class="label">Metal</div>
+                    <div class="control-options">${metalOptions}</div>
+                    <p class="helper" style="font-style:italic;opacity:.75;">Color shown is approximate — final finish renders the chosen metal exactly.</p>
+                  </div>
+
+                  ${product.sizes ? `
+                    <div class="control-group">
+                      <div class="label">${product.category === "rings" ? "Size" : "Length"}</div>
+                      <div class="control-options">${sizeOptions}</div>
+                    </div>
+                  ` : ""}
+
+                  ${initialHtml}
+                  ${engravingHtml}
+                </div>
+
+                <div class="product-actions">
+                  <button class="cta-primary" id="addToCartBtn" type="button" data-summary="${summary}" data-price="${finalPrice}">Add to bag — $${finalPrice}</button>
+                  <a class="cta-secondary" href="customize.html?piece=${product.id}&metal=${state.metal}${state.size ? '&size=' + encodeURIComponent(state.size) : ''}${state.initial !== '—' ? '&initial=' + state.initial : ''}">Customize this piece</a>
+                </div>
+
+                <div class="trust-strip">
+                  Designed in Newport Beach · Hand-finished in Downtown LA · Ships in ${product.shipDays} days
+                  <em>$1 from this piece goes to Postpartum Support International.</em>
+                </div>
+
+                <div class="product-meta">
+                  <h3>The piece</h3>
+                  <p>${product.longDesc}</p>
+                  <dl class="product-meta-detail">
+                    <dt>Materials</dt><dd>${product.materials}</dd>
+                    <dt>Metals offered</dt><dd>${product.metals.map((m) => m === "silver" ? "Sterling silver" : m === "vermeil" ? "Gold vermeil" : "Solid 14k gold").join(" · ")}</dd>
+                    ${product.sizes ? `<dt>${product.category === "rings" ? "Sizes" : "Lengths"}</dt><dd>${product.sizes.join(" · ")}</dd>` : ""}
+                    <dt>Ship time</dt><dd>${product.shipDays} business days</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          ${related.length ? `
+            <section class="related-section">
+              <h2 class="related-title">You may also love</h2>
+              <div class="related-grid">
+                ${related.map((p) => `
+                  <a class="related-card" href="product.html?id=${p.id}">
+                    <div class="related-image"><img src="${p.image}" alt="${p.title}"></div>
+                    <h4>${p.title}</h4>
+                    <p class="price-small">From $${p.price}</p>
+                  </a>
+                `).join("")}
+              </div>
+            </section>
+          ` : ""}
+        `;
+
+        bindControls();
+      }
+
+      function bindControls() {
+        document.querySelectorAll('[data-action="set-metal"]').forEach((btn) =>
+          btn.addEventListener("click", () => { state.metal = btn.dataset.value; render(); })
+        );
+        document.querySelectorAll('[data-action="set-size"]').forEach((btn) =>
+          btn.addEventListener("click", () => { state.size = btn.dataset.value; render(); })
+        );
+        document.querySelectorAll('[data-action="set-initial"]').forEach((btn) =>
+          btn.addEventListener("click", () => { state.initial = btn.dataset.value; render(); })
+        );
+        const engravingInput = document.querySelector('[data-action="set-engraving"]');
+        if (engravingInput) {
+          engravingInput.addEventListener("input", (e) => {
+            state.engraving = e.target.value;
+            // Don't re-render on every keystroke — just hold the value
+          });
+        }
+        const addBtn = document.getElementById("addToCartBtn");
+        if (addBtn) {
+          addBtn.addEventListener("click", () => {
+            addBtn.textContent = "✓ Added to bag";
+            addBtn.classList.add("added");
+          });
+        }
+      }
+
+      render();
+    }
+  </script>
+</body>
+</html>
