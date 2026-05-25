@@ -373,6 +373,7 @@
   </footer>
 
   <script src="assets/products-data.js"></script>
+  <script src="assets/shopify-checkout.js"></script>
   <script>
     // ============================================================
     // PRODUCT DETAIL PAGE — v30.11
@@ -563,9 +564,48 @@
         }
         const addBtn = document.getElementById("addToCartBtn");
         if (addBtn) {
-          addBtn.addEventListener("click", () => {
-            addBtn.textContent = "✓ Added to bag";
-            addBtn.classList.add("added");
+          addBtn.addEventListener("click", async () => {
+            // Disable button and show loading state
+            const originalText = addBtn.textContent;
+            addBtn.disabled = true;
+            addBtn.textContent = "Preparing checkout...";
+
+            try {
+              // Translate metal label to Shopify-compatible value
+              const metalLabel =
+                state.metal === "silver" ? "Sterling Silver" :
+                state.metal === "vermeil" ? "Gold Vermeil" :
+                "Solid 14k Gold";
+
+              // Build a clean configuration object for the Shopify integration
+              const config = {
+                productId: product.id,
+                metal: state.metal,
+                size: state.size || "",
+                initial: state.initial !== "—" ? state.initial : "",
+                engraving: state.engraving || "",
+                giftNote: "",
+              };
+
+              if (window.AdornmeShopify && window.AdornmeShopify.addToCart) {
+                await window.AdornmeShopify.addToCart(config);
+                // If addToCart doesn't redirect, restore the button
+                setTimeout(() => {
+                  addBtn.textContent = originalText;
+                  addBtn.disabled = false;
+                }, 3000);
+              } else {
+                console.error("[Adornme] Shopify integration not loaded");
+                alert("Checkout system is loading. Please try again in a moment.");
+                addBtn.textContent = originalText;
+                addBtn.disabled = false;
+              }
+            } catch (err) {
+              console.error("[Adornme] Add to cart error:", err);
+              alert("Sorry — something went wrong. Please email mira@adornme.ai for assistance.");
+              addBtn.textContent = originalText;
+              addBtn.disabled = false;
+            }
           });
         }
       }
