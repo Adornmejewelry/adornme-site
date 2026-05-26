@@ -318,8 +318,8 @@
         <div class="mobile-menu-section">
           <p class="mobile-menu-section-label">Shop</p>
           <a class="mobile-menu-link" href="/trinity-collection.html">The Gallery</a>
-          <a class="mobile-menu-link" href="/for-him.html">For Him</a>
           <a class="mobile-menu-link" href="/customize.html">Customize</a>
+          <a class="mobile-menu-link" href="/for-him.html">For Him</a>
         </div>
 
         <div class="mobile-menu-section">
