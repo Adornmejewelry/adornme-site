@@ -7,8 +7,133 @@
   <link rel="stylesheet" href="assets/home-gallery-v24.css">
   <style>
     .for-him-hero h1 { font-size: clamp(32px, 5vw, 64px); }
-    .him-product { width: min(1120px, 100%); margin: 0 auto; }
+    .him-product { width: min(1120px, 100%); margin: 0 auto; padding: clamp(40px, 5vw, 64px) clamp(20px, 4vw, 56px); }
     .soft-rule { width: min(1120px, 100%); margin: 0 auto; border: 0; border-top: 1px solid var(--rule); }
+
+    /* Configurator styles (match product.html exactly) */
+    .control-group { display: grid; gap: 12px; margin-top: 24px; }
+    .control-group .label {
+      font: 600 11px/1 var(--sans);
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .control-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .opt {
+      padding: 10px 16px;
+      border: 1px solid var(--rule);
+      background: var(--ivory);
+      color: var(--ink);
+      font: 500 13px/1 var(--sans);
+      letter-spacing: .02em;
+      transition: all .2s ease;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .opt:hover { border-color: var(--antique-gold); color: var(--antique-gold); }
+    .opt.active {
+      background: var(--ink);
+      color: var(--ivory);
+      border-color: var(--ink);
+    }
+    .opt.active:hover { color: var(--ivory); }
+    .opt .dot {
+      width: 12px; height: 12px; border-radius: 50%; display: inline-block;
+    }
+    .opt .dot.silver { background: #C9CDCF; border: 1px solid #999; }
+    .opt .dot.vermeil { background: #D9A856; border: 1px solid #B07D2D; }
+    .opt .dot.gold { background: #E9C66B; border: 1px solid #B98C24; }
+    /* Initial chips - smaller, denser grid */
+    .initial-chips .opt {
+      padding: 8px 12px;
+      min-width: 36px;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .engraving-input {
+      padding: 14px 16px;
+      width: 100%;
+      max-width: 420px;
+      border: 1px solid var(--rule);
+      background: var(--ivory);
+      color: var(--ink);
+      font: 400 15px/1.5 var(--serif);
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .engraving-input:focus { outline: none; border-color: var(--antique-gold); }
+    .helper {
+      color: var(--ink-soft);
+      font: italic 400 13px/1.55 var(--serif);
+    }
+
+    .price-display {
+      font: 500 22px/1 var(--serif);
+      color: var(--ink);
+      margin-top: 8px;
+      letter-spacing: .01em;
+    }
+
+    .product-actions {
+      margin-top: 32px;
+      display: grid;
+      gap: 12px;
+      max-width: 420px;
+    }
+    .cta-primary {
+      padding: 18px 28px;
+      background: var(--ink);
+      color: var(--ivory);
+      border: none;
+      border-radius: 999px;
+      font: 600 14px/1 var(--sans);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .25s ease;
+      text-align: center;
+    }
+    .cta-primary:hover { background: var(--aegean-deep); }
+    .cta-primary:disabled { opacity: .6; cursor: wait; }
+    .cta-secondary {
+      padding: 16px 24px;
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      font: 600 12px/1 var(--sans);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .25s ease;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+    .cta-secondary:hover { border-color: var(--ink); color: var(--ink); background: rgba(45,77,88,.04); }
+
+    .trust-strip {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--rule);
+      color: var(--ink-soft);
+      font: 400 13px/1.6 var(--sans);
+      max-width: 420px;
+    }
+    .trust-strip em {
+      display: block;
+      margin-top: 6px;
+      font: italic 400 13px/1.5 var(--serif);
+      color: var(--ink-soft);
+    }
   </style>
 </head>
 <body>
@@ -27,45 +152,90 @@
   </header>
 
   <main>
-    <section>
-      <article class="product-row him-product">
-        <div class="product-image"><img src="assets/products/for-him-signet-pendant-silver.png" alt="The Signet Pendant"></div>
-        <div class="product-copy">
-          <h3>The Signet Pendant</h3>
-          <p class="lede">A cushion-shaped signet on a fine chain. Engraved with his initial — or hers, if it's the name he carries close.</p>
-          <ul class="details">
-            <li>Metals. Sterling silver · gold vermeil · solid 14k gold</li>
-            <li>Chain. 20–22″ adjustable · 22–24″ adjustable</li>
-            <li>Dimensions. 22mm × 28mm cushion face</li>
-            <li>Ships in. 7–14 days</li>
-          </ul>
-          <p class="shown-choice">Shown: Sterling Silver · M · 20–22″ chain</p>
-          <div class="action-row">
-            <button class="button cart-button" type="button" data-cart="The Signet Pendant · Sterling Silver · M · 20–22″ chain">Add to cart</button>
-            <a class="button secondary" href="customize.html?piece=signet-pendant&metal=silver&initial=M&size=20%E2%80%9322%E2%80%B3">Design your own</a>
-          </div>
+
+    <article class="product-row him-product" id="pendant-product">
+      <div class="product-image"><img src="assets/products/for-him-signet-pendant-silver.png" alt="The Signet Pendant"></div>
+      <div class="product-copy">
+        <div class="eyebrow">For Him</div>
+        <h3>The Signet Pendant</h3>
+        <p class="lede">A cushion-shaped signet on a fine chain. Engraved with his initial — or hers, if it's the name he carries close.</p>
+        <p class="price-display" id="pendantPrice">From $185</p>
+
+        <div class="control-group">
+          <div class="label">Metal</div>
+          <div class="control-options" id="pendantMetal" data-control="metal" data-piece="pendant"></div>
         </div>
-      </article>
-      <hr class="soft-rule">
-      <article class="product-row reverse him-product">
-        <div class="product-image"><img src="assets/products/for-him-signet-ring-silver.png" alt="The Signet Ring"></div>
-        <div class="product-copy">
-          <h3>The Signet Ring</h3>
-          <p class="lede">A wide flat face on a substantial band. A classic men's signet in the Adornme register. Engraved deep enough to last decades of wear.</p>
-          <ul class="details">
-            <li>Metals. Sterling silver · gold vermeil · solid 14k gold</li>
-            <li>Face. 18mm flat oval, deep-engraved</li>
-            <li>Sizes. 8–13, including half-sizes</li>
-            <li>Ships in. 7–14 days</li>
-          </ul>
-          <p class="shown-choice">Shown: Sterling Silver · M · size 9</p>
-          <div class="action-row">
-            <button class="button cart-button" type="button" data-cart="The Signet Ring · Sterling Silver · M · size 9">Add to cart</button>
-            <a class="button secondary" href="customize.html?piece=signet-ring&metal=silver&initial=M&size=9">Design your own</a>
-          </div>
+
+        <div class="control-group">
+          <div class="label">Chain length</div>
+          <div class="control-options" id="pendantSize" data-control="size" data-piece="pendant"></div>
         </div>
-      </article>
-    </section>
+
+        <div class="control-group">
+          <div class="label">Initial</div>
+          <div class="control-options initial-chips" id="pendantInitial" data-control="initial" data-piece="pendant"></div>
+        </div>
+
+        <div class="control-group">
+          <div class="label">Engraving</div>
+          <input type="text" class="engraving-input" id="pendantEngraving" maxlength="25" placeholder="e.g. forever · 09.16.74 · Maman">
+          <p class="helper">A few words hand-engraved on the back by our LA studio. Free.</p>
+        </div>
+
+        <div class="product-actions">
+          <button class="cta-primary" id="pendantAddBtn" type="button">Add to bag — $185</button>
+          <a class="cta-secondary" id="pendantDesignLink" href="customize.html?piece=signet-pendant">Design your own</a>
+        </div>
+
+        <div class="trust-strip">
+          Designed in Newport Beach · Hand-finished in Downtown LA · Ships in 7–14 days
+          <em>$1 from this piece goes to Postpartum Support International.</em>
+        </div>
+      </div>
+    </article>
+
+    <hr class="soft-rule">
+
+    <article class="product-row reverse him-product" id="ring-product">
+      <div class="product-image"><img src="assets/products/for-him-signet-ring-silver.png" alt="The Signet Ring"></div>
+      <div class="product-copy">
+        <div class="eyebrow">For Him</div>
+        <h3>The Signet Ring</h3>
+        <p class="lede">A wide flat face on a substantial band. A classic men's signet in the Adornme register. Engraved deep enough to last decades of wear.</p>
+        <p class="price-display" id="ringPrice">From $245</p>
+
+        <div class="control-group">
+          <div class="label">Metal</div>
+          <div class="control-options" id="ringMetal" data-control="metal" data-piece="ring"></div>
+        </div>
+
+        <div class="control-group">
+          <div class="label">Size</div>
+          <div class="control-options" id="ringSize" data-control="size" data-piece="ring"></div>
+        </div>
+
+        <div class="control-group">
+          <div class="label">Initial</div>
+          <div class="control-options initial-chips" id="ringInitial" data-control="initial" data-piece="ring"></div>
+        </div>
+
+        <div class="control-group">
+          <div class="label">Engraving</div>
+          <input type="text" class="engraving-input" id="ringEngraving" maxlength="25" placeholder="optional — inside the band">
+          <p class="helper">Engraved inside the band, in our LA studio. Free.</p>
+        </div>
+
+        <div class="product-actions">
+          <button class="cta-primary" id="ringAddBtn" type="button">Add to bag — $245</button>
+          <a class="cta-secondary" id="ringDesignLink" href="customize.html?piece=signet-ring">Design your own</a>
+        </div>
+
+        <div class="trust-strip">
+          Designed in Newport Beach · Hand-finished in Downtown LA · Ships in 7–14 days
+          <em>$1 from this piece goes to Postpartum Support International.</em>
+        </div>
+      </div>
+    </article>
 
     <section class="cream">
       <div class="narrow" style="max-width:680px">
@@ -84,14 +254,194 @@
     </div>
     <div class="legal"><span>© 2026 Adornme · Dr. Mira "Mehraein" Mokhberi, Founder</span><span>Designed in Newport Beach · Made in Downtown Los Angeles</span></div>
   </footer>
+
+  <script src="assets/shopify-checkout.js"></script>
   <script>
-    document.querySelectorAll(".cart-button").forEach((button) => {
-      button.addEventListener("click", () => {
-        button.textContent = "Added to cart";
-        button.classList.add("added");
-        button.setAttribute("aria-label", `${button.dataset.cart} added to cart`);
+    // ===== FOR HIM CONFIGURATOR =====
+    //
+    // Two pieces (pendant + ring), each with its own state and configurator.
+    // Each state holds the customer's current selections.
+    // When metal changes, price updates. When Add to bag is clicked,
+    // we call window.AdornmeShopify.addToCart() with the current config.
+
+    // ---- Product specs ----
+    const PIECES = {
+      pendant: {
+        productId: "signet-pendant",
+        basePrice: 185,  // Sterling Silver price
+        metals: ["silver", "vermeil", "gold"],
+        sizes: ["20–22″", "22–24″"],
+        defaultSize: "20–22″",
+      },
+      ring: {
+        productId: "signet-ring",
+        basePrice: 245,
+        metals: ["silver", "vermeil", "gold"],
+        sizes: ["8", "8½", "9", "9½", "10", "10½", "11", "11½", "12", "12½", "13"],
+        defaultSize: "9",
+      },
+    };
+
+    // Metal multipliers (same as the rest of the site)
+    const METAL_MULTIPLIERS = { silver: 1.0, vermeil: 1.25, gold: 3.1 };
+    const METAL_LABELS = { silver: "Sterling Silver", vermeil: "Gold Vermeil", gold: "Solid 14k Gold" };
+    const METAL_SHORT = { silver: "Silver", vermeil: "Vermeil", gold: "Gold" };
+
+    // Initial options: "—" (no initial) plus all 26 letters
+    const INITIALS = ["—", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+                      "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+
+    // ---- Initial state for each piece ----
+    const state = {
+      pendant: { metal: "silver", size: "20–22″", initial: "M", engraving: "" },
+      ring:    { metal: "silver", size: "9",      initial: "M", engraving: "" },
+    };
+
+    // ---- Render the chip groups ----
+
+    function renderMetalChips(piece) {
+      const spec = PIECES[piece];
+      const s = state[piece];
+      const container = document.getElementById(`${piece}Metal`);
+      container.innerHTML = spec.metals.map((m) => {
+        const isActive = s.metal === m;
+        return `<button class="opt ${isActive ? "active" : ""}" data-value="${m}" type="button">
+          <span class="dot ${m}"></span>${METAL_LABELS[m]}
+        </button>`;
+      }).join("");
+      container.querySelectorAll(".opt").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          s.metal = btn.dataset.value;
+          renderMetalChips(piece);
+          updatePrice(piece);
+        });
       });
+    }
+
+    function renderSizeChips(piece) {
+      const spec = PIECES[piece];
+      const s = state[piece];
+      const container = document.getElementById(`${piece}Size`);
+      container.innerHTML = spec.sizes.map((sz) => {
+        const isActive = s.size === sz;
+        return `<button class="opt ${isActive ? "active" : ""}" data-value="${sz}" type="button">${sz}</button>`;
+      }).join("");
+      container.querySelectorAll(".opt").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          s.size = btn.dataset.value;
+          renderSizeChips(piece);
+        });
+      });
+    }
+
+    function renderInitialChips(piece) {
+      const s = state[piece];
+      const container = document.getElementById(`${piece}Initial`);
+      container.innerHTML = INITIALS.map((init) => {
+        const isActive = s.initial === init;
+        return `<button class="opt ${isActive ? "active" : ""}" data-value="${init}" type="button">${init}</button>`;
+      }).join("");
+      container.querySelectorAll(".opt").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          s.initial = btn.dataset.value;
+          renderInitialChips(piece);
+        });
+      });
+    }
+
+    function updatePrice(piece) {
+      const spec = PIECES[piece];
+      const s = state[piece];
+      const price = Math.round(spec.basePrice * METAL_MULTIPLIERS[s.metal]);
+      document.getElementById(`${piece}Price`).textContent = `From $${price}`;
+      document.getElementById(`${piece}AddBtn`).textContent = `Add to bag — $${price}`;
+    }
+
+    // ---- Wire up engraving inputs ----
+
+    document.getElementById("pendantEngraving").addEventListener("input", (e) => {
+      state.pendant.engraving = e.target.value;
     });
+    document.getElementById("ringEngraving").addEventListener("input", (e) => {
+      state.ring.engraving = e.target.value;
+    });
+
+    // ---- Add to bag handlers ----
+
+    async function handleAddToBag(piece) {
+      const btn = document.getElementById(`${piece}AddBtn`);
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "Preparing checkout…";
+
+      try {
+        const s = state[piece];
+        const config = {
+          productId: PIECES[piece].productId,
+          metal: s.metal,
+          size: s.size || "",
+          initial: s.initial && s.initial !== "—" ? s.initial : "",
+          engraving: s.engraving || "",
+          giftNote: "",
+        };
+
+        if (window.AdornmeShopify && window.AdornmeShopify.addToCart) {
+          await window.AdornmeShopify.addToCart(config);
+          // Shopify checkout opens in a new tab — restore button after brief delay
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.disabled = false;
+          }, 1500);
+        } else {
+          console.error("[Adornme] Shopify integration not loaded");
+          alert("Checkout system is loading. Please try again in a moment.");
+          btn.textContent = originalText;
+          btn.disabled = false;
+        }
+      } catch (err) {
+        console.error("[Adornme] Add to bag error:", err);
+        alert("Sorry — something went wrong. Please email mira@adornme.ai for assistance.");
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById("pendantAddBtn").addEventListener("click", () => handleAddToBag("pendant"));
+    document.getElementById("ringAddBtn").addEventListener("click", () => handleAddToBag("ring"));
+
+    // ---- "Design your own" links carry current selections to the Customize page ----
+
+    function updateDesignLink(piece) {
+      const s = state[piece];
+      const productId = PIECES[piece].productId;
+      const params = new URLSearchParams({
+        piece: productId,
+        metal: s.metal,
+      });
+      if (s.size) params.set("size", s.size);
+      if (s.initial && s.initial !== "—") params.set("initial", s.initial);
+      document.getElementById(`${piece}DesignLink`).href = `customize.html?${params.toString()}`;
+    }
+
+    // Update design links whenever state changes (poll-style — simple and reliable)
+    setInterval(() => {
+      updateDesignLink("pendant");
+      updateDesignLink("ring");
+    }, 500);
+
+    // ---- Initial render ----
+
+    renderMetalChips("pendant");
+    renderSizeChips("pendant");
+    renderInitialChips("pendant");
+    updatePrice("pendant");
+    updateDesignLink("pendant");
+
+    renderMetalChips("ring");
+    renderSizeChips("ring");
+    renderInitialChips("ring");
+    updatePrice("ring");
+    updateDesignLink("ring");
   </script>
   <script src="assets/mobile-menu.js"></script>
 </body>
