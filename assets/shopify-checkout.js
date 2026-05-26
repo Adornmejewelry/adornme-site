@@ -158,43 +158,158 @@ function buildCheckoutUrl(variantId, attributes = {}) {
 
 /**
  * Main entry point — called when the customer clicks Add to bag.
- * Reads the current product configuration from the page state and redirects to Shopify.
+ *
+ * IMPORTANT: This function MUST be called synchronously from within a click
+ * event handler (no awaits before it). Browsers block window.open() calls
+ * that happen after an async operation.
+ *
+ * Approach: open the new tab IMMEDIATELY with a small "loading" page,
+ * then complete the variant lookup in the background and redirect the
+ * already-open tab to Shopify checkout once we have the URL.
  *
  * Expects the caller to pass:
  *   { productId, metal, size, initial, engraving, giftNote }
  */
-async function addToShopifyCart(config) {
-  // Wait for product map to be ready (in case the customer clicked early)
-  if (!ADORNME_SHOPIFY.ready) {
-    await ADORNME_SHOPIFY.readyPromise;
+function addToShopifyCart(config) {
+  // STEP 1 — Open a new tab IMMEDIATELY (synchronously) so the browser
+  // recognizes this as a direct user-initiated action and doesn't block it.
+  // We open a temporary "about:blank" page first; we'll redirect it shortly.
+  const checkoutTab = window.open("about:blank", "_blank");
+
+  // STEP 2 — Inject a small "Preparing your checkout..." holding page
+  // so the customer sees something familiar while we look up the variant.
+  // (If the new tab failed to open, we'll fall back to same-window redirect.)
+  if (checkoutTab) {
+    try {
+      checkoutTab.document.write(`
+        <!doctype html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Preparing your checkout — Adornme</title>
+          <style>
+            body {
+              margin: 0;
+              min-height: 100vh;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              background: #FAF6F0;
+              color: #2D4D58;
+              font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+              text-align: center;
+              padding: 20px;
+            }
+            .brand {
+              font-weight: 500;
+              font-size: 22px;
+              letter-spacing: 0.22em;
+              margin-bottom: 8px;
+            }
+            .tag {
+              font-style: italic;
+              color: #5B7480;
+              font-size: 14px;
+              margin-bottom: 40px;
+            }
+            .status {
+              font-size: 18px;
+              font-style: italic;
+              color: #2D4D58;
+            }
+            .dot {
+              display: inline-block;
+              width: 4px;
+              height: 4px;
+              border-radius: 50%;
+              background: #C9A961;
+              margin: 0 3px;
+              animation: pulse 1.4s ease-in-out infinite;
+            }
+            .dot:nth-child(2) { animation-delay: 0.2s; }
+            .dot:nth-child(3) { animation-delay: 0.4s; }
+            @keyframes pulse {
+              0%, 80%, 100% { opacity: 0.3; }
+              40% { opacity: 1; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="brand">ADORNME</div>
+          <div class="tag">A love story you can wear</div>
+          <div class="status">Preparing your checkout<span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        </body>
+        </html>
+      `);
+      checkoutTab.document.close();
+    } catch (e) {
+      // Some browsers (especially Safari with strict settings) don't allow
+      // document.write into about:blank. That's fine — the tab is open with
+      // about:blank and we'll just redirect it shortly. No visible "loading" page.
+      console.warn("[Adornme] Could not write loading page:", e);
+    }
   }
 
-  const variant = findShopifyVariant(config.productId, config.metal, config.size);
+  // STEP 3 — Now do the async variant lookup and redirect the new tab
+  // (or fall back to same-window navigation if the new tab failed to open).
+  completeCheckoutAsync(checkoutTab, config);
+}
 
-  if (!variant) {
-    alert(
-      "Sorry — this combination isn't available right now. Please try a different metal or size, or email mira@adornme.ai for assistance."
-    );
-    console.error("[Adornme] Variant not found for:", config);
-    return;
-  }
+/**
+ * Background helper — does the variant lookup and redirects the new tab
+ * (or current window, as fallback) to the Shopify checkout URL.
+ */
+async function completeCheckoutAsync(checkoutTab, config) {
+  try {
+    // Wait for product map to be ready
+    if (!ADORNME_SHOPIFY.ready) {
+      await ADORNME_SHOPIFY.readyPromise;
+    }
 
-  // Build custom attributes — these appear on the order in Shopify admin
-  const attributes = {};
-  if (config.initial && config.initial !== "—") {
-    attributes["Initial"] = config.initial;
-  }
-  if (config.engraving) {
-    attributes["Engraving"] = config.engraving;
-  }
-  if (config.giftNote) {
-    attributes["Gift note"] = config.giftNote;
-  }
+    const variant = findShopifyVariant(config.productId, config.metal, config.size);
 
-  const url = buildCheckoutUrl(variant.id, attributes);
+    if (!variant) {
+      console.error("[Adornme] Variant not found for:", config);
+      // Close the loading tab and tell the customer
+      if (checkoutTab && !checkoutTab.closed) {
+        checkoutTab.close();
+      }
+      alert(
+        "Sorry — this combination isn't available right now. Please try a different metal or size, or email mira@adornme.ai for assistance."
+      );
+      return;
+    }
 
-  // Redirect customer to Shopify checkout
-  window.location.href = url;
+    // Build custom attributes — these appear on the order in Shopify admin
+    const attributes = {};
+    if (config.initial && config.initial !== "—") {
+      attributes["Initial"] = config.initial;
+    }
+    if (config.engraving) {
+      attributes["Engraving"] = config.engraving;
+    }
+    if (config.giftNote) {
+      attributes["Gift note"] = config.giftNote;
+    }
+
+    const url = buildCheckoutUrl(variant.id, attributes);
+
+    // Redirect the already-open new tab to Shopify
+    if (checkoutTab && !checkoutTab.closed) {
+      checkoutTab.location.href = url;
+    } else {
+      // Pop-up was blocked, or new tab was closed by the user — fall back
+      // to navigating the current window. The customer at least gets to checkout.
+      window.location.href = url;
+    }
+  } catch (err) {
+    console.error("[Adornme] Checkout error:", err);
+    if (checkoutTab && !checkoutTab.closed) {
+      checkoutTab.close();
+    }
+    alert("Sorry — something went wrong preparing your checkout. Please email mira@adornme.ai for assistance.");
+  }
 }
 
 /**
