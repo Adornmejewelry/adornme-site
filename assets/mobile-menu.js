@@ -1,9 +1,18 @@
 /**
  * Adornme — Mobile Hamburger Menu (v2)
+ *
+ * Changes in v2:
+ *   - Uses absolute paths (with leading /) for menu links so navigation
+ *     always works from any page, no matter how deep
+ *   - Menu now opens at 82% width with a dark overlay on the remaining 18%
+ *   - Tapping the overlay closes the menu
+ *   - Explicit X close button at top-right of the menu itself
+ *   - Improved animation and accessibility
  */
 
 (function () {
   const styles = `
+    /* === Mobile hamburger button === */
     .mobile-menu-btn {
       display: none;
       position: absolute;
@@ -40,7 +49,13 @@
     }
     .mobile-menu-btn span::before { top: -7px; }
     .mobile-menu-btn span::after { top: 7px; }
+    .mobile-menu-btn:hover span,
+    .mobile-menu-btn:hover span::before,
+    .mobile-menu-btn:hover span::after {
+      background: var(--antique-gold, #C9A961);
+    }
 
+    /* === Overlay backdrop (dark dim layer over the rest of the screen) === */
     .mobile-menu-overlay {
       position: fixed;
       top: 0;
@@ -60,6 +75,7 @@
       background: rgba(45, 77, 88, 0.45);
     }
 
+    /* === Slide-out menu panel === */
     .mobile-menu-panel {
       position: fixed;
       top: 0;
@@ -79,6 +95,7 @@
       transform: translateX(0);
     }
 
+    /* X close button inside the panel */
     .mobile-menu-close {
       position: absolute;
       top: 16px;
@@ -101,15 +118,21 @@
       width: 20px;
       height: 1.5px;
       background: var(--ink, #2D4D58);
+      transition: background-color .2s ease;
     }
     .mobile-menu-close::before { transform: rotate(45deg); }
     .mobile-menu-close::after { transform: rotate(-45deg); }
+    .mobile-menu-close:hover::before,
+    .mobile-menu-close:hover::after {
+      background: var(--antique-gold, #C9A961);
+    }
 
     .mobile-menu-inner {
       padding: 70px 28px 50px 28px;
       min-height: 100%;
       box-sizing: border-box;
     }
+
     .mobile-menu-brand {
       font-family: var(--serif, "Cormorant Garamond"), serif;
       font-size: 28px;
@@ -127,7 +150,10 @@
       color: var(--ink-soft, #5B7480);
       margin: 0 0 32px 0;
     }
-    .mobile-menu-section { margin-bottom: 28px; }
+
+    .mobile-menu-section {
+      margin-bottom: 28px;
+    }
     .mobile-menu-section-label {
       font-family: var(--sans, "Inter"), sans-serif;
       font-size: 10px;
@@ -137,6 +163,7 @@
       margin: 0 0 12px 0;
       font-weight: 500;
     }
+
     .mobile-menu-link {
       display: block;
       font-family: var(--serif, "Cormorant Garamond"), serif;
@@ -148,13 +175,15 @@
       border-bottom: 1px solid rgba(45, 77, 88, 0.08);
       transition: color .2s ease, padding-left .25s ease;
     }
-    .mobile-menu-link:hover, .mobile-menu-link:active {
+    .mobile-menu-link:hover,
+    .mobile-menu-link:active {
       color: var(--antique-gold, #C9A961);
       padding-left: 6px;
     }
     .mobile-menu-section .mobile-menu-link:last-child {
       border-bottom: none;
     }
+
     .mobile-menu-foot {
       margin-top: 36px;
       padding-top: 24px;
@@ -168,21 +197,90 @@
       color: var(--ink, #2D4D58);
       text-decoration: none;
     }
+    .mobile-menu-foot a:hover { color: var(--antique-gold, #C9A961); }
     .mobile-menu-foot p { margin: 0 0 4px 0; }
-    body.mobile-menu-open { overflow: hidden; }
 
+    /* Body lock when menu is open — prevents scroll bleed through */
+    body.mobile-menu-open {
+      overflow: hidden;
+    }
+
+    /* === Mobile breakpoint: show hamburger, hide desktop nav,
+           make top nav STICKY (always visible) === */
     @media (max-width: 768px) {
       .mobile-menu-btn { display: flex; }
-      .nav .nav-left, .nav .nav-right { display: none !important; }
-      .nav .logo { margin: 0 auto; }
-      .nav { position: relative; min-height: 60px; }
+      .nav .nav-left,
+      .nav .nav-right {
+        display: none !important;
+      }
+      .nav .logo {
+        margin: 0 auto;
+      }
+      /* Pin the nav to the top of the viewport on mobile.
+         The hamburger is always reachable, no matter how far the user scrolls. */
+      .nav {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 900;
+        min-height: 60px;
+        background: var(--ivory, #FAF6F0);
+        /* Subtle frosted-glass effect on supporting browsers */
+        backdrop-filter: saturate(180%) blur(12px);
+        -webkit-backdrop-filter: saturate(180%) blur(12px);
+        background: rgba(250, 246, 240, 0.92);
+        border-bottom: 1px solid rgba(45, 77, 88, 0.08);
+      }
+      /* Compensate for the fixed nav by adding top padding to the body.
+         60px nav + ~32px announce bar = ~92px */
+      body {
+        padding-top: 60px;
+      }
+      /* Hide the announce bar on mobile to save vertical space.
+         The promo text is visible on desktop only. */
+      .announce {
+        display: none;
+      }
+
+      /* === Override "sticky" elements that get in the way on mobile === */
+
+      /* Gallery: the filter chip bar should NOT stick to the top on mobile.
+         It blocks content as you scroll. Let it scroll naturally. */
+      .gallery-filter-bar,
+      .filter-bar,
+      .trinity-filter-bar,
+      .gallery .sticky-filters,
+      .shop-filter,
+      [class*="sticky-filter"] {
+        position: static !important;
+        top: auto !important;
+      }
+
+      /* Customize: the preview image should not stick at the top.
+         Let it scroll away naturally so customers can reach the configuration below. */
+      .preview-box,
+      .preview-wrap,
+      .customize-preview,
+      [class*="sticky-preview"],
+      .product-image-wrap {
+        position: static !important;
+        top: auto !important;
+      }
     }
+
+    /* Smaller logo on small phones */
     @media (max-width: 480px) {
-      .nav .logo strong { font-size: 20px !important; }
-      .nav .logo span { display: none; }
+      .nav .logo strong {
+        font-size: 20px !important;
+      }
+      .nav .logo span {
+        display: none;
+      }
     }
   `;
 
+  // Inject styles
   const styleEl = document.createElement("style");
   styleEl.setAttribute("data-mobile-menu", "true");
   styleEl.textContent = styles;
@@ -192,6 +290,7 @@
     const nav = document.querySelector("nav.nav");
     if (!nav) return;
 
+    // 1. Hamburger button
     const button = document.createElement("button");
     button.className = "mobile-menu-btn";
     button.setAttribute("aria-label", "Open menu");
@@ -199,11 +298,14 @@
     button.innerHTML = "<span></span>";
     nav.appendChild(button);
 
+    // 2. Dark overlay (tap to close)
     const overlay = document.createElement("div");
     overlay.className = "mobile-menu-overlay";
     overlay.setAttribute("aria-hidden", "true");
     document.body.appendChild(overlay);
 
+    // 3. Slide-out panel
+    // NOTE: Using absolute paths (leading /) so links work from any page
     const panel = document.createElement("div");
     panel.className = "mobile-menu-panel";
     panel.setAttribute("aria-hidden", "true");
@@ -216,8 +318,8 @@
         <div class="mobile-menu-section">
           <p class="mobile-menu-section-label">Shop</p>
           <a class="mobile-menu-link" href="/trinity-collection.html">The Gallery</a>
-          <a class="mobile-menu-link" href="/customize.html">Customize</a>
           <a class="mobile-menu-link" href="/for-him.html">For Him</a>
+          <a class="mobile-menu-link" href="/customize.html">Customize</a>
         </div>
 
         <div class="mobile-menu-section">
@@ -241,6 +343,7 @@
       panel.classList.add("is-open");
       overlay.classList.add("is-open");
       button.setAttribute("aria-expanded", "true");
+      button.setAttribute("aria-label", "Close menu");
       panel.setAttribute("aria-hidden", "false");
       overlay.setAttribute("aria-hidden", "false");
       document.body.classList.add("mobile-menu-open");
@@ -249,6 +352,7 @@
       panel.classList.remove("is-open");
       overlay.classList.remove("is-open");
       button.setAttribute("aria-expanded", "false");
+      button.setAttribute("aria-label", "Open menu");
       panel.setAttribute("aria-hidden", "true");
       overlay.setAttribute("aria-hidden", "true");
       document.body.classList.remove("mobile-menu-open");
@@ -258,12 +362,14 @@
     closeBtn.addEventListener("click", closeMenu);
     overlay.addEventListener("click", closeMenu);
 
+    // Close on ESC key
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && panel.classList.contains("is-open")) {
         closeMenu();
       }
     });
 
+    // Close if resized past mobile breakpoint
     let resizeTimer;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
