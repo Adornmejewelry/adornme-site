@@ -493,8 +493,8 @@
         <em>$1 from this piece goes to Postpartum Support International.</em>
       </div>
 
-      <a class="cta-order" href="#joinForm"><span>Pre-order this piece</span><strong id="ctaPrice">$145</strong></a>
-      <p class="helper">Pre-orders ship in our launch week, summer 2026.</p>
+      <button type="button" class="cta-order" id="addToCartBtn"><span>Add to bag</span><strong id="ctaPrice">$145</strong></button>
+      <p class="helper">Free engraving · Ships in 7–14 days · $1 to Postpartum Support International</p>
     </section>
   </main>
 
@@ -506,11 +506,11 @@
   </section>
 
   <section class="join" id="joinForm">
-    <h2>Be the first to wear it</h2>
-    <p>Adornme launches this summer. Pre-order your piece now and it ships in our launch week.</p>
+    <h2>Stay close to the brand</h2>
+    <p>Receive notes from the studio, news about new pieces, and quiet stories from the journal — directly to your inbox.</p>
     <form class="preorder-form" id="preorderForm">
       <input type="email" placeholder="your email address" aria-label="Email address" required>
-      <button type="submit" id="submitButton">Pre-order now</button>
+      <button type="submit" id="submitButton">Subscribe</button>
     </form>
   </section>
 
@@ -882,7 +882,47 @@
 
     $("#preorderForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      $("#submitButton").textContent = "✓ piece reserved";
+      $("#submitButton").textContent = "✓ Subscribed";
+    });
+
+    // ----- ADD TO BAG → SHOPIFY CHECKOUT -----
+
+    $("#addToCartBtn").addEventListener("click", async () => {
+      const btn = $("#addToCartBtn");
+      const originalContent = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = "<span>Preparing checkout…</span>";
+
+      try {
+        // Build config object matching what shopify-checkout.js expects
+        const config = {
+          productId: state.pieceId,
+          metal: state.metal,
+          size: state.size || "",
+          initial: state.initial && state.initial !== "—" ? state.initial : "",
+          engraving: state.engraving || "",
+          giftNote: state.giftNote || "",
+        };
+
+        if (window.AdornmeShopify && window.AdornmeShopify.addToCart) {
+          await window.AdornmeShopify.addToCart(config);
+          // If addToCart doesn't redirect within a few seconds, restore the button
+          setTimeout(() => {
+            btn.innerHTML = originalContent;
+            btn.disabled = false;
+          }, 4000);
+        } else {
+          console.error("[Adornme] Shopify integration not loaded");
+          alert("Checkout system is loading. Please try again in a moment.");
+          btn.innerHTML = originalContent;
+          btn.disabled = false;
+        }
+      } catch (err) {
+        console.error("[Adornme] Add to cart error:", err);
+        alert("Sorry — something went wrong. Please email mira@adornme.ai for assistance.");
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+      }
     });
 
     // ----- URL PARAMS (from Gallery "Make it yours" links) -----
@@ -923,6 +963,7 @@
     applyUrlParams();
     render();
   </script>
+  <script src="../assets/shopify-checkout.js"></script>
   <script src="../assets/mobile-menu.js"></script>
 </body>
 </html>
