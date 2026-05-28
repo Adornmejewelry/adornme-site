@@ -325,7 +325,7 @@
           <a class="shop-card" href="product.html?id=${p.id}">
             <div class="shop-card-image">
               ${tag}
-              <img src="${p.image}" alt="${p.title}">
+              <img src="${p.imageInitial || p.image}" alt="${p.title}">
             </div>
             <h3>${p.title}</h3>
             <p class="shop-card-price">From $${p.price}</p>
