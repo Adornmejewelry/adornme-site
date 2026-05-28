@@ -243,25 +243,6 @@ const PRODUCTS = [
     longDesc: "A cross with a solid heart resting at its center and a pearl dropping below. The closest Devotion piece to the brand's Bleeding Heart signature.",
     materials: "14k solid gold or gold vermeil. Freshwater drop pearl. Fine cable-link chain.",
   },
-  {
-    id: "devoted-heart",
-    title: "The Devoted Heart",
-    collection: "devotion",
-    category: "necklaces",
-    price: 165,
-    image: "assets/products/devoted-heart.jpeg",
-    imageInitial: "assets/products/devoted-heart.jpeg",
-    metals: ["silver", "vermeil", "gold"],
-    sizes: ["14–16″", "16–18″", "20–22″"],
-    defaultSize: "16–18″",
-    canHaveInitial: false,
-    canEngrave: true,
-    shipDays: "7–14",
-    lede: "A cross at rest above an open heart, with a pearl below — the quietest expression of love and faith together.",
-    longDesc: "The simplest devotional piece in the collection — a small cross perched above an open heart, the pearl dropping beneath. Designed for everyday wear and quiet faith.",
-    materials: "14k solid gold, gold vermeil, or sterling silver. Freshwater drop pearl. Fine cable-link chain.",
-  },
-
   // ----------- ADORNME CHAIN -----------
   {
     id: "adornme-chain",
