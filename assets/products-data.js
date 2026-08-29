@@ -1,38 +1,28 @@
 // ============================================================
-// ADORNME — Central product data (v32.0)
-// All prices computed from Jack's cost documents.
-// Drops (pearl/cz/diamond) affect price → priced per drop.
-// Gold color (yellow/white/rose) = image/property only, NO price change.
-// Metals: silver, vermeil, gold10, gold14, gold18.
+// ADORNME — Central product data (v32.1)
+// All prices from Jack's cost documents. Bracelets at lower margin.
+// Drops (pearl/cz/diamond) priced per drop. Gold color = image/property only.
 // ============================================================
 
-// Shared option sets ------------------------------------------
 const HEART_STONE_OPTIONS = [
   { id: "rose-quartz",   label: "Rose Quartz",       priceAdjust: 0,   goldOnly: false },
   { id: "pink-topaz",    label: "Pink Topaz",        priceAdjust: 55,  goldOnly: false },
   { id: "pink-sapphire", label: "Pink Lab Sapphire", priceAdjust: 90,  goldOnly: false },
   { id: "pink-diamond",  label: "Pink Lab Diamond",  priceAdjust: 1400,goldOnly: true  },
 ];
-
 const DROP_OPTIONS = [
   { id: "pearl",   label: "Freshwater Pearl" },
   { id: "cz",      label: "Synthetic / CZ"  },
   { id: "diamond", label: "Lab Diamond"     },
 ];
-
-// Gold color options — display only, no price impact. Shown only for gold metals.
 const GOLD_COLOR_OPTIONS = [
   { id: "yellow", label: "Yellow Gold" },
   { id: "white",  label: "White Gold"  },
   { id: "rose",   label: "Rose Gold"   },
 ];
-
 const METAL_LABELS = {
-  silver: "Sterling Silver",
-  vermeil: "Gold Vermeil",
-  gold10: "Solid 10k Gold",
-  gold14: "Solid 14k Gold",
-  gold18: "Solid 18k Gold",
+  silver: "Sterling Silver", vermeil: "Gold Vermeil",
+  gold10: "Solid 10k Gold", gold14: "Solid 14k Gold", gold18: "Solid 18k Gold",
 };
 
 const PRODUCTS = [
@@ -346,11 +336,52 @@ const PRODUCTS = [
     lede: "Sold separately, in three lengths and five metals.",
     materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Fine cable-link.",
   },
+  {
+    id: "pearl-bracelet",
+    title: "The Bleeding Heart Pearl Bracelet",
+    collection: "bleeding-heart",
+    category: "bracelets",
+    prices: { silver:830, vermeil:885, gold10:1710, gold14:2320, gold18:2945 },
+    pricesByDrop: { pearl: { silver:830, vermeil:885, gold10:1710, gold14:2320, gold18:2945 }, cz: { silver:450, vermeil:505, gold10:1400, gold14:2010, gold18:2635 }, diamond: { silver:1870, vermeil:1925, gold10:2545, gold14:3160, gold18:3785 } },
+    price: 450,
+    image: "assets/products/pearl-bracelet.png",
+    imageInitial: "assets/products/pearl-bracelet.png",
+    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
+    sizes: ["6.5\u20137\u2033", "7\u20137.5\u2033"],
+    defaultSize: "7\u20137.5\u2033",
+    canHaveInitial: true,
+    canEngrave: true,
+    hasDrops: true,
+    hasGoldColors: true,
+    dropOptions: DROP_OPTIONS,
+    shipDays: "5–7 days",
+    lede: "Six little engravable hearts along a fine chain \u2014 a bracelet of initials, dates, or names.",
+    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Six hearts, each with a drop of pearl, CZ, or lab diamond. Fine chain.",
+  },
+  {
+    id: "cuff",
+    title: "The Bleeding Heart Cuff in Mother-of-Pearl",
+    collection: "bleeding-heart",
+    category: "bracelets",
+    prices: { silver:695, vermeil:750, gold10:2815, gold14:4130, gold18:5480 },
+    pricesByDrop: { pearl: { silver:695, vermeil:750, gold10:2815, gold14:4130, gold18:5480 }, cz: { silver:635, vermeil:690, gold10:2765, gold14:4080, gold18:5425 }, diamond: { silver:870, vermeil:925, gold10:2955, gold14:4270, gold18:5620 } },
+    price: 635,
+    image: "assets/products/cuff-mother-of-pearl.png",
+    imageInitial: "assets/products/cuff-mother-of-pearl.png",
+    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
+    sizes: null,
+    canHaveInitial: false,
+    canEngrave: false,
+    hasDrops: true,
+    hasGoldColors: true,
+    dropOptions: DROP_OPTIONS,
+    shipDays: "5–7 days",
+    lede: "A solid heart cuff inlaid with mother-of-pearl \u2014 the collection's boldest piece.",
+    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Mother-of-pearl inlays. Drop of pearl, CZ, or lab diamond.",
+  },
 ];
 
-// ----------- Helpers -----------
 function adornmeGetMetalPrice(product, metal, drop) {
-  // drop-aware pricing
   if (product.pricesByDrop && drop && product.pricesByDrop[drop]) {
     const v = product.pricesByDrop[drop][metal];
     if (v != null) return v;
@@ -359,17 +390,12 @@ function adornmeGetMetalPrice(product, metal, drop) {
   const vals = product.prices ? Object.values(product.prices).filter(x=>typeof x==="number") : [];
   return vals.length ? Math.min(...vals) : (product.price || 0);
 }
-
 function adornmeGetFromPrice(product) {
   let all = [];
-  if (product.pricesByDrop) {
-    for (const d of Object.values(product.pricesByDrop)) all.push(...Object.values(d).filter(x=>typeof x==="number"));
-  } else if (product.prices) {
-    all = Object.values(product.prices).filter(x=>typeof x==="number");
-  }
+  if (product.pricesByDrop) { for (const d of Object.values(product.pricesByDrop)) all.push(...Object.values(d).filter(x=>typeof x==="number")); }
+  else if (product.prices) { all = Object.values(product.prices).filter(x=>typeof x==="number"); }
   return all.length ? Math.min(...all) : (product.price || 0);
 }
-
 if (typeof window !== "undefined") {
   window.ADORNME_METAL_LABELS = METAL_LABELS;
   window.adornmeGetMetalPrice = adornmeGetMetalPrice;
