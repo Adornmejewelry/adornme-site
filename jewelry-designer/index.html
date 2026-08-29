@@ -185,7 +185,7 @@
     const money = (v) => `$${Math.round(v).toLocaleString()}`;
     const fixPath = (p) => p && p.indexOf("http")!==0 && p.indexOf("../")!==0 ? "../"+p : p;
 
-    const METAL_LABELS = { silver:"Sterling Silver", vermeil:"Gold Vermeil", gold10:"Solid 10k Gold", gold14:"Solid 14k Gold", gold18:"Solid 18k Gold" };
+    // METAL_LABELS provided globally by products-data.js
     const METAL_SHORT  = { silver:"Silver", vermeil:"Gold Vermeil", gold10:"10k Gold", gold14:"14k Gold", gold18:"18k Gold" };
     const METAL_DOT = { silver:["#C9CDCF","#999"], vermeil:["#D9A856","#B07D2D"], gold10:["#E7CE8F","#C0982F"], gold14:["#E9C66B","#B98C24"], gold18:["#E8B84B","#A87A18"] };
     const METAL_ORDER = ["silver","vermeil","gold10","gold14","gold18"];
