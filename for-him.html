@@ -9,131 +9,34 @@
     .for-him-hero h1 { font-size: clamp(32px, 5vw, 64px); }
     .him-product { width: min(1120px, 100%); margin: 0 auto; padding: clamp(40px, 5vw, 64px) clamp(20px, 4vw, 56px); }
     .soft-rule { width: min(1120px, 100%); margin: 0 auto; border: 0; border-top: 1px solid var(--rule); }
-
-    /* Configurator styles (match product.html exactly) */
     .control-group { display: grid; gap: 12px; margin-top: 24px; }
-    .control-group .label {
-      font: 600 11px/1 var(--sans);
-      letter-spacing: .26em;
-      text-transform: uppercase;
-      color: var(--ink);
-    }
-    .control-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .opt {
-      padding: 10px 16px;
-      border: 1px solid var(--rule);
-      background: var(--ivory);
-      color: var(--ink);
-      font: 500 13px/1 var(--sans);
-      letter-spacing: .02em;
-      transition: all .2s ease;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
+    .control-group .label { font: 600 11px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--ink); }
+    .control-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .opt { padding: 10px 16px; border: 1px solid var(--rule); background: var(--ivory); color: var(--ink); font: 500 13px/1 var(--sans); letter-spacing: .02em; transition: all .2s ease; border-radius: 999px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
     .opt:hover { border-color: var(--antique-gold); color: var(--antique-gold); }
-    .opt.active {
-      background: var(--ink);
-      color: var(--ivory);
-      border-color: var(--ink);
-    }
+    .opt.active { background: var(--ink); color: var(--ivory); border-color: var(--ink); }
     .opt.active:hover { color: var(--ivory); }
-    .opt .dot {
-      width: 12px; height: 12px; border-radius: 50%; display: inline-block;
-    }
+    .opt .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
     .opt .dot.silver { background: #C9CDCF; border: 1px solid #999; }
     .opt .dot.vermeil { background: #D9A856; border: 1px solid #B07D2D; }
-    .opt .dot.gold { background: #E9C66B; border: 1px solid #B98C24; }
-    /* Initial chips - smaller, denser grid */
-    .initial-chips .opt {
-      padding: 8px 12px;
-      min-width: 36px;
-      justify-content: center;
-      font-size: 12px;
-    }
-
-    .engraving-input {
-      padding: 14px 16px;
-      width: 100%;
-      max-width: 420px;
-      border: 1px solid var(--rule);
-      background: var(--ivory);
-      color: var(--ink);
-      font: 400 15px/1.5 var(--serif);
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
+    .opt .dot.gold10 { background: #E7CE8F; border: 1px solid #C0982F; }
+    .opt .dot.gold14 { background: #E9C66B; border: 1px solid #B98C24; }
+    .opt .dot.gold18 { background: #E8B84B; border: 1px solid #A87A18; }
+    .opt .dot.gc-yellow { background:#E9C66B; border:1px solid #B98C24; }
+    .opt .dot.gc-white { background:#E8E9EB; border:1px solid #AAB; }
+    .opt .dot.gc-rose { background:#E7B7A3; border:1px solid #C98A72; }
+    .engraving-input { padding: 14px 16px; width: 100%; max-width: 420px; border: 1px solid var(--rule); background: var(--ivory); color: var(--ink); font: 400 15px/1.5 var(--serif); border-radius: 4px; box-sizing: border-box; }
     .engraving-input:focus { outline: none; border-color: var(--antique-gold); }
-    .helper {
-      color: var(--ink-soft);
-      font: italic 400 13px/1.55 var(--serif);
-    }
-
-    .price-display {
-      font: 500 22px/1 var(--serif);
-      color: var(--ink);
-      margin-top: 8px;
-      letter-spacing: .01em;
-    }
-
-    .product-actions {
-      margin-top: 32px;
-      display: grid;
-      gap: 12px;
-      max-width: 420px;
-    }
-    .cta-primary {
-      padding: 18px 28px;
-      background: var(--ink);
-      color: var(--ivory);
-      border: none;
-      border-radius: 999px;
-      font: 600 14px/1 var(--sans);
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background .25s ease;
-      text-align: center;
-    }
+    .helper { color: var(--ink-soft); font: italic 400 13px/1.55 var(--serif); }
+    .price-display { font: 500 22px/1 var(--serif); color: var(--ink); margin-top: 8px; letter-spacing: .01em; }
+    .product-actions { margin-top: 32px; display: grid; gap: 12px; max-width: 420px; }
+    .cta-primary { padding: 18px 28px; background: var(--ink); color: var(--ivory); border: none; border-radius: 999px; font: 600 14px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: background .25s ease; text-align: center; }
     .cta-primary:hover { background: var(--aegean-deep); }
     .cta-primary:disabled { opacity: .6; cursor: wait; }
-    .cta-secondary {
-      padding: 16px 24px;
-      background: transparent;
-      color: var(--ink);
-      border: 1px solid var(--rule);
-      border-radius: 999px;
-      font: 600 12px/1 var(--sans);
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all .25s ease;
-      text-align: center;
-      text-decoration: none;
-      display: block;
-    }
+    .cta-secondary { padding: 16px 24px; background: transparent; color: var(--ink); border: 1px solid var(--rule); border-radius: 999px; font: 600 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .25s ease; text-align: center; text-decoration: none; display: block; }
     .cta-secondary:hover { border-color: var(--ink); color: var(--ink); background: rgba(45,77,88,.04); }
-
-    .trust-strip {
-      margin-top: 24px;
-      padding-top: 18px;
-      border-top: 1px solid var(--rule);
-      color: var(--ink-soft);
-      font: 400 13px/1.6 var(--sans);
-      max-width: 420px;
-    }
-    .trust-strip em {
-      display: block;
-      margin-top: 6px;
-      font: italic 400 13px/1.5 var(--serif);
-      color: var(--ink-soft);
-    }
+    .trust-strip { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--rule); color: var(--ink-soft); font: 400 13px/1.6 var(--sans); max-width: 420px; }
+    .trust-strip em { display: block; margin-top: 6px; font: italic 400 13px/1.5 var(--serif); color: var(--ink-soft); }
   </style>
 </head>
 <body>
@@ -147,48 +50,49 @@
     <div class="narrow" style="max-width:780px">
       <div class="eyebrow">For Him</div>
       <h1><em>For the men who choose</em><br>meaning over the ordinary</h1>
-      <p class="lede">A signet pendant and a signet ring — both engraved with his initial, in the same metals as the Bleeding Heart designs.</p>
+      <p class="lede">Christ risen — as a pendant and as a bold ring. Both in the same fine metals as the Bleeding Heart designs, each with a small golden heart-stone at the center.</p>
     </div>
   </header>
 
   <main>
 
     <article class="product-row him-product" id="pendant-product">
-      <div class="product-image"><img src="assets/products/for-him-signet-pendant-silver.png" alt="The Signet Pendant"></div>
+      <div class="product-image"><img src="assets/products/christ-risen-mens-pendant.jpeg" alt="Christ Risen Pendant for Men"></div>
       <div class="product-copy">
         <div class="eyebrow">For Him</div>
-        <h3>The Signet Pendant</h3>
-        <p class="lede">A cushion-shaped signet on a fine chain. Engraved with his initial — or hers, if it's the name he carries close.</p>
-        <p class="price-display" id="pendantPrice">From $185</p>
+        <h3>Christ Risen Pendant for Men</h3>
+        <p class="lede">Christ rising in triumph, arms open, a small golden heart-stone at his center. A larger, bolder figure — designed for him.</p>
+        <p class="price-display" id="pendantPrice">From $225</p>
 
         <div class="control-group">
           <div class="label">Metal</div>
-          <div class="control-options" id="pendantMetal" data-control="metal" data-piece="pendant"></div>
+          <div class="control-options" id="pendantMetal"></div>
+        </div>
+
+        <div class="control-group" id="pendantColorGroup" hidden>
+          <div class="label">Gold Color</div>
+          <div class="control-options" id="pendantColor"></div>
+          <p class="helper">Same price in yellow, white, or rose.</p>
         </div>
 
         <div class="control-group">
           <div class="label">Chain length</div>
-          <div class="control-options" id="pendantSize" data-control="size" data-piece="pendant"></div>
-        </div>
-
-        <div class="control-group">
-          <div class="label">Initial</div>
-          <div class="control-options initial-chips" id="pendantInitial" data-control="initial" data-piece="pendant"></div>
+          <div class="control-options" id="pendantSize"></div>
         </div>
 
         <div class="control-group">
           <div class="label">Engraving</div>
-          <input type="text" class="engraving-input" id="pendantEngraving" maxlength="25" placeholder="e.g. forever · 09.16.74 · Maman">
+          <input type="text" class="engraving-input" id="pendantEngraving" maxlength="25" placeholder="e.g. faith · a name · a date">
           <p class="helper">A few words hand-engraved on the back by our LA studio. Free.</p>
         </div>
 
         <div class="product-actions">
-          <button class="cta-primary" id="pendantAddBtn" type="button">Add to bag — $185</button>
-          <a class="cta-secondary" id="pendantDesignLink" href="customize.html?piece=signet-pendant">Design your own</a>
+          <button class="cta-primary" id="pendantAddBtn" type="button">Add to bag — $225</button>
+          <a class="cta-secondary" id="pendantDesignLink" href="product.html?id=mens-christ-pendant">View full details</a>
         </div>
 
         <div class="trust-strip">
-          Designed in Newport Beach · Hand-finished in Downtown LA · Ships in 7–14 days
+          Designed in Newport Beach · Hand-finished in Downtown LA · Ships in 5–7 days
           <em>$1 from this piece goes to Postpartum Support International.</em>
         </div>
       </div>
@@ -197,26 +101,27 @@
     <hr class="soft-rule">
 
     <article class="product-row reverse him-product" id="ring-product">
-      <div class="product-image"><img src="assets/products/for-him-signet-ring-silver.png" alt="The Signet Ring"></div>
+      <div class="product-image"><img src="assets/products/christ-risen-mens-ring.jpeg" alt="Christ Risen Ring for Men"></div>
       <div class="product-copy">
         <div class="eyebrow">For Him</div>
-        <h3>The Signet Ring</h3>
-        <p class="lede">A wide flat face on a substantial band. A classic men's signet in the Adornme register. Engraved deep enough to last decades of wear.</p>
-        <p class="price-display" id="ringPrice">From $245</p>
+        <h3>Christ Risen Ring for Men</h3>
+        <p class="lede">A bold, substantial ring carrying the risen Christ — a statement of faith in solid metal. Heavy in the hand, built to last decades of wear.</p>
+        <p class="price-display" id="ringPrice">From $365</p>
 
         <div class="control-group">
           <div class="label">Metal</div>
-          <div class="control-options" id="ringMetal" data-control="metal" data-piece="ring"></div>
+          <div class="control-options" id="ringMetal"></div>
+        </div>
+
+        <div class="control-group" id="ringColorGroup" hidden>
+          <div class="label">Gold Color</div>
+          <div class="control-options" id="ringColor"></div>
+          <p class="helper">Same price in yellow, white, or rose.</p>
         </div>
 
         <div class="control-group">
           <div class="label">Size</div>
-          <div class="control-options" id="ringSize" data-control="size" data-piece="ring"></div>
-        </div>
-
-        <div class="control-group">
-          <div class="label">Initial</div>
-          <div class="control-options initial-chips" id="ringInitial" data-control="initial" data-piece="ring"></div>
+          <div class="control-options" id="ringSize"></div>
         </div>
 
         <div class="control-group">
@@ -226,12 +131,12 @@
         </div>
 
         <div class="product-actions">
-          <button class="cta-primary" id="ringAddBtn" type="button">Add to bag — $245</button>
-          <a class="cta-secondary" id="ringDesignLink" href="customize.html?piece=signet-ring">Design your own</a>
+          <button class="cta-primary" id="ringAddBtn" type="button">Add to bag — $365</button>
+          <a class="cta-secondary" id="ringDesignLink" href="product.html?id=mens-christ-ring">View full details</a>
         </div>
 
         <div class="trust-strip">
-          Designed in Newport Beach · Hand-finished in Downtown LA · Ships in 7–14 days
+          Designed in Newport Beach · Hand-finished in Downtown LA · Ships in 5–7 days
           <em>$1 from this piece goes to Postpartum Support International.</em>
         </div>
       </div>
@@ -255,195 +160,101 @@
     <div class="legal"><span>© 2026 Adornme · Dr. Mira "Mehraein" Mokhberi, Founder</span><span>Designed in Newport Beach · Made in Downtown Los Angeles</span></div>
   </footer>
 
+  <script src="assets/products-data.js"></script>
   <script src="assets/shopify-checkout.js"></script>
   <script>
-    // ===== FOR HIM CONFIGURATOR =====
-    //
-    // Two pieces (pendant + ring), each with its own state and configurator.
-    // Each state holds the customer's current selections.
-    // When metal changes, price updates. When Add to bag is clicked,
-    // we call window.AdornmeShopify.addToCart() with the current config.
-
-    // ---- Product specs ----
+    // ===== FOR HIM CONFIGURATOR (v33 — reads live product data) =====
     const PIECES = {
-      pendant: {
-        productId: "signet-pendant",
-        basePrice: 185,  // Sterling Silver price
-        metals: ["silver", "vermeil", "gold"],
-        sizes: ["20–22″", "22–24″"],
-        defaultSize: "20–22″",
-      },
-      ring: {
-        productId: "signet-ring",
-        basePrice: 245,
-        metals: ["silver", "vermeil", "gold"],
-        sizes: ["8", "8½", "9", "9½", "10", "10½", "11", "11½", "12", "12½", "13"],
-        defaultSize: "9",
-      },
+      pendant: { productId: "mens-christ-pendant" },
+      ring:    { productId: "mens-christ-ring" },
     };
 
-    // Metal multipliers (same as the rest of the site)
-    const METAL_MULTIPLIERS = { silver: 1.0, vermeil: 1.25, gold: 4.0 };
-    const METAL_LABELS = { silver: "Sterling Silver", vermeil: "Gold Vermeil", gold: "Solid 14k Gold" };
-    const METAL_SHORT = { silver: "Silver", vermeil: "Vermeil", gold: "Gold" };
+    const METAL_LABELS = { silver:"Sterling Silver", vermeil:"Gold Vermeil", gold10:"Solid 10k Gold", gold14:"Solid 14k Gold", gold18:"Solid 18k Gold" };
+    const METAL_SHORT  = { silver:"Silver", vermeil:"Gold Vermeil", gold10:"10k Gold", gold14:"14k Gold", gold18:"18k Gold" };
+    const METAL_ORDER  = ["silver","vermeil","gold10","gold14","gold18"];
+    const GOLD_COLORS  = [ {id:"yellow",label:"Yellow Gold"},{id:"white",label:"White Gold"},{id:"rose",label:"Rose Gold"} ];
 
-    // Initial options: "—" (no initial) plus all 26 letters
-    const INITIALS = ["—", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-                      "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    function product(piece){ return PRODUCTS.find((p)=>p.id===PIECES[piece].productId); }
+    function isGold(metal){ return metal.startsWith("gold"); }
 
-    // ---- Initial state for each piece ----
     const state = {
-      pendant: { metal: "silver", size: "20–22″", initial: "M", engraving: "" },
-      ring:    { metal: "silver", size: "9",      initial: "M", engraving: "" },
+      pendant: { metal:"gold14", goldColor:"yellow", size:null, engraving:"" },
+      ring:    { metal:"gold14", goldColor:"yellow", size:null, engraving:"" },
     };
-
-    // ---- Render the chip groups ----
-
-    function renderMetalChips(piece) {
-      const spec = PIECES[piece];
-      const s = state[piece];
-      const container = document.getElementById(`${piece}Metal`);
-      container.innerHTML = spec.metals.map((m) => {
-        const isActive = s.metal === m;
-        return `<button class="opt ${isActive ? "active" : ""}" data-value="${m}" type="button">
-          <span class="dot ${m}"></span>${METAL_LABELS[m]}
-        </button>`;
-      }).join("");
-      container.querySelectorAll(".opt").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          s.metal = btn.dataset.value;
-          renderMetalChips(piece);
-          updatePrice(piece);
-        });
-      });
+    // set default sizes from data
+    for (const key of ["pendant","ring"]) {
+      const p = product(key);
+      if (p && p.sizes && p.sizes.length) state[key].size = p.defaultSize || p.sizes[0];
     }
 
-    function renderSizeChips(piece) {
-      const spec = PIECES[piece];
-      const s = state[piece];
-      const container = document.getElementById(`${piece}Size`);
-      container.innerHTML = spec.sizes.map((sz) => {
-        const isActive = s.size === sz;
-        return `<button class="opt ${isActive ? "active" : ""}" data-value="${sz}" type="button">${sz}</button>`;
-      }).join("");
-      container.querySelectorAll(".opt").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          s.size = btn.dataset.value;
-          renderSizeChips(piece);
-        });
-      });
+    function priceFor(piece){
+      const p = product(piece); const s = state[piece];
+      if (p.prices && p.prices[s.metal] != null) return p.prices[s.metal];
+      return window.adornmeGetFromPrice ? window.adornmeGetFromPrice(p) : (p.price||0);
     }
 
-    function renderInitialChips(piece) {
-      const s = state[piece];
-      const container = document.getElementById(`${piece}Initial`);
-      container.innerHTML = INITIALS.map((init) => {
-        const isActive = s.initial === init;
-        return `<button class="opt ${isActive ? "active" : ""}" data-value="${init}" type="button">${init}</button>`;
-      }).join("");
-      container.querySelectorAll(".opt").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          s.initial = btn.dataset.value;
-          renderInitialChips(piece);
-        });
-      });
+    function renderMetal(piece){
+      const p = product(piece), s = state[piece];
+      const el = document.getElementById(`${piece}Metal`);
+      el.innerHTML = METAL_ORDER.map((m)=>`<button class="opt ${s.metal===m?"active":""}" data-value="${m}" type="button"><span class="dot ${m}"></span>${METAL_SHORT[m]}</button>`).join("");
+      el.querySelectorAll(".opt").forEach((b)=>b.addEventListener("click",()=>{ s.metal=b.dataset.value; renderAll(piece); }));
     }
-
-    function updatePrice(piece) {
-      const spec = PIECES[piece];
+    function renderColor(piece){
       const s = state[piece];
-      const price = Math.round(spec.basePrice * METAL_MULTIPLIERS[s.metal]);
-      document.getElementById(`${piece}Price`).textContent = `From $${price}`;
-      document.getElementById(`${piece}AddBtn`).textContent = `Add to bag — $${price}`;
+      const group = document.getElementById(`${piece}ColorGroup`);
+      const show = isGold(s.metal);
+      group.hidden = !show;
+      if (!show) return;
+      const el = document.getElementById(`${piece}Color`);
+      el.innerHTML = GOLD_COLORS.map((c)=>`<button class="opt ${s.goldColor===c.id?"active":""}" data-value="${c.id}" type="button"><span class="dot gc-${c.id}"></span>${c.label}</button>`).join("");
+      el.querySelectorAll(".opt").forEach((b)=>b.addEventListener("click",()=>{ s.goldColor=b.dataset.value; renderColor(piece); }));
     }
+    function renderSize(piece){
+      const p = product(piece), s = state[piece];
+      const el = document.getElementById(`${piece}Size`);
+      if (!p.sizes) { el.innerHTML=""; return; }
+      el.innerHTML = p.sizes.map((sz)=>`<button class="opt ${s.size===sz?"active":""}" data-value="${sz}" type="button">${sz}</button>`).join("");
+      el.querySelectorAll(".opt").forEach((b)=>b.addEventListener("click",()=>{ s.size=b.dataset.value; renderSize(piece); }));
+    }
+    function updatePrice(piece){
+      const pr = priceFor(piece);
+      document.getElementById(`${piece}Price`).textContent = `From $${pr.toLocaleString()}`;
+      document.getElementById(`${piece}AddBtn`).textContent = `Add to bag — $${pr.toLocaleString()}`;
+    }
+    function renderAll(piece){ renderMetal(piece); renderColor(piece); renderSize(piece); updatePrice(piece); }
 
-    // ---- Wire up engraving inputs ----
+    document.getElementById("pendantEngraving").addEventListener("input",(e)=>{ state.pendant.engraving=e.target.value; });
+    document.getElementById("ringEngraving").addEventListener("input",(e)=>{ state.ring.engraving=e.target.value; });
 
-    document.getElementById("pendantEngraving").addEventListener("input", (e) => {
-      state.pendant.engraving = e.target.value;
-    });
-    document.getElementById("ringEngraving").addEventListener("input", (e) => {
-      state.ring.engraving = e.target.value;
-    });
-
-    // ---- Add to bag handlers ----
-
-    async function handleAddToBag(piece) {
+    async function handleAddToBag(piece){
       const btn = document.getElementById(`${piece}AddBtn`);
-      const originalText = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = "Preparing checkout…";
-
+      const orig = btn.textContent; btn.disabled=true; btn.textContent="Preparing checkout…";
       try {
-        const s = state[piece];
+        const p = product(piece), s = state[piece];
         const config = {
-          productId: PIECES[piece].productId,
-          metal: s.metal,
+          productId: p.id,
+          metal: s.metal, metalLabel: METAL_LABELS[s.metal],
+          drop: "", dropLabel: "",
+          stone: "", stoneLabel: "",
+          goldColor: isGold(s.metal) ? s.goldColor : "",
           size: s.size || "",
-          initial: s.initial && s.initial !== "—" ? s.initial : "",
+          initial: "",
           engraving: s.engraving || "",
           giftNote: "",
         };
-
         if (window.AdornmeShopify && window.AdornmeShopify.addToCart) {
           await window.AdornmeShopify.addToCart(config);
-          // Shopify checkout opens in a new tab — restore button after brief delay
-          setTimeout(() => {
-            btn.textContent = originalText;
-            btn.disabled = false;
-          }, 1500);
-        } else {
-          console.error("[Adornme] Shopify integration not loaded");
-          alert("Checkout system is loading. Please try again in a moment.");
-          btn.textContent = originalText;
-          btn.disabled = false;
-        }
-      } catch (err) {
-        console.error("[Adornme] Add to bag error:", err);
-        alert("Sorry — something went wrong. Please email mira@adornme.ai for assistance.");
-        btn.textContent = originalText;
-        btn.disabled = false;
-      }
+          setTimeout(()=>{ btn.textContent=orig; btn.disabled=false; }, 2000);
+        } else { alert("Checkout system is loading. Please try again in a moment."); btn.textContent=orig; btn.disabled=false; }
+      } catch(err){ console.error("[Adornme] Add to bag error:",err); alert("Sorry — something went wrong. Please email mira@adornme.ai."); btn.textContent=orig; btn.disabled=false; }
     }
+    document.getElementById("pendantAddBtn").addEventListener("click",()=>handleAddToBag("pendant"));
+    document.getElementById("ringAddBtn").addEventListener("click",()=>handleAddToBag("ring"));
 
-    document.getElementById("pendantAddBtn").addEventListener("click", () => handleAddToBag("pendant"));
-    document.getElementById("ringAddBtn").addEventListener("click", () => handleAddToBag("ring"));
-
-    // ---- "Design your own" links carry current selections to the Customize page ----
-
-    function updateDesignLink(piece) {
-      const s = state[piece];
-      const productId = PIECES[piece].productId;
-      const params = new URLSearchParams({
-        piece: productId,
-        metal: s.metal,
-      });
-      if (s.size) params.set("size", s.size);
-      if (s.initial && s.initial !== "—") params.set("initial", s.initial);
-      document.getElementById(`${piece}DesignLink`).href = `customize.html?${params.toString()}`;
-    }
-
-    // Update design links whenever state changes (poll-style — simple and reliable)
-    setInterval(() => {
-      updateDesignLink("pendant");
-      updateDesignLink("ring");
-    }, 500);
-
-    // ---- Initial render ----
-
-    renderMetalChips("pendant");
-    renderSizeChips("pendant");
-    renderInitialChips("pendant");
-    updatePrice("pendant");
-    updateDesignLink("pendant");
-
-    renderMetalChips("ring");
-    renderSizeChips("ring");
-    renderInitialChips("ring");
-    updatePrice("ring");
-    updateDesignLink("ring");
+    renderAll("pendant");
+    renderAll("ring");
   </script>
   <script src="assets/mobile-menu.js"></script>
-<script src="assets/fab.js"></script>
+  <script src="assets/fab.js"></script>
 </body>
 </html>
