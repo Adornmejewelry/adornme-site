@@ -1,7 +1,6 @@
 // ============================================================
-// ADORNME — Central product data (v32.1)
-// All prices from Jack's cost documents. Bracelets at lower margin.
-// Drops (pearl/cz/diamond) priced per drop. Gold color = image/property only.
+// ADORNME — Central product data (v32.5) — clean .jpeg image names
+// Prices from Jack's costs. Gold color = image/property only.
 // ============================================================
 
 const HEART_STONE_OPTIONS = [
@@ -35,8 +34,8 @@ const PRODUCTS = [
     pricesByDrop: { pearl: { silver:350, vermeil:425, gold10:1245, gold14:1730, gold18:2280 }, cz: { silver:265, vermeil:340, gold10:1175, gold14:1660, gold18:2210 }, diamond: { silver:590, vermeil:665, gold10:1435, gold14:1920, gold18:2470 } },
     pricesByDrop21: { pearl: { silver:455, vermeil:530, gold10:1840, gold14:2635, gold18:3505 }, cz: { silver:365, vermeil:440, gold10:1770, gold14:2565, gold18:3435 }, diamond: { silver:690, vermeil:765, gold10:2030, gold14:2825, gold18:3695 } },
     price: 265,
-    image: "assets/products/bleeding-heart-necklace-no-initial.png",
-    imageInitial: "assets/products/bleeding-heart-necklace-with-initial.jpg",
+    image: "assets/products/engravable-necklace.jpeg",
+    imageInitial: "assets/products/engravable-necklace.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["14\u201316\u2033", "16\u201318\u2033", "20\u201322\u2033"],
     defaultSize: "16\u201318\u2033",
@@ -59,8 +58,8 @@ const PRODUCTS = [
     pricesByDrop: { pearl: { silver:340, vermeil:415, gold10:1000, gold14:1435, gold18:1885 }, cz: { silver:255, vermeil:330, gold10:930, gold14:1365, gold18:1815 }, diamond: { silver:580, vermeil:655, gold10:1190, gold14:1625, gold18:2075 } },
     pricesByDrop21: { pearl: { silver:445, vermeil:520, gold10:1600, gold14:2345, gold18:3110 }, cz: { silver:355, vermeil:430, gold10:1530, gold14:2275, gold18:3040 }, diamond: { silver:680, vermeil:755, gold10:1790, gold14:2535, gold18:3300 } },
     price: 255,
-    image: "assets/products/bleeding-heart-pendant-no-initial.png",
-    imageInitial: "assets/products/bleeding-heart-pendant-no-initial.png",
+    image: "assets/products/engravable-pendant.jpeg",
+    imageInitial: "assets/products/engravable-pendant.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: null,
     heartSizes: ["17mm", "21mm"],
@@ -81,8 +80,8 @@ const PRODUCTS = [
     prices: { silver:280, vermeil:355, gold10:690, gold14:975, gold18:1260 },
     pricesByDrop: { pearl: { silver:280, vermeil:355, gold10:690, gold14:975, gold18:1260 }, cz: { silver:190, vermeil:265, gold10:620, gold14:905, gold18:1190 }, diamond: { silver:515, vermeil:590, gold10:880, gold14:1165, gold18:1450 } },
     price: 190,
-    image: "assets/products/bleeding-heart-pendant-no-initial.png",
-    imageInitial: "assets/products/bleeding-heart-pendant-no-initial.png",
+    image: "assets/products/classic-pendant.jpeg",
+    imageInitial: "assets/products/classic-pendant.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: null,
     canHaveInitial: false,
@@ -102,8 +101,8 @@ const PRODUCTS = [
     prices: { silver:250, vermeil:325, gold10:520, gold14:715, gold18:910 },
     pricesByDrop: { pearl: { silver:250, vermeil:325, gold10:520, gold14:715, gold18:910 }, cz: { silver:165, vermeil:240, gold10:450, gold14:645, gold18:840 }, diamond: { silver:490, vermeil:565, gold10:710, gold14:905, gold18:1100 } },
     price: 165,
-    image: "assets/products/bleeding-heart-ring-no-initial.png",
-    imageInitial: "assets/products/bleeding-heart-ring-with-initial.jpg",
+    image: "assets/products/engravable-ring.jpeg",
+    imageInitial: "assets/products/engravable-ring.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"],
     defaultSize: "4.5",
@@ -124,8 +123,8 @@ const PRODUCTS = [
     prices: { silver:495, vermeil:575, gold10:1055, gold14:1445, gold18:1850 },
     pricesByDrop: { pearl: { silver:495, vermeil:575, gold10:1055, gold14:1445, gold18:1850 }, cz: { silver:320, vermeil:400, gold10:915, gold14:1305, gold18:1710 }, diamond: { silver:970, vermeil:1050, gold10:1435, gold14:1825, gold18:2230 } },
     price: 320,
-    image: "assets/products/bleeding-heart-earrings-no-initial.png",
-    imageInitial: "assets/products/bleeding-heart-earrings-with-initial.jpg",
+    image: "assets/products/engravable-stud.jpeg",
+    imageInitial: "assets/products/engravable-stud.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: null,
     canHaveInitial: true,
@@ -145,8 +144,8 @@ const PRODUCTS = [
     prices: { silver:490, vermeil:565, gold10:1045, gold14:1435, gold18:1835 },
     pricesByDrop: { pearl: { silver:490, vermeil:565, gold10:1045, gold14:1435, gold18:1835 }, cz: { silver:315, vermeil:390, gold10:905, gold14:1295, gold18:1695 }, diamond: { silver:965, vermeil:1040, gold10:1425, gold14:1815, gold18:2215 } },
     price: 315,
-    image: "assets/products/bleeding-heart-earrings-no-initial.png",
-    imageInitial: "assets/products/bleeding-heart-earrings-with-initial.jpg",
+    image: "assets/products/engravable-chain-ear.jpeg",
+    imageInitial: "assets/products/engravable-chain-ear.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: null,
     canHaveInitial: true,
@@ -166,8 +165,8 @@ const PRODUCTS = [
     prices: { silver:250, vermeil:325, gold10:520, gold14:715, gold18:910 },
     pricesByDrop: { pearl: { silver:250, vermeil:325, gold10:520, gold14:715, gold18:910 }, cz: { silver:165, vermeil:240, gold10:450, gold14:645, gold18:840 }, diamond: { silver:490, vermeil:565, gold10:710, gold14:905, gold18:1100 } },
     price: 165,
-    image: "assets/products/bleeding-heart-rose-quartz-pendant.png",
-    imageInitial: "assets/products/bleeding-heart-rose-quartz-pendant.png",
+    image: "assets/products/stone-ring.jpeg",
+    imageInitial: "assets/products/stone-ring.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"],
     defaultSize: "4.5",
@@ -190,8 +189,8 @@ const PRODUCTS = [
     prices: { silver:455, vermeil:535, gold10:830, gold14:1100, gold18:1385 },
     pricesByDrop: { pearl: { silver:455, vermeil:535, gold10:830, gold14:1100, gold18:1385 }, cz: { silver:280, vermeil:360, gold10:690, gold14:960, gold18:1245 }, diamond: { silver:930, vermeil:1010, gold10:1210, gold14:1480, gold18:1765 } },
     price: 280,
-    image: "assets/products/bleeding-heart-rose-quartz-pendant.png",
-    imageInitial: "assets/products/bleeding-heart-rose-quartz-pendant.png",
+    image: "assets/products/stone-stud.jpeg",
+    imageInitial: "assets/products/stone-stud.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: null,
     canHaveInitial: false,
@@ -213,8 +212,8 @@ const PRODUCTS = [
     prices: { silver:490, vermeil:565, gold10:1045, gold14:1435, gold18:1835 },
     pricesByDrop: { pearl: { silver:490, vermeil:565, gold10:1045, gold14:1435, gold18:1835 }, cz: { silver:315, vermeil:390, gold10:905, gold14:1295, gold18:1695 }, diamond: { silver:965, vermeil:1040, gold10:1425, gold14:1815, gold18:2215 } },
     price: 315,
-    image: "assets/products/bleeding-heart-rose-quartz-pendant.png",
-    imageInitial: "assets/products/bleeding-heart-rose-quartz-pendant.png",
+    image: "assets/products/stone-chain-ear.jpeg",
+    imageInitial: "assets/products/stone-chain-ear.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: null,
     canHaveInitial: false,
@@ -236,8 +235,8 @@ const PRODUCTS = [
     prices: { silver:545, vermeil:620, gold10:1390, gold14:1955, gold18:2540 },
     pricesByDrop: { pearl: { silver:545, vermeil:620, gold10:1390, gold14:1955, gold18:2540 }, cz: { silver:370, vermeil:445, gold10:1250, gold14:1815, gold18:2400 }, diamond: { silver:1020, vermeil:1095, gold10:1770, gold14:2335, gold18:2920 } },
     price: 370,
-    image: "assets/products/bleeding-heart-earrings-no-initial.png",
-    imageInitial: "assets/products/bleeding-heart-earrings-no-initial.png",
+    image: "assets/products/classic-chain-ear.jpeg",
+    imageInitial: "assets/products/classic-chain-ear.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: null,
     canHaveInitial: false,
@@ -257,8 +256,8 @@ const PRODUCTS = [
     prices: { silver:320, vermeil:395, gold10:615, gold14:820, gold18:1040 },
     pricesByDrop: { pearl: { silver:320, vermeil:395, gold10:615, gold14:820, gold18:1040 }, cz: { silver:230, vermeil:305, gold10:545, gold14:750, gold18:970 }, diamond: { silver:555, vermeil:630, gold10:805, gold14:1010, gold18:1230 } },
     price: 230,
-    image: "assets/products/flower-cross-new.jpg",
-    imageInitial: "assets/products/flower-cross-new.jpg",
+    image: "assets/products/flower-cross.jpeg",
+    imageInitial: "assets/products/flower-cross.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["16\u201318\u2033", "20\u201322\u2033"],
     defaultSize: "20\u201322\u2033",
@@ -279,8 +278,8 @@ const PRODUCTS = [
     prices: { silver:310, vermeil:385, gold10:680, gold14:925, gold18:1185 },
     pricesByDrop: { pearl: { silver:310, vermeil:385, gold10:680, gold14:925, gold18:1185 }, cz: { silver:220, vermeil:295, gold10:610, gold14:855, gold18:1115 }, diamond: { silver:545, vermeil:620, gold10:870, gold14:1115, gold18:1375 } },
     price: 220,
-    image: "assets/products/heart-cross-new.jpg",
-    imageInitial: "assets/products/heart-cross-new.jpg",
+    image: "assets/products/heart-cross.jpeg",
+    imageInitial: "assets/products/heart-cross.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["16\u201318\u2033", "20\u201322\u2033"],
     defaultSize: "20\u201322\u2033",
@@ -322,8 +321,8 @@ const PRODUCTS = [
     category: "chains",
     prices: { silver:20, vermeil:100, gold10:255, gold14:300, gold18:405 },
     price: 20,
-    image: "assets/products/adornme-chain-three-lengths.png",
-    imageInitial: "assets/products/adornme-chain-three-lengths.png",
+    image: "assets/products/adornme-chain.png",
+    imageInitial: "assets/products/adornme-chain.png",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["16\u2033", "18\u2033", "20\u2033"],
     defaultSize: "18\u2033",
@@ -344,8 +343,8 @@ const PRODUCTS = [
     prices: { silver:830, vermeil:885, gold10:1710, gold14:2320, gold18:2945 },
     pricesByDrop: { pearl: { silver:830, vermeil:885, gold10:1710, gold14:2320, gold18:2945 }, cz: { silver:450, vermeil:505, gold10:1400, gold14:2010, gold18:2635 }, diamond: { silver:1870, vermeil:1925, gold10:2545, gold14:3160, gold18:3785 } },
     price: 450,
-    image: "assets/products/pearl-bracelet.png",
-    imageInitial: "assets/products/pearl-bracelet.png",
+    image: "assets/products/pearl-bracelet.jpeg",
+    imageInitial: "assets/products/pearl-bracelet.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["6.5\u20137\u2033", "7\u20137.5\u2033"],
     defaultSize: "7\u20137.5\u2033",
@@ -366,8 +365,8 @@ const PRODUCTS = [
     prices: { silver:695, vermeil:750, gold10:2815, gold14:4130, gold18:5480 },
     pricesByDrop: { pearl: { silver:695, vermeil:750, gold10:2815, gold14:4130, gold18:5480 }, cz: { silver:635, vermeil:690, gold10:2765, gold14:4080, gold18:5425 }, diamond: { silver:870, vermeil:925, gold10:2955, gold14:4270, gold18:5620 } },
     price: 635,
-    image: "assets/products/cuff-mother-of-pearl.png",
-    imageInitial: "assets/products/cuff-mother-of-pearl.png",
+    image: "assets/products/cuff.jpeg",
+    imageInitial: "assets/products/cuff.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: null,
     canHaveInitial: false,
@@ -382,10 +381,7 @@ const PRODUCTS = [
 ];
 
 function adornmeGetMetalPrice(product, metal, drop) {
-  if (product.pricesByDrop && drop && product.pricesByDrop[drop]) {
-    const v = product.pricesByDrop[drop][metal];
-    if (v != null) return v;
-  }
+  if (product.pricesByDrop && drop && product.pricesByDrop[drop]) { const v=product.pricesByDrop[drop][metal]; if(v!=null)return v; }
   if (product.prices && product.prices[metal] != null) return product.prices[metal];
   const vals = product.prices ? Object.values(product.prices).filter(x=>typeof x==="number") : [];
   return vals.length ? Math.min(...vals) : (product.price || 0);
