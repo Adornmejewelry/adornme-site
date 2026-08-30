@@ -133,6 +133,16 @@
         </div>
         <div class="study-grid study-grid--five" id="homeDevotionGrid"></div>
       </div>
+
+      <div class="cross-studies">
+        <div class="section-head">
+          <div class="eyebrow">For the Men Who Choose Meaning</div>
+          <h2>For Him</h2>
+          <p class="lede">Christ risen — as a pendant and a bold ring — in the same fine metals as the Bleeding Heart designs. A side door, opened deliberately.</p>
+        </div>
+        <div class="study-grid study-grid--five" id="homeForHimGrid"></div>
+        <a class="link-arrow" href="for-him.html">Explore For Him →</a>
+      </div>
       <a class="link-arrow" href="trinity-collection.html">See the full Gallery →</a>
     </div>
   </section>
@@ -311,10 +321,13 @@
       // Signature: Bleeding Heart collection pieces (exclude devotion), cap at a tidy set
       const sig = PRODUCTS.filter((p)=>p.collection==="bleeding-heart");
       const devotion = PRODUCTS.filter((p)=>p.collection==="devotion");
+      const forhim = PRODUCTS.filter((p)=>p.collection==="for-him");
       const sigEl = document.getElementById("homeSignatureGrid");
       const devEl = document.getElementById("homeDevotionGrid");
+      const forhimEl = document.getElementById("homeForHimGrid");
       if (sigEl) sigEl.innerHTML = sig.map(card).join("");
       if (devEl) devEl.innerHTML = devotion.map(studyCard).join("");
+      if (forhimEl) forhimEl.innerHTML = forhim.map(studyCard).join("");
       // chain price
       const chain = PRODUCTS.find((p)=>p.id==="adornme-chain");
       const chainEl = document.getElementById("homeChainPrice");
