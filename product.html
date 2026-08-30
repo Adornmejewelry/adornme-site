@@ -86,6 +86,7 @@
   </style>
 </head>
 <body>
+  <div class="announce">Our launch has begun — enjoy 10% off through September 21 as a thank-you for pre-ordering early. Ships in 2–3 weeks.</div>
   <nav class="nav" aria-label="Primary navigation">
     <div class="nav-left"><a href="trinity-collection.html">Gallery</a><a href="customize.html">Customize</a></div>
     <a class="logo" href="index.html" aria-label="Adornme home"><strong>ADORNME</strong><span>A love story you can wear</span></a>
@@ -263,7 +264,7 @@
                   <button class="cta-primary" id="addToCartBtn" type="button" ${live==null?"disabled":""}>${btnLabel}</button>
                   <a class="cta-secondary" href="customize.html?piece=${product.id}&metal=${state.metal}">Customize this piece</a>
                 </div>
-                <div class="trust-strip">Designed in Newport Beach · Hand-finished in Downtown LA · Ships in ${product.shipDays}<em>$1 from this piece goes to Postpartum Support International.</em></div>
+                <div class="trust-strip">Designed in Newport Beach · Hand-finished in Downtown LA · Ships in ${product.shipDays}</div>
                 <div class="product-meta"><h3>The piece</h3><p>${product.materials}</p>
                   <dl class="product-meta-detail">
                     <dt>Metals</dt><dd>${product.metals.filter((m)=>METAL_ORDER.includes(m)).map((m)=>METAL_LABELS[m]).join(" · ")}</dd>
