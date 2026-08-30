@@ -3,456 +3,355 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Customize | Adornme</title>
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap");
-    :root {
-      --ink:#2D4D58; --ink-soft:#5A7984; --aegean:#2D4D58; --aegean-deep:#3F7E99;
-      --buttercup:#F4D770; --buttercup-deep:#D4B850; --buttercup-pale:#FFEFA8;
-      --antique-gold:#C9A961; --cream:#F0E7D2; --ivory:#FAF6F0; --paper:#F6EFDE;
-      --rule:rgba(45,77,88,0.14);
-      --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
-      --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body { margin:0; background:var(--ivory); color:var(--ink); font:16px/1.65 var(--sans); }
-    .announce{position:sticky;top:0;z-index:1002;display:block;width:100%;box-sizing:border-box;background:#2D4D58;color:#FAF6F0;text-align:center;padding:10px 16px;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:12px;font-weight:500;line-height:1.45;letter-spacing:.03em;}
-    @media (max-width:560px){ .announce { font-size:11px; padding:9px 12px; letter-spacing:.02em; } }
-    a { color:inherit; text-decoration:none; }
-    button, input, textarea { font:inherit; }
-    button { cursor:pointer; }
-    h1,h2,h3,p { margin:0; }
-    .nav { position:sticky; top:0; z-index:20; min-height:88px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:28px; padding:16px clamp(20px,4vw,56px); border-bottom:1px solid var(--rule); background:rgba(255,250,240,.92); backdrop-filter:blur(10px); }
-    .nav-left,.nav-right { display:flex; align-items:center; gap:clamp(22px,3vw,42px); }
-    .nav-right { justify-content:flex-end; }
-    .nav a { font:600 12px/1 var(--sans); letter-spacing:.26em; text-transform:uppercase; color:var(--ink); transition:color .3s ease; }
-    .nav a:hover { color:var(--antique-gold); }
-    .logo { text-align:center; }
-    .logo strong { display:block; font:400 22px/1 var(--serif); letter-spacing:.42em; color:var(--ink); }
-    .logo span { display:block; margin-top:6px; font:italic 400 13px/1 var(--serif); color:var(--ink-soft); letter-spacing:.04em; }
-    @media (max-width:768px){
-      .nav { grid-template-columns:1fr !important; justify-items:center; position:relative; min-height:60px; }
-      .nav .logo { grid-column:1; margin:0 auto; text-align:center; }
-    }
-    .hero { padding:clamp(60px,8vw,96px) clamp(20px,4vw,56px) clamp(40px,5vw,64px); text-align:center; background:var(--ivory); }
-    .hero-inner { width:min(720px,100%); margin:0 auto; }
-    .eyebrow { font:600 11px/1.4 var(--sans); letter-spacing:.32em; text-transform:uppercase; color:var(--antique-gold); }
-    .hero h1 { margin-top:18px; color:var(--ink); font:400 clamp(40px,5.6vw,72px)/1.05 var(--serif); letter-spacing:.005em; }
-    .hero h1 em { font-style:italic; color:var(--antique-gold); font-weight:400; }
-    .hero p.lede { margin-top:24px; color:var(--ink-soft); font:italic 400 clamp(17px,1.8vw,20px)/1.6 var(--serif); }
-    .customizer { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:clamp(40px,5vw,80px); padding:clamp(30px,4vw,60px) clamp(20px,4vw,56px) clamp(60px,8vw,100px); max-width:1320px; margin:0 auto; align-items:start; }
-    @media (max-width:980px){ .customizer{ grid-template-columns:1fr; } }
-    .preview-wrap { position:sticky; top:112px; }
-    .preview-label { margin-bottom:18px; color:var(--ink-soft); font:italic 400 clamp(15px,1.7vw,17px)/1.5 var(--serif); text-align:center; }
-    .preview-box { position:relative; width:100%; aspect-ratio:1; background:var(--paper) center/cover no-repeat; border:1px solid var(--rule); overflow:hidden; transition:opacity .3s ease; }
-    .preview-box img.preview-img { width:100%; height:100%; object-fit:cover; display:block; transition:opacity .25s ease, filter .35s ease; }
-    .preview-box img.preview-img.metal-gold10, .preview-box img.preview-img.metal-gold14, .preview-box img.preview-img.metal-gold18 { filter:none; }
-    .preview-box img.preview-img.metal-vermeil { filter:saturate(1.15) brightness(1.04) hue-rotate(-4deg); }
-    .preview-box img.preview-img.metal-silver { filter:grayscale(.85) brightness(1.12) contrast(.98); }
-    .preview-box img.preview-img.gc-white { filter:grayscale(.82) brightness(1.14) contrast(.97) !important; }
-    .preview-box img.preview-img.gc-rose { filter:saturate(1.35) hue-rotate(-18deg) brightness(1.03) !important; }
-    .live-engraving { position:absolute; left:50%; top:70%; transform:translate(-50%,0); font:italic 400 clamp(16px,2.2vw,26px)/1 var(--serif); color:rgba(45,77,88,.78); pointer-events:none; text-align:center; max-width:80%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .preview-meta { margin-top:18px; text-align:center; }
-    .preview-meta h2 { font:italic 400 clamp(22px,2.6vw,28px)/1.15 var(--serif); color:var(--ink); }
-    .preview-meta p { margin-top:6px; color:var(--ink-soft); font:400 14px/1.5 var(--sans); }
-    .controls { display:grid; gap:clamp(28px,3vw,40px); }
-    .group { display:grid; gap:14px; }
-    .group .eyebrow { display:flex; align-items:center; gap:12px; }
-    .label-note { font:italic 400 13px/1 var(--serif); color:var(--ink-soft); letter-spacing:.02em; text-transform:none; }
-    .chip-row { display:flex; flex-wrap:wrap; gap:8px; }
-    .chip { padding:10px 16px; border:1px solid var(--rule); background:var(--ivory); color:var(--ink); font:500 13px/1 var(--sans); letter-spacing:.02em; transition:all .25s ease; border-radius:999px; display:inline-flex; align-items:center; gap:8px; }
-    .chip:hover { border-color:var(--antique-gold); color:var(--antique-gold); }
-    .chip.active { background:var(--ink); color:var(--ivory); border-color:var(--ink); }
-    .chip.active:hover { color:var(--ivory); }
-    .chip[disabled], .chip.disabled { opacity:.35; cursor:not-allowed; pointer-events:none; }
-    .chip .dot { display:inline-block; width:12px; height:12px; border-radius:50%; flex-shrink:0; }
-    .chip.letter-chip { min-width:38px; justify-content:center; font:500 14px/1 var(--serif); padding:10px 12px; }
-    .chip.no-initial { font-style:italic; }
-    .field { padding:14px 16px; width:100%; border:1px solid var(--rule); background:var(--ivory); color:var(--ink); font:400 15px/1.5 var(--serif); border-radius:4px; transition:border-color .25s ease; }
-    .field:focus { outline:none; border-color:var(--antique-gold); }
-    textarea.field { resize:vertical; min-height:80px; }
-    .helper { color:var(--ink-soft); font:italic 400 13px/1.55 var(--serif); letter-spacing:.01em; }
-    .summary { margin-top:16px; padding:24px; border:1px solid var(--rule); background:var(--paper); display:grid; grid-template-columns:1fr auto; gap:18px; align-items:center; }
-    .summary-line { color:var(--ink); font:400 15px/1.5 var(--serif); }
-    .price { color:var(--ink); font:500 clamp(24px,3vw,32px)/1 var(--serif); letter-spacing:.01em; }
-    .trust { margin-top:8px; padding:18px 24px; background:var(--cream); color:var(--ink); font:400 13px/1.6 var(--sans); letter-spacing:.01em; text-align:center; }
-    .trust em { display:block; margin-top:6px; color:var(--ink-soft); font:italic 400 13px/1.5 var(--serif); }
-    .cta-order { display:flex; justify-content:space-between; align-items:center; padding:18px 28px; background:var(--ink); color:var(--ivory); border-radius:999px; font:600 14px/1 var(--sans); letter-spacing:.14em; text-transform:uppercase; transition:background .25s ease; width:100%; border:none; }
-    .cta-order:hover { background:var(--aegean-deep); }
-    .cta-order[disabled] { opacity:.5; cursor:not-allowed; }
-    .cta-order strong { color:var(--buttercup); font-weight:500; letter-spacing:.02em; text-transform:none; }
-    .gallery { padding:clamp(50px,6vw,80px) clamp(20px,4vw,56px); background:var(--cream); text-align:center; }
-    .gallery-inner { width:min(620px,100%); margin:0 auto; }
-    .gallery .eyebrow { color:var(--antique-gold); }
-    .gallery p { margin-top:14px; color:var(--ink); font:italic 400 clamp(17px,1.9vw,20px)/1.6 var(--serif); }
-    .join { padding:clamp(60px,8vw,100px) clamp(20px,4vw,56px); background:var(--ink); color:var(--ivory); text-align:center; }
-    .join h2 { font:italic 400 clamp(32px,4.5vw,56px)/1.1 var(--serif); color:var(--ivory); }
-    .join p { margin-top:16px; color:rgba(255,250,240,.85); font:400 17px/1.6 var(--serif); }
-    .preorder-form { margin-top:32px; display:grid; grid-template-columns:1fr auto; gap:8px; max-width:540px; margin-left:auto; margin-right:auto; }
-    @media (max-width:560px){ .preorder-form{ grid-template-columns:1fr; } }
-    .preorder-form input { padding:16px 20px; border:1px solid rgba(255,250,240,.3); background:transparent; color:var(--ivory); border-radius:4px; font:400 15px/1 var(--sans); }
-    .preorder-form input::placeholder { color:rgba(255,250,240,.5); }
-    .preorder-form input:focus { outline:none; border-color:var(--buttercup); }
-    .preorder-form button { padding:16px 28px; background:var(--buttercup); color:var(--ink); border:none; border-radius:4px; font:600 13px/1 var(--sans); letter-spacing:.14em; text-transform:uppercase; transition:background .25s ease; }
-    .preorder-form button:hover { background:var(--buttercup-pale); }
-    .footer { padding:clamp(50px,6vw,80px) clamp(20px,4vw,56px) 32px; background:var(--ivory); color:var(--ink); }
-    .footer-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(20px,3vw,40px); max-width:1280px; margin:0 auto; }
-    @media (max-width:760px){ .footer-grid{ grid-template-columns:1fr 1fr; } }
-    @media (max-width:460px){ .footer-grid{ grid-template-columns:1fr; } }
-    .footer-mark img { width:36px; height:auto; }
-    .footer-logo { font:400 18px/1 var(--serif); letter-spacing:.42em; margin-top:14px; }
-    .footer-tag { margin-top:8px; font:italic 400 13px/1.4 var(--serif); color:var(--ink-soft); }
-    .footer h3 { font:600 11px/1 var(--sans); letter-spacing:.26em; text-transform:uppercase; color:var(--antique-gold); margin-bottom:16px; }
-    .footer a, .footer p { display:block; margin-top:8px; color:var(--ink); font:400 14px/1.4 var(--sans); transition:color .25s ease; }
-    .footer a:hover { color:var(--antique-gold); }
-    .legal { max-width:1280px; margin:clamp(50px,6vw,80px) auto 0; padding-top:24px; border-top:1px solid var(--rule); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; color:var(--ink-soft); font:400 12px/1.5 var(--sans); }
-  </style>
+  <title>Adornme | A love story you can wear</title>
+  <link rel="stylesheet" href="assets/home-gallery-v24.css">
+<style id="adornme-launch-banner-style">
+.announce{display:block !important;width:100%;box-sizing:border-box;background:#2D4D58;color:#FAF6F0;text-align:center;padding:11px 16px;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:12px;font-weight:500;line-height:1.5;letter-spacing:.04em;}
+@media (max-width:560px){.announce{font-size:11px;padding:10px 12px;letter-spacing:.02em;}}
+</style>
 </head>
 <body>
   <div class="announce">Our launch has begun — enjoy 10% off through September 21 as a thank-you for pre-ordering early. Ships in 2–3 weeks.</div>
   <nav class="nav" aria-label="Primary navigation">
-    <div class="nav-left"><a href="../trinity-collection.html">Gallery</a><a href="../customize.html">Customize</a></div>
-    <a class="logo" href="../index.html" aria-label="Adornme home"><strong>ADORNME</strong><span>A love story you can wear</span></a>
-    <div class="nav-right"><a href="../our-story.html">Story</a><a href="../for-him.html">For Him</a></div>
+    <div class="nav-left">
+      <a href="trinity-collection.html">Gallery</a>
+      <a href="customize.html">Customize</a>
+    </div>
+    <a class="logo" href="index.html" aria-label="Adornme home">
+      <strong>ADORNME</strong>
+      <span>A love story you can wear</span>
+    </a>
+    <div class="nav-right">
+      <a href="our-story.html">Story</a>
+      <a href="for-him.html">For Him</a>
+    </div>
   </nav>
 
-  <header class="hero">
-    <div class="hero-inner">
-      <div class="eyebrow">Your turn</div>
-      <h1><em>Make it</em><br>yours</h1>
-      <p class="lede">Choose a piece. Choose your metal. Add an initial, an engraving, or both. Or simply wear it as the bloom.</p>
+  <header class="home-hero">
+    <div class="hero-grid">
+      <div>
+        <p class="hero-tag">A love story you can wear</p>
+        <h1><em>Designed by soul</em><br>Made by you</h1>
+        <p class="hero-copy"><strong>Heart. Flower. Devotion.</strong> — Three forms. One love story.</p>
+        <p class="hero-copy hero-copy--soft">Each piece can be made yours with an initial or engraving.</p>
+        <p class="hero-copy hero-copy--soft">Designed in Newport Beach, hand-finished in Downtown Los Angeles.</p>
+        <div class="hero-actions">
+          <a class="button" href="trinity-collection.html">Shop the Gallery</a>
+          <a class="button blue" href="customize.html">Design your own</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <a href="product.html?id=engravable-necklace" aria-label="Shop The Bleeding Heart Engravable Necklace"><img src="assets/products/engravable-necklace.jpeg" alt="The Bleeding Heart Engravable Necklace in gold with engraved initial and pearl drop"></a>
+      </div>
     </div>
   </header>
 
-  <main class="customizer">
-    <section class="preview-wrap" aria-label="Live jewelry preview">
-      <p class="preview-label" id="previewLabel"></p>
-      <div class="preview-box" id="imagePreview" role="img" aria-label="Piece preview">
-        <img class="preview-img" id="previewImg" src="../assets/products/bleeding-heart-necklace-no-initial.png" alt="The Bleeding Heart Necklace">
-        <span class="live-engraving" id="liveEngraving"></span>
+  <section class="garden-section">
+    <div class="garden-grid">
+      <div class="garden-col garden-left">
+        <div class="eyebrow">THE STORY BEHIND OUR SIGNATURE DESIGN</div>
+        <h2>A flower with a heart that bleeds.</h2>
+        <div class="garden-image">
+          <img src="assets/bleeding-heart-flower.png" alt="A single bleeding heart flower bloom — pink heart with white drop hanging below">
+        </div>
       </div>
-      <div class="preview-meta">
-        <h2 id="previewTitle">The Bleeding Heart Necklace</h2>
-        <p id="previewSub">Adornme's signature design</p>
+      <div class="garden-col garden-right">
+        <p class="lede">Lamprocapnos spectabilis — <strong>The Bleeding Heart Flower.</strong> What falls from the wound is not loss. It is treasure.</p>
+        <p>This is the story of the founder, and of so many women who have lived through heartbreak and hardship — and stood tall through it all, gaining growth: the treasure. Wear it as a vow to yourself: in your hardest seasons, you are not breaking. You are blooming.</p>
+        <p>The founder brings meaningful pieces from nature, so women can feel its beauty and learn from it.</p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="controls" aria-label="Customize your piece">
-      <div class="group"><div class="eyebrow">Collection</div><div class="chip-row" id="collectionChips"></div></div>
-      <div class="group"><div class="eyebrow">Piece</div><div class="chip-row" id="pieceChips"></div></div>
-      <div class="group"><div class="eyebrow">Metal</div><div class="chip-row" id="metalChips"></div><p class="helper" style="font-style:italic;opacity:.75;">Color shown in preview is approximate — final finish renders the chosen metal exactly.</p></div>
-      <div class="group" id="goldColorGroup" hidden><div class="eyebrow">Gold Color</div><div class="chip-row" id="goldColorChips"></div><p class="helper" style="font-style:italic;opacity:.75;">Same price in yellow, white, or rose.</p></div>
-      <div class="group" id="heartSizeGroup" hidden><div class="eyebrow">Heart Size</div><div class="chip-row" id="heartSizeChips"></div><p class="helper" style="font-style:italic;opacity:.75;">21mm gives more room for engraving.</p></div>
+  <style>
+    .garden-section { padding: 80px 24px; background: #faf6f0; }
+    .garden-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .garden-left .eyebrow { font-size: 12px; letter-spacing: 3px; color: #c9a961; margin-bottom: 16px; font-weight: 600; }
+    .garden-left h2 { font-size: 36px; line-height: 1.2; color: #2d4d58; font-family: 'Times', serif; margin: 0 0 32px 0; font-weight: 400; }
+    .garden-image img { width: 100%; height: auto; display: block; border-radius: 4px; }
+    .garden-right .lede { font-size: 18px; line-height: 1.6; color: #2d4d58; margin-bottom: 20px; font-style: italic; }
+    .garden-right p { font-size: 16px; line-height: 1.7; color: #5a7984; margin-bottom: 16px; }
+    @media (max-width: 768px) { .garden-section { padding: 50px 20px; } .garden-grid { grid-template-columns: 1fr; gap: 24px; } .garden-left h2 { font-size: 28px; margin-bottom: 24px; } .garden-left .garden-image { margin-bottom: 8px; } }
+  </style>
 
-      <div class="group" id="stoneGroup" hidden><div class="eyebrow">Heart Stone</div><div class="chip-row" id="stoneChips"></div><p class="helper" id="stoneHelper"></p></div>
-      <div class="group" id="dropGroup" hidden><div class="eyebrow">Drop</div><div class="chip-row" id="dropChips"></div></div>
+  <section class="three-pillars centered-section">
+    <div class="container">
+      <div class="pillars-head">
+        <div class="eyebrow">Our Language of Love</div>
+        <h2>Three forms. One love story.</h2>
+        <p class="pillars-intro">Every Adornme piece is built from three signature elements — each a different way of saying the same thing.</p>
+      </div>
+      <div class="pillars-grid">
+        <article class="pillar">
+          <div class="pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M30 49 C 30 49, 11 36, 11 23 C 11 16, 17 12, 22 12 C 26 12, 29 14, 30 18 C 31 14, 34 12, 38 12 C 43 12, 49 16, 49 23 C 49 36, 30 49, 30 49 Z" /></svg>
+          </div>
+          <h3 class="pillar-name">Heart</h3>
+          <p class="pillar-line">Divine love, and every love that flows from it.</p>
+        </article>
+        <article class="pillar">
+          <div class="pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="30" cy="16" rx="7" ry="10" /><ellipse cx="44" cy="30" rx="10" ry="7" /><ellipse cx="30" cy="44" rx="7" ry="10" /><ellipse cx="16" cy="30" rx="10" ry="7" /><circle cx="30" cy="30" r="3" fill="currentColor" stroke="none" /></svg>
+          </div>
+          <h3 class="pillar-name">Flower</h3>
+          <p class="pillar-line">Nature, and the divine love painted on earth.</p>
+        </article>
+        <article class="pillar">
+          <div class="pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="30" y1="10" x2="30" y2="50" /><line x1="20" y1="24" x2="40" y2="24" /></svg>
+          </div>
+          <h3 class="pillar-name">Devotion</h3>
+          <p class="pillar-line">Christ, the cross, and any sacred symbol of devotion returning to their divine source.</p>
+        </article>
+      </div>
+      <div class="pillars-personal pillars-personal--with-example">
+        <div class="pillars-personal-text">
+          <div class="eyebrow">One Personal Touch</div>
+          <p class="personal-line">Each piece can be made personal — <em>add an initial, engraving, or customize it</em> to make it uniquely yours.</p>
+        </div>
+        <div class="personal-example">
+          <div class="personal-example-image">
+            <a href="product.html?id=pearl-bracelet" aria-label="Shop The Bleeding Heart Pearl Bracelet"><img src="assets/products/pearl-bracelet.jpeg" alt="The Bleeding Heart Pearl Bracelet, personalized with initial"></a>
+          </div>
+          <p class="personal-example-caption">The Bleeding Heart Pearl Bracelet, made personal. <a href="product.html?id=pearl-bracelet">Shop it →</a> · <a href="customize.html">Customize yours →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <div class="group" id="initialGroup"><div class="eyebrow">Initial <span class="label-note">— or wear it without</span></div><div class="chip-row" id="initialChips"></div><p class="helper" id="initialHelper">Free engraved initial on this piece.</p></div>
-      <div class="group" id="sizeGroup"><div class="eyebrow" id="sizeLabel">Length</div><div class="chip-row" id="sizeChips"></div><p class="helper" id="sizeHelper"></p></div>
+  <section class="signature cream">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Our Signature Design</div>
+        <h2>The Bleeding Heart Collection</h2>
+        <p class="poem">From the bleeding heart, a pearl is born — pain transforming into beauty, softness into elegance.</p>
+      </div>
+      <!-- Data-driven: rendered from PRODUCTS with live Shopify prices -->
+      <div class="product-grid product-grid--six" id="homeSignatureGrid"></div>
 
-      <div class="group"><div class="eyebrow">Engraving <span class="label-note">— optional, up to 25 characters</span></div><input class="field" id="engraving" maxlength="25" placeholder="e.g. always · 12.04.23 · Maman"><p class="helper">A few words hand-engraved on the back by our LA studio. Free.</p></div>
-      <div class="group"><div class="eyebrow">A note for the gift card <span class="label-note">— optional</span></div><textarea class="field" id="giftNote" maxlength="180" rows="3" placeholder="e.g. For Mira, the way of the sun. With love, always."></textarea><p class="helper">Printed on a small cream card tucked inside the box. Up to 180 characters · free.</p></div>
-      <div class="group"><div class="eyebrow">Anything else? <span class="label-note">— optional</span></div><textarea class="field" id="aiNotes" maxlength="400" rows="3" placeholder="e.g. Please use a slightly smaller pearl, or wrap as a baby gift."></textarea><p class="helper">Our studio reviews every custom note and confirms before we begin.</p></div>
+      <div class="cross-studies">
+        <div class="section-head">
+          <div class="eyebrow">Symbols of What We Hold Sacred</div>
+          <h2>The Devotion Collection</h2>
+          <p class="lede">The cross, Christ, and any sacred symbol of devotion worn as reminders of divine love — and the peace, grace, and beauty that flow from it.</p>
+        </div>
+        <div class="study-grid study-grid--five" id="homeDevotionGrid"></div>
+      </div>
 
-      <div class="summary"><div><div class="eyebrow">Your piece</div><p class="summary-line" id="summaryLine"></p></div><div class="price" id="price">—</div></div>
-      <div class="trust">Designed in Newport Beach · Hand-finished in Downtown LA · Free engraving · Ships in 2–3 weeks</div>
-      <button type="button" class="cta-order" id="addToCartBtn"><span>Add to bag</span><strong id="ctaPrice">—</strong></button>
-      <p class="helper">Free engraving · Ships in 2–3 weeks</p>
-    </section>
-  </main>
+      <div class="cross-studies">
+        <div class="section-head">
+          <div class="eyebrow">For the Men Who Choose Meaning</div>
+          <h2>For Him</h2>
+          <p class="lede">Christ risen — as a pendant and a bold ring — in the same fine metals as the Bleeding Heart designs. A side door, opened deliberately.</p>
+        </div>
+        <div class="study-grid study-grid--five" id="homeForHimGrid"></div>
+        <a class="link-arrow" href="for-him.html">Explore For Him →</a>
+      </div>
+      <a class="link-arrow" href="trinity-collection.html">See the full Gallery →</a>
+    </div>
+  </section>
 
-  <section class="gallery"><div class="gallery-inner"><div class="eyebrow">The Gallery</div><p>Your customized piece joins the Adornme Gallery. If someone orders it, you receive a 5% royalty.</p></div></section>
+  <section class="chains centered-section">
+    <div class="container">
+      <div class="chains-head">
+        <div class="eyebrow">Build it your way</div>
+        <h2>The Adornme Chain</h2>
+        <p class="chains-intro">Sold separately, in three lengths and five metals. For layering, for adding a second pendant, or for pairing with a chain you already own.</p>
+      </div>
+      <div class="chains-grid">
+        <div class="chains-image">
+          <a href="product.html?id=adornme-chain" aria-label="Shop The Adornme Chain"><img src="assets/products/adornme-chain.png" alt="The Adornme Chain — 16 inch, 18 inch, and 20 inch lengths shown side by side"></a>
+        </div>
+        <div class="chains-copy">
+          <ul class="chains-options">
+            <li><strong>16″</strong> · sits at the collarbone</li>
+            <li><strong>18″</strong> · standard length</li>
+            <li><strong>20″</strong> · for layering or longer drop</li>
+          </ul>
+          <p class="chains-detail">Metals: Sterling silver · gold vermeil · solid 10k, 14k &amp; 18k gold</p>
+          <p class="chains-detail">Choose your length and metal at checkout. Each chain comes ready to thread any Adornme pendant or any of your own.</p>
+          <p class="chains-price" id="homeChainPrice">From $65</p>
+          <a class="link-arrow" href="product.html?id=adornme-chain">Shop the chain →</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <section class="join" id="joinForm">
-    <h2>Stay close to the brand</h2>
-    <p>Receive notes from the studio, news about new pieces, and quiet stories from the journal — directly to your inbox.</p>
-    <form class="preorder-form" id="preorderForm"><input type="email" placeholder="your email address" aria-label="Email address" required><button type="submit" id="submitButton">Subscribe</button></form>
+  <section class="gift centered-section">
+    <div class="container">
+      <div class="gift-head">
+        <div class="eyebrow">Made to be Given</div>
+        <h2>The most personal gift<br>you'll ever give.</h2>
+        <p class="gift-copy">Every Adornme piece can be personalized with an initial, engraving, customization, and a note tucked inside the box.</p>
+        <p class="gift-copy gift-copy--italic">Whether for a birthday, an anniversary, a wedding, a graduation, or a quiet memorial — Adornme is designed to be given. Each piece arrives in a hand-finished gift box, with a personal note from you to them.</p>
+      </div>
+      <div class="gift-grid">
+        <article class="gift-card">
+          <h3>For Her</h3>
+          <p>Pendants, bracelets, and rings with her initial.</p>
+        </article>
+        <article class="gift-card">
+          <h3>For Him</h3>
+          <p>Crosses and devotional pieces with his initial.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark">
+    <div class="story-grid">
+      <div class="story-image">
+        <img src="assets/products/bleeding-heart-macro.jpg" alt="Close-up of the Bleeding Heart pendant">
+      </div>
+      <div>
+        <div class="eyebrow">Why the Bleeding Heart</div>
+        <h3>Nature already drew the symbol</h3>
+        <p>The bleeding heart (Lamprocapnos spectabilis) is a bloom that holds a flower and a heart at once. Mira, the founder, chose it as Adornme's signature design because it carries the brand's whole language in a single shape.</p>
+        <p>From the bleeding heart, a pearl is born — pain transforming into beauty, softness into elegance.</p>
+        <p class="quote">"The wound is the place where the Light enters you." — Rumi</p>
+        <a class="link-arrow" href="our-story.html">Read our story →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="made">
+    <div class="section-head narrow">
+      <div class="eyebrow">Why Adornme</div>
+      <h2>Made with care</h2>
+    </div>
+    <div class="trust-grid">
+      <article class="trust-item">
+        <div class="eyebrow">Newport Beach to Downtown LA</div>
+        <h4>Designed by hand, made by hand</h4>
+        <p>Every Adornme piece is sketched in Newport Beach and hand-finished in our Downtown Los Angeles studio — never mass-produced, never offshore.</p>
+      </article>
+      <article class="trust-item">
+        <div class="eyebrow">Five metals</div>
+        <h4>One promise</h4>
+        <p>Sterling silver, gold vermeil, and solid 10k, 14k &amp; 18k gold — available from day one, in every piece we make.</p>
+      </article>
+      <article class="trust-item">
+        <div class="eyebrow">A quiet vow</div>
+        <h4>$1 from every piece</h4>
+        
+      </article>
+    </div>
+  </section>
+
+  <section class="founder-note cream">
+    <div class="container">
+      <div class="founder-grid">
+        <div class="founder-portrait">
+          <img src="assets/mira-founder-portrait.jpg" alt="Dr. Mira 'Mehraein' Mokhberi, founder of Adornme">
+        </div>
+        <div class="founder-text">
+          <div class="eyebrow">The Founder</div>
+          <h2 class="founder-name">Dr. Mira <em>"Mehraein"</em> Mokhberi</h2>
+          <p class="founder-meaning"><em>Mehraein</em> — a Persian name meaning <em>"the way of the sun"</em> and <em>"the way of kindness."</em></p>
+          <p>Adornme was born from a love story and soul polished through pain, rebirth, growth, and the quiet beauty of becoming. Created by a woman who believes jewelry should be a daily reminder of who we are, what we love, and what we devote ourselves to.</p>
+          <p class="founder-quote">"I started Adornme because I wanted to wear my own story of becoming. The symbols I couldn't find anywhere else. Pieces that hold more than metal — inviting others to make them their own."</p>
+          <p class="founder-signoff">— Mira</p>
+          <p class="founder-attribution">Dr. Mira Mokhberi, Founder · Newport Beach, California</p>
+          <a class="link-arrow" href="our-story.html">Read her story →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="invite">
+    <div class="narrow">
+      <div class="eyebrow">Begin the design</div>
+      <h2>Make your own</h2>
+      <p class="lede">Choose your piece, your metal, your initial — and watch your design come together.</p>
+      <a class="button" href="customize.html">Design your piece</a>
+    </div>
   </section>
 
   <footer class="footer">
     <div class="footer-grid">
-      <div><div class="footer-mark"><img src="../assets/adornme-symbol-mark-adornme.png" alt="Adornme flower-heart symbol"></div><div class="footer-logo">ADORNME</div><p class="footer-tag">A love story you can wear</p></div>
-      <div><h3>Shop</h3><a href="../trinity-collection.html">Gallery</a><a href="../for-him.html">For Him</a><a href="../customize.html">Customize</a></div>
-      <div><h3>Brand</h3><a href="../our-story.html">Our Story</a><a href="../journal.html">Journal</a></div>
-      <div><h3>Care</h3><p><a href="mailto:hello@adornme.ai" style="color:inherit;text-decoration:none;">hello@adornme.ai</a></p><a href="../shipping.html">Shipping</a><a href="../materials.html">Sizing</a></div>
+      <div>
+        <div class="footer-mark"><img src="assets/adornme-symbol-mark-adornme.png" alt="Adornme flower-heart symbol"></div>
+        <div class="footer-logo">ADORNME</div>
+        <p class="footer-tag">A love story you can wear</p>
+      </div>
+      <div>
+        <h3>Shop</h3>
+        <a href="trinity-collection.html">Gallery</a>
+        <a href="for-him.html">For Him</a>
+        <a href="customize.html">Customize</a>
+      </div>
+      <div>
+        <h3>Brand</h3>
+        <a href="our-story.html">Our Story</a>
+        <a href="journal.html">Journal</a>
+      </div>
+      <div>
+        <h3>Care</h3>
+        <p><a href="mailto:hello@adornme.ai" style="color:inherit;text-decoration:none;">hello@adornme.ai</a></p>
+        <p><a href="tel:+19498658009" style="color:inherit;text-decoration:none;">+1 (949) 865-8009</a></p>
+        <a href="shipping.html">Shipping</a>
+        <a href="materials.html">Sizing</a>
+      </div>
     </div>
-    <div class="legal"><span>© 2026 Adornme · Dr. Mira "Mehraein" Mokhberi, Founder</span><span>Designed in Newport Beach · Made in Downtown Los Angeles</span></div>
+    <div class="legal">
+      <span>© 2026 Adornme · Dr. Mira "Mehraein" Mokhberi, Founder</span>
+      <span>Designed in Newport Beach · Made in Downtown Los Angeles</span>
+    </div>
   </footer>
 
-  <script src="../assets/products-data.js"></script>
-  <script src="../assets/shopify-checkout.js"></script>
+  <script src="assets/products-data.js"></script>
+  <script src="assets/shopify-checkout.js"></script>
   <script>
     // ============================================================
-    // ADORNME CUSTOMIZE — v32.0
-    // Reads shared PRODUCTS + live Shopify prices (source of truth).
-    // All pieces: metal + gold color + drop (+ stone) + heart size + initial + engraving.
+    // HOMEPAGE product grids — v31.0
+    // Data-driven from PRODUCTS with live Shopify "from" prices.
+    // This prevents stale/broken cards when the catalog changes.
     // ============================================================
-    const $ = (s) => document.querySelector(s);
-    const money = (v) => `$${Math.round(v).toLocaleString()}`;
-    const fixPath = (p) => p && p.indexOf("http")!==0 && p.indexOf("../")!==0 ? "../"+p : p;
+    const livePrices = {};
 
-    // METAL_LABELS provided globally by products-data.js
-    const METAL_SHORT  = { silver:"Silver", vermeil:"Gold Vermeil", gold10:"10k Gold", gold14:"14k Gold", gold18:"18k Gold" };
-    const METAL_DOT = { silver:["#C9CDCF","#999"], vermeil:["#D9A856","#B07D2D"], gold10:["#E7CE8F","#C0982F"], gold14:["#E9C66B","#B98C24"], gold18:["#E8B84B","#A87A18"] };
-    const METAL_ORDER = ["silver","vermeil","gold10","gold14","gold18"];
-    const METAL_SHOPIFY = METAL_LABELS;
-
-    // NOTE: stone ids match products-data.js HEART_STONE_OPTIONS: rose-quartz, pink-topaz, pink-sapphire, pink-diamond
-    const STONE_LABELS = { "rose-quartz":"Rose Quartz", "pink-topaz":"Pink Topaz", "pink-sapphire":"Pink Lab Sapphire", "pink-diamond":"Pink Lab Diamond" };
-    const STONE_ORDER = ["rose-quartz","pink-topaz","pink-sapphire","pink-diamond"];
-    const STONE_DOT = { "rose-quartz":["#F3C6CE","#D98B9A"], "pink-topaz":["#F5A9C4","#D96C97"], "pink-sapphire":["#F17FA8","#C64E7E"], "pink-diamond":["#F5B9D0","#C77"] };
-    const STONE_SHOPIFY = STONE_LABELS;
-
-    // drop ids match products-data.js DROP_OPTIONS: pearl, cz, diamond
-    const DROP_LABELS = { "pearl":"Freshwater Pearl", "cz":"Synthetic / CZ", "diamond":"Lab Diamond" };
-    const DROP_ORDER = ["pearl","cz","diamond"];
-    const DROP_SHOPIFY = DROP_LABELS;
-
-    const GOLD_COLORS = [ {id:"yellow",label:"Yellow Gold",dot:["#E9C66B","#B98C24"]}, {id:"white",label:"White Gold",dot:["#E8E9EB","#AAB"]}, {id:"rose",label:"Rose Gold",dot:["#E7B7A3","#C98A72"]} ];
-
-    const COLLECTIONS = [
-      { id:"bleeding-heart", label:"The Bleeding Heart" },
-      { id:"devotion", label:"The Devotion Collection" },
-      { id:"for-him", label:"For Him" },
-      { id:"chain", label:"The Adornme Chain" }
-    ];
-
-    const sizeHints = {
-      "14–16″":"Sits high on the neck — flatters with open necklines.",
-      "16–18″":"Falls at the base of the neck — Adornme's most versatile length.",
-      "18–20″":"Sits just below the collarbone.",
-      "20–22″":"Sits just above the chest — perfect for layering.",
-      "4":"A very petite ring size.","4.5":"A petite ring size.","5":"A smaller women's size, delicate fit.",
-      "5.5":"A slightly smaller everyday size.","6":"The most-purchased women's size — Adornme's default.",
-      "6.5":"A common women's size.","7":"A versatile size.","7.5":"For larger fingers.","8":"A larger women's size.",
-      "8.5":"A larger fit with extra ease.","9":"A larger women's size or men's small.",
-      "16″":"Choker length — sits at the collarbone.","18″":"Standard length — Adornme's default.","20″":"Longer — perfect for layering."
-    };
-
-    const state = {
-      collection:"bleeding-heart", pieceId:null, metal:"gold14",
-      goldColor:"yellow", stone:"rose-quartz", drop:"pearl", heartSize:null,
-      initial:"—", size:null, engraving:"", giftNote:"", aiNotes:""
-    };
-
-    let livePricing = {};
-
-    const piecesIn = (cid) => PRODUCTS.filter((p)=>p.collection===cid);
-    const piece = () => PRODUCTS.find((p)=>p.id===state.pieceId) || PRODUCTS[0];
-    const isStone = () => !!piece().hasStoneOptions;
-    const hasDrops = () => !!piece().hasDrops;
-    const hasColors = () => !!piece().hasGoldColors;
-    const hasHeartSize = () => Array.isArray(piece().heartSizes) && piece().heartSizes.length>0;
-    const isGold = () => state.metal.startsWith("gold");
-
-    function firstPieceOf(cid){ const list=piecesIn(cid); return list.length?list[0].id:null; }
-    function chip(label, active, attrs="", extra=""){ return `<button class="chip ${active?"active":""} ${extra}" type="button" ${attrs}>${label}</button>`; }
-    function dotted(label,color,border){ return `<span class="dot" style="background:${color};border:1px solid ${border||color}"></span>${label}`; }
-
-    // Drop + heart-size aware price (fallback to data file when offline)
-    function localPrice(){
-      const p = piece();
-      if (hasHeartSize() && state.heartSize==="21mm" && p.pricesByDrop21){
-        const t = p.pricesByDrop21[state.drop];
-        if (t && t[state.metal]!=null) return t[state.metal];
-      }
-      if (p.pricesByDrop && state.drop && p.pricesByDrop[state.drop]){
-        const v = p.pricesByDrop[state.drop][state.metal];
-        if (v!=null) return v;
-      }
-      if (p.prices && p.prices[state.metal]!=null) return p.prices[state.metal];
+    function fromPriceFor(p){
+      if (livePrices[p.id] != null) return livePrices[p.id];
       if (window.adornmeGetFromPrice) return window.adornmeGetFromPrice(p);
-      return p.price||0;
+      return p.price || 0;
     }
-    function currentPrice(){
-      const p = piece();
-      const lp = livePricing[p.id];
-      // Live variant price (except 21mm, which is a property not a variant → price locally)
-      if (lp && lp.index && !(hasHeartSize() && state.heartSize==="21mm")){
-        const parts=[METAL_SHOPIFY[state.metal]];
-        if (hasDrops()) parts.push(DROP_SHOPIFY[state.drop]);
-        if (isStone()) parts.push(STONE_SHOPIFY[state.stone]);
-        const hit = lp.index.get(parts.join("|"));
-        if (hit) return hit.price;
-      }
-      return localPrice();
+    function card(p){
+      const img = p.image;
+      return `<a class="product-card" href="product.html?id=${p.id}"><div class="product-image"><img src="${img}" alt="${p.title}"></div><h3>${p.title}</h3><p class="price">From $${fromPriceFor(p).toLocaleString()}</p></a>`;
     }
-
-    function renderCollections(){
-      $("#collectionChips").innerHTML = COLLECTIONS.map((c)=>chip(c.label, c.id===state.collection, `data-collection="${c.id}"`)).join("");
+    function studyCard(p){
+      return `<a class="study-card" href="product.html?id=${p.id}" style="text-decoration:none;color:inherit;display:block;"><div class="product-image"><img src="${p.image}" alt="${p.title}"></div><h3>${p.title}</h3><p>${p.lede || ""}</p></a>`;
     }
-    function renderPieces(){
-      $("#pieceChips").innerHTML = piecesIn(state.collection).map((p)=>chip(p.title.replace(/^The /,""), p.id===state.pieceId, `data-piece="${p.id}"`)).join("");
-    }
-    function renderMetals(){
-      const metals = piece().metals.filter((m)=>METAL_ORDER.includes(m));
-      $("#metalChips").innerHTML = metals.map((m)=>chip(dotted(METAL_SHORT[m], METAL_DOT[m][0], METAL_DOT[m][1]), m===state.metal, `data-metal="${m}"`)).join("");
-    }
-    function renderGoldColor(){
-      const show = hasColors() && isGold();
-      $("#goldColorGroup").hidden = !show;
-      if (!show) return;
-      $("#goldColorChips").innerHTML = GOLD_COLORS.map((c)=>chip(dotted(c.label,c.dot[0],c.dot[1]), state.goldColor===c.id, `data-color="${c.id}"`)).join("");
-    }
-    function renderDrop(){
-      const show = hasDrops();
-      $("#dropGroup").hidden = !show;
-      if (!show) return;
-      $("#dropChips").innerHTML = DROP_ORDER.map((d)=>chip(DROP_LABELS[d], state.drop===d, `data-drop="${d}"`)).join("");
-    }
-    function renderStone(){
-      const show = isStone();
-      $("#stoneGroup").hidden = !show;
-      if (!show) return;
-      $("#stoneChips").innerHTML = STONE_ORDER.map((s)=>{
-        const goldOnly = (s==="pink-diamond");
-        const disabled = goldOnly && !isGold();
-        return chip(dotted(STONE_LABELS[s], STONE_DOT[s][0], STONE_DOT[s][1]), state.stone===s, `data-stone="${s}" ${disabled?"disabled":""}`, disabled?"disabled":"");
-      }).join("");
-      $("#stoneHelper").textContent = isGold() ? "Pink Lab Diamond available in solid gold." : "Pink Lab Diamond is available on solid gold only.";
-    }
-    function renderHeartSize(){
-      const show = hasHeartSize();
-      $("#heartSizeGroup").hidden = !show;
-      if (!show) return;
-      $("#heartSizeChips").innerHTML = piece().heartSizes.map((h)=>chip(h, state.heartSize===h, `data-heartsize="${h}"`)).join("");
-    }
-    function renderInitial(){
-      const p = piece();
-      $("#initialGroup").hidden = !p.canHaveInitial;
-      if (!p.canHaveInitial) return;
-      const noInitial = chip("No initial", state.initial==="—", `data-initial="—"`, "no-initial");
-      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((L)=>chip(L, state.initial===L, `data-initial="${L}"`, "letter-chip")).join("");
-      $("#initialChips").innerHTML = (p.initialRequired?"":noInitial) + letters;
-      $("#initialHelper").textContent = p.initialRequired ? "This piece is designed around its initial. Choose one." : "Free engraved initial. Or wear the piece as the bloom alone.";
-    }
-    function renderSize(){
-      const p = piece();
-      const sizes = p.sizes;
-      $("#sizeGroup").hidden = !sizes || !sizes.length;
-      if (!sizes || !sizes.length) return;
-      $("#sizeLabel").textContent = (p.category==="rings") ? "Size" : "Length";
-      $("#sizeChips").innerHTML = sizes.map((s)=>chip(s, state.size===s, `data-size="${s}"`)).join("");
-      $("#sizeHelper").textContent = sizeHints[state.size] || "";
-    }
-    function renderPreview(){
-      const p = piece();
-      const useInitial = p.canHaveInitial && state.initial!=="—" && p.imageInitial && p.imageInitial!==p.image;
-      const src = fixPath(useInitial ? p.imageInitial : p.image);
-      const img = $("#previewImg");
-      if (img.getAttribute("src") !== src){ img.style.opacity=0; setTimeout(()=>{ img.src=src; img.alt=p.title; img.style.opacity=1; },150); }
-      img.classList.remove("metal-silver","metal-vermeil","metal-gold10","metal-gold14","metal-gold18");
-      img.classList.add("metal-"+state.metal);
-      img.classList.remove("gc-white","gc-rose");
-      if (isGold() && state.goldColor==="white") img.classList.add("gc-white");
-      if (isGold() && state.goldColor==="rose") img.classList.add("gc-rose");
-      if ($("#previewTitle")) $("#previewTitle").textContent = p.title;
-      if ($("#previewSub")) $("#previewSub").textContent = p.lede || "";
-      if ($("#previewLabel")) $("#previewLabel").textContent = `Start with ${p.title}. Customize it to make it yours.`;
-      $("#liveEngraving").textContent = state.engraving.trim();
-    }
-    function renderSummary(){
-      const p = piece();
-      const parts = [p.title, METAL_SHORT[state.metal]];
-      if (hasColors() && isGold() && state.goldColor!=="yellow") parts.push(GOLD_COLORS.find((c)=>c.id===state.goldColor).label);
-      if (hasDrops()) parts.push(DROP_LABELS[state.drop]+" drop");
-      if (isStone()) parts.push(STONE_LABELS[state.stone]);
-      if (hasHeartSize()) parts.push(state.heartSize);
-      if (p.canHaveInitial) parts.push(state.initial==="—"?"no initial":`initial ${state.initial}`);
-      if (p.sizes && p.sizes.length) parts.push(state.size);
-      $("#summaryLine").textContent = parts.join(" · ");
-      const pr = currentPrice();
-      $("#price").textContent = money(pr);
-      if ($("#ctaPrice")) $("#ctaPrice").textContent = money(pr);
-    }
-    function applyConditionals(){
-      const p = piece();
-      if (!p.metals.includes(state.metal)) state.metal = p.metals.find((m)=>METAL_ORDER.includes(m)) || "gold14";
-      if (hasDrops()){ if (!DROP_ORDER.includes(state.drop)) state.drop="pearl"; }
-      if (isStone()){ if (state.stone==="pink-diamond" && !isGold()) state.stone="rose-quartz"; }
-      if (hasHeartSize()){ if (!p.heartSizes.includes(state.heartSize)) state.heartSize=p.heartSizes[0]; }
-      else state.heartSize=null;
-      if (p.sizes && p.sizes.length){ if (!p.sizes.includes(state.size)) state.size = p.defaultSize || p.sizes[0]; }
-      else state.size = null;
-      if (!p.canHaveInitial) state.initial="—";
-      if (p.initialRequired && state.initial==="—") state.initial="M";
-    }
-    function render(){
-      if (!state.pieceId) state.pieceId = firstPieceOf(state.collection);
-      applyConditionals();
-      renderCollections(); renderPieces(); renderMetals(); renderGoldColor();
-      renderDrop(); renderStone(); renderHeartSize();
-      renderInitial(); renderSize(); renderPreview(); renderSummary(); bindButtons();
-    }
-    function bindButtons(){
-      document.querySelectorAll("[data-collection]").forEach((b)=>b.addEventListener("click",()=>{ state.collection=b.dataset.collection; state.pieceId=firstPieceOf(state.collection); render(); }));
-      document.querySelectorAll("[data-piece]").forEach((b)=>b.addEventListener("click",()=>{ state.pieceId=b.dataset.piece; render(); }));
-      document.querySelectorAll("[data-metal]").forEach((b)=>b.addEventListener("click",()=>{ state.metal=b.dataset.metal; if(isStone()&&state.stone==="pink-diamond"&&!isGold())state.stone="rose-quartz"; render(); }));
-      document.querySelectorAll("[data-color]").forEach((b)=>b.addEventListener("click",()=>{ state.goldColor=b.dataset.color; render(); }));
-      document.querySelectorAll("[data-drop]").forEach((b)=>b.addEventListener("click",()=>{ state.drop=b.dataset.drop; render(); }));
-      document.querySelectorAll("[data-stone]").forEach((b)=>b.addEventListener("click",()=>{ if(b.hasAttribute("disabled"))return; state.stone=b.dataset.stone; render(); }));
-      document.querySelectorAll("[data-heartsize]").forEach((b)=>b.addEventListener("click",()=>{ state.heartSize=b.dataset.heartsize; render(); }));
-      document.querySelectorAll("[data-initial]").forEach((b)=>b.addEventListener("click",()=>{ state.initial=b.dataset.initial; render(); }));
-      document.querySelectorAll("[data-size]").forEach((b)=>b.addEventListener("click",()=>{ state.size=b.dataset.size; render(); }));
+    function renderHomeGrids(){
+      // Signature: Bleeding Heart collection pieces (exclude devotion), cap at a tidy set
+      const sig = PRODUCTS.filter((p)=>p.collection==="bleeding-heart");
+      const devotion = PRODUCTS.filter((p)=>p.collection==="devotion");
+      const forhim = PRODUCTS.filter((p)=>p.collection==="for-him");
+      const sigEl = document.getElementById("homeSignatureGrid");
+      const devEl = document.getElementById("homeDevotionGrid");
+      const forhimEl = document.getElementById("homeForHimGrid");
+      if (sigEl) sigEl.innerHTML = sig.map(card).join("");
+      if (devEl) devEl.innerHTML = devotion.map(studyCard).join("");
+      if (forhimEl) forhimEl.innerHTML = forhim.map(studyCard).join("");
+      // chain price
+      const chain = PRODUCTS.find((p)=>p.id==="adornme-chain");
+      const chainEl = document.getElementById("homeChainPrice");
+      if (chain && chainEl) chainEl.textContent = "From $"+fromPriceFor(chain).toLocaleString();
     }
 
-    $("#engraving").addEventListener("input",(e)=>{ state.engraving=e.target.value; $("#liveEngraving").textContent=state.engraving.trim(); });
-    if ($("#giftNote")) $("#giftNote").addEventListener("input",(e)=>{ state.giftNote=e.target.value; });
-    if ($("#aiNotes")) $("#aiNotes").addEventListener("input",(e)=>{ state.aiNotes=e.target.value; });
-    if ($("#preorderForm")) $("#preorderForm").addEventListener("submit",(e)=>{ e.preventDefault(); $("#submitButton").textContent="✓ Subscribed"; });
-
-    $("#addToCartBtn").addEventListener("click", async ()=>{
-      const btn=$("#addToCartBtn"); const original=btn.innerHTML;
-      btn.disabled=true; btn.innerHTML="<span>Preparing checkout…</span>";
-      try {
-        const p = piece();
-        const config = {
-          productId: p.id,
-          metal: state.metal, metalLabel: METAL_SHOPIFY[state.metal],
-          drop: hasDrops()?state.drop:"", dropLabel: hasDrops()?DROP_SHOPIFY[state.drop]:"",
-          stone: isStone()?state.stone:"", stoneLabel: isStone()?STONE_SHOPIFY[state.stone]:"",
-          goldColor: (hasColors() && isGold()) ? state.goldColor : "",
-          heartSize: hasHeartSize() ? state.heartSize : "",
-          size: state.size||"",
-          initial: state.initial && state.initial!=="—" ? state.initial : "",
-          engraving: state.engraving||"",
-          giftNote: state.giftNote||"",
-        };
-        if (window.AdornmeShopify && window.AdornmeShopify.addToCart){
-          await window.AdornmeShopify.addToCart(config);
-          setTimeout(()=>{ btn.innerHTML=original; btn.disabled=false; }, 4000);
-        } else { alert("Checkout system is loading. Please try again in a moment."); btn.innerHTML=original; btn.disabled=false; }
-      } catch(err){ console.error("[Adornme] Add to cart error:",err); alert("Sorry — something went wrong. Please email mira@adornme.ai for assistance."); btn.innerHTML=original; btn.disabled=false; }
-    });
-
-    function applyUrlParams(){
-      const params = new URLSearchParams(window.location.search);
-      const rp = params.get("piece") || params.get("design");
-      const rm = params.get("metal");
-      const ri = params.get("initial");
-      const rs = params.get("size");
-      if (rp){ const m=PRODUCTS.find((p)=>p.id===rp); if(m){ state.pieceId=m.id; state.collection=m.collection; } }
-      if (rm && METAL_ORDER.includes(rm)) state.metal=rm;
-      if (ri && (ri==="—" || /^[A-Z]$/.test(ri))) state.initial=ri;
-      if (rs) state.size=rs;
-    }
-
-    applyUrlParams();
-    render();
+    renderHomeGrids();
 
     (async function loadLive(){
       try {
         if (window.AdornmeShopify && window.AdornmeShopify.getProductPricing){
           await Promise.all(PRODUCTS.map(async (p)=>{
-            try { const d=await window.AdornmeShopify.getProductPricing(p.id); if(d) livePricing[p.id]=d; } catch(e){}
+            try { const d = await window.AdornmeShopify.getProductPricing(p.id); if (d && d.from!=null) livePrices[p.id]=d.from; } catch(e){}
           }));
-          renderSummary();
+          renderHomeGrids();
         }
-      } catch(e){ console.warn("[Adornme] Customize live pricing fallback:", e); }
+      } catch(e){ console.warn("[Adornme] Home live pricing fallback:", e); }
     })();
-    </script>
-  <script src="../assets/mobile-menu.js"></script>
-  <script src="../assets/fab.js"></script>
+  </script>
+  <script src="assets/mobile-menu.js"></script>
+  <script src="assets/fab.js"></script>
 </body>
 </html>
