@@ -17,10 +17,13 @@
     .product-image-wrap { position:sticky; top:112px; }
     .product-main-image { aspect-ratio:1; background:var(--paper); border:1px solid var(--rule); overflow:hidden; position:relative; }
     .product-main-image img { width:100%; height:100%; object-fit:cover; transition:opacity .25s ease, filter .35s ease; }
-    .product-main-image img.metal-silver { filter:saturate(.04) brightness(1.08) contrast(1.02) hue-rotate(180deg); }
-    .product-main-image img.metal-vermeil { filter:brightness(1.06) saturate(.92) hue-rotate(-3deg); }
-    .product-main-image img.gc-white { filter:saturate(.08) brightness(1.1) contrast(1.02); }
-    .product-main-image img.gc-rose { filter:saturate(1.1) hue-rotate(-12deg) brightness(1.02); }
+    .product-main-image img.metal-silver { filter:grayscale(.85) brightness(1.12) contrast(.98); }
+    .product-main-image img.metal-vermeil { filter:saturate(1.15) brightness(1.04) hue-rotate(-4deg); }
+    .product-main-image img.metal-gold10 { filter:saturate(1.05) brightness(1.02); }
+    .product-main-image img.metal-gold14 { filter:none; }
+    .product-main-image img.metal-gold18 { filter:saturate(1.12) brightness(.99) hue-rotate(-2deg); }
+    .product-main-image img.gc-white { filter:grayscale(.82) brightness(1.14) contrast(.97) !important; }
+    .product-main-image img.gc-rose { filter:saturate(1.35) hue-rotate(-18deg) brightness(1.03) !important; }
     .product-info { padding-top:4px; }
     .product-info .eyebrow { color:var(--antique-gold); }
     .product-info h1 { margin-top:12px; font:400 clamp(32px,4vw,48px)/1.1 var(--serif); color:var(--ink); letter-spacing:.005em; }
