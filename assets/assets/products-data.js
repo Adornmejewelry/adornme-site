@@ -4,10 +4,10 @@
 // ============================================================
 
 const HEART_STONE_OPTIONS = [
-  { id: "rose-quartz",   label: "Rose Quartz",       priceAdjust: 0,   goldOnly: false },
-  { id: "pink-topaz",    label: "Pink Topaz",        priceAdjust: 55,  goldOnly: false },
-  { id: "pink-sapphire", label: "Pink Lab Sapphire", priceAdjust: 90,  goldOnly: false },
-  { id: "pink-diamond",  label: "Pink Lab Diamond",  priceAdjust: 1400,goldOnly: true  },
+  { id: "rose-quartz",   label: "Rose Quartz",       priceAdjust: 10,   priceAdjustPair: 20,   goldOnly: false },
+  { id: "pink-topaz",    label: "Pink Topaz",        priceAdjust: 15,   priceAdjustPair: 25,   goldOnly: false },
+  { id: "pink-sapphire", label: "Pink Lab Sapphire", priceAdjust: 580,  priceAdjustPair: 1000, goldOnly: true  },
+  { id: "pink-diamond",  label: "Pink Lab Diamond",  priceAdjust: 975,  priceAdjustPair: 1690, goldOnly: true  },
 ];
 const DROP_OPTIONS = [
   { id: "pearl",   label: "Freshwater Pearl" },
@@ -228,6 +228,29 @@ const PRODUCTS = [
     materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Two carved heart stones. Drops. Chain and backings.",
   },
   {
+    id: "stone-pendant",
+    title: "The Bleeding Heart Stone Pendant",
+    collection: "bleeding-heart",
+    category: "pendants",
+    prices: { silver:145, vermeil:220, gold10:260, gold14:350, gold18:430 },
+    pricesByDrop: { pearl: { silver:145, vermeil:220, gold10:260, gold14:350, gold18:430 }, cz: { silver:130, vermeil:205, gold10:250, gold14:340, gold18:420 }, diamond: { silver:265, vermeil:340, gold10:360, gold14:450, gold18:530 } },
+    price: 130,
+    image: "assets/products/stone-pendant.jpeg",
+    imageInitial: "assets/products/stone-pendant.jpeg",
+    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
+    sizes: null,
+    canHaveInitial: false,
+    canEngrave: false,
+    hasDrops: true,
+    hasStoneOptions: true,
+    stoneOptions: HEART_STONE_OPTIONS,
+    hasGoldColors: true,
+    dropOptions: DROP_OPTIONS,
+    shipDays: "2\u20133 weeks",
+    lede: "A carved stone heart pendant \u2014 10mm. Choose your stone and drop.",
+    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Carved 10mm heart stone. Drop of pearl, CZ, or lab diamond. Sapphire and Lab Diamond stones available in solid gold.",
+  },
+    {
     id: "classic-chain-ear",
     title: "The Bleeding Heart Classic Chain Earrings",
     collection: "bleeding-heart",
