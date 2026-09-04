@@ -138,8 +138,8 @@
       const hasHeartSize = Array.isArray(product.heartSizes) && product.heartSizes.length > 0;
 
       const state = {
-        metal: "gold14",
-        drop: hasDrops ? "pearl" : null,
+        metal: "vermeil",
+        drop: hasDrops ? "cz" : null,
         stone: isStone ? "rose-quartz" : null,
         goldColor: "yellow",
         heartSize: hasHeartSize ? product.heartSizes[0] : null,
@@ -161,18 +161,28 @@
       }
 
       // Local (data-file) price with drop + heart-size awareness
+      function stoneUpcharge() {
+        if (!isStone || !state.stone) return 0;
+        const opt = (product.stoneOptions||[]).find((o)=>o.id===state.stone);
+        if (!opt) return 0;
+        // earrings = pair (2 stones); everything else = single
+        const isPair = product.category === "earrings";
+        return isPair ? (opt.priceAdjustPair||0) : (opt.priceAdjust||0);
+      }
       function localPrice() {
+        let base;
         // 21mm uses pricesByDrop21
         if (hasHeartSize && state.heartSize === "21mm" && product.pricesByDrop21) {
           const t = product.pricesByDrop21[state.drop];
-          if (t && t[state.metal] != null) return t[state.metal];
+          if (t && t[state.metal] != null) base = t[state.metal];
         }
-        if (product.pricesByDrop && state.drop && product.pricesByDrop[state.drop]) {
+        if (base == null && product.pricesByDrop && state.drop && product.pricesByDrop[state.drop]) {
           const v = product.pricesByDrop[state.drop][state.metal];
-          if (v != null) return v;
+          if (v != null) base = v;
         }
-        if (product.prices && product.prices[state.metal] != null) return product.prices[state.metal];
-        return window.adornmeGetFromPrice ? window.adornmeGetFromPrice(product) : (product.price||0);
+        if (base == null && product.prices && product.prices[state.metal] != null) base = product.prices[state.metal];
+        if (base == null) base = window.adornmeGetFromPrice ? window.adornmeGetFromPrice(product) : (product.price||0);
+        return base + stoneUpcharge();
       }
 
       async function loadPrices() {
@@ -205,7 +215,8 @@
       }
       function stoneButtons() {
         return STONE_ORDER.map((s) => {
-          const goldOnly = (s === "pink-diamond");
+          const opt = (product.stoneOptions||[]).find((o)=>o.id===s);
+          const goldOnly = opt ? opt.goldOnly : (s === "pink-diamond" || s === "pink-sapphire");
           const disabled = goldOnly && !isGold();
           return `<button class="opt ${state.stone===s?"active":""} ${disabled?"disabled":""}" data-action="set-stone" data-value="${s}" type="button" ${disabled?"disabled":""}><span class="dot stone-${s}"></span>${STONE_LABELS[s]}</button>`;
         }).join("");
@@ -288,7 +299,7 @@
       function bindControls() {
         document.querySelectorAll('[data-action="set-metal"]').forEach((b)=>b.addEventListener("click",()=>{
           state.metal=b.dataset.value;
-          if (isStone && state.stone==="pink-diamond" && !isGold()) state.stone="rose-quartz";
+          if (isStone && (state.stone==="pink-diamond"||state.stone==="pink-sapphire") && !isGold()) state.stone="rose-quartz";
           render();
         }));
         document.querySelectorAll('[data-action="set-drop"]').forEach((b)=>b.addEventListener("click",()=>{ state.drop=b.dataset.value; render(); }));
