@@ -24,6 +24,19 @@ const METAL_LABELS = {
   gold10: "Solid 10k Gold", gold14: "Solid 14k Gold", gold18: "Solid 18k Gold",
 };
 
+// ============================================================
+// GALLERY / PRODUCT PAGE display config (SIMPLIFIED view).
+// The gallery and product pages show ONLY this subset.
+// The CUSTOMIZE page ignores this and shows everything.
+// ============================================================
+const GALLERY_METALS = ["silver", "gold14"];            // only silver + 14k
+const GALLERY_DROPS = ["pearl", "diamond"];             // only pearl + lab diamond (no CZ)
+const GALLERY_GOLD_COLORS = ["yellow", "rose"];         // 14k in yellow + rose (no white)
+const GALLERY_STONES = ["pink-sapphire", "pink-diamond", "pink-topaz"]; // 3 stones, both metals
+const GALLERY_DEFAULT_METAL = "gold14";                 // opens on 14k
+const GALLERY_DEFAULT_GOLD_COLOR = "yellow";            // yellow first
+const GALLERY_DEFAULT_DROP = "pearl";                   // pearl (cheapest) first
+
 const PRODUCTS = [
   {
     id: "engravable-necklace",
@@ -480,9 +493,32 @@ function adornmeGetFromPrice(product) {
   else if (product.prices) { all = Object.values(product.prices).filter(x=>typeof x==="number"); }
   return all.length ? Math.min(...all) : (product.price || 0);
 }
+// From-price for the SIMPLIFIED gallery view (silver/14k, pearl/diamond only)
+function adornmeGetGalleryFromPrice(product) {
+  let all = [];
+  const metals = GALLERY_METALS;
+  const drops = product.hasDrops ? GALLERY_DROPS : [null];
+  for (const m of metals) {
+    for (const d of drops) {
+      let v = null;
+      if (d && product.pricesByDrop && product.pricesByDrop[d]) v = product.pricesByDrop[d][m];
+      else if (product.prices) v = product.prices[m];
+      if (typeof v === "number") all.push(v);
+    }
+  }
+  return all.length ? Math.min(...all) : (product.price || 0);
+}
 if (typeof window !== "undefined") {
   window.ADORNME_METAL_LABELS = METAL_LABELS;
   window.adornmeGetMetalPrice = adornmeGetMetalPrice;
   window.adornmeGetFromPrice = adornmeGetFromPrice;
+  window.adornmeGetGalleryFromPrice = adornmeGetGalleryFromPrice;
   window.ADORNME_GOLD_COLORS = GOLD_COLOR_OPTIONS;
+  window.GALLERY_METALS = GALLERY_METALS;
+  window.GALLERY_DROPS = GALLERY_DROPS;
+  window.GALLERY_GOLD_COLORS = GALLERY_GOLD_COLORS;
+  window.GALLERY_STONES = GALLERY_STONES;
+  window.GALLERY_DEFAULT_METAL = GALLERY_DEFAULT_METAL;
+  window.GALLERY_DEFAULT_GOLD_COLOR = GALLERY_DEFAULT_GOLD_COLOR;
+  window.GALLERY_DEFAULT_DROP = GALLERY_DEFAULT_DROP;
 }
