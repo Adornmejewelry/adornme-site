@@ -118,15 +118,15 @@
     const main = document.getElementById("productMain");
 
     // METAL_LABELS provided globally by products-data.js
-    const METAL_ORDER = ["silver","vermeil","gold10","gold14","gold18"];
+    const METAL_ORDER = ["silver","gold14"];  // SIMPLIFIED gallery view (customize has all)
     const METAL_SHOPIFY = METAL_LABELS;
     const DROP_LABELS = { pearl:"Freshwater Pearl", cz:"Synthetic / CZ", diamond:"Lab Diamond" };
-    const DROP_ORDER = ["pearl","cz","diamond"];
+    const DROP_ORDER = ["pearl","diamond"];  // SIMPLIFIED (no CZ; customize has CZ)
     const DROP_SHOPIFY = DROP_LABELS;
     const STONE_LABELS = { "rose-quartz":"Rose Quartz","pink-topaz":"Pink Topaz","pink-sapphire":"Pink Lab Sapphire","pink-diamond":"Pink Lab Diamond" };
-    const STONE_ORDER = ["rose-quartz","pink-topaz","pink-sapphire","pink-diamond"];
+    const STONE_ORDER = ["pink-sapphire","pink-diamond","pink-topaz"];  // SIMPLIFIED 3 stones
     const STONE_SHOPIFY = STONE_LABELS;
-    const GOLD_COLORS = [ {id:"yellow",label:"Yellow Gold"},{id:"white",label:"White Gold"},{id:"rose",label:"Rose Gold"} ];
+    const GOLD_COLORS = [ {id:"yellow",label:"Yellow Gold"},{id:"rose",label:"Rose Gold"} ];  // SIMPLIFIED: no white
 
     if (!product) {
       main.innerHTML = `<div class="product-missing"><h1>Piece not found</h1><p>We couldn't find the piece you were looking for.</p><a class="cta-secondary" href="trinity-collection.html">Back to the Gallery</a></div>`;
@@ -138,9 +138,9 @@
       const hasHeartSize = Array.isArray(product.heartSizes) && product.heartSizes.length > 0;
 
       const state = {
-        metal: "vermeil",
-        drop: hasDrops ? "cz" : null,
-        stone: isStone ? "rose-quartz" : null,
+        metal: "gold14",
+        drop: hasDrops ? "pearl" : null,
+        stone: isStone ? "pink-topaz" : null,
         goldColor: "yellow",
         heartSize: hasHeartSize ? product.heartSizes[0] : null,
         size: product.defaultSize || null,
@@ -277,7 +277,7 @@
                 </div>
                 <div class="product-actions">
                   <button class="cta-primary" id="addToCartBtn" type="button" ${live==null?"disabled":""}>${btnLabel}</button>
-                  <a class="cta-secondary" href="customize.html?piece=${product.id}&metal=${state.metal}">Customize this piece</a>
+                  <a class="cta-secondary" href="customize.html?piece=${product.id}&metal=${state.metal}">Want 10k, 18k, vermeil, or more options? Customize it →</a>
                 </div>
                 <div class="trust-strip">Designed in Newport Beach · Hand-finished in Downtown LA · Ships in ${product.shipDays}</div>
                 <div class="product-meta"><h3>The piece</h3><p>${product.materials}</p>

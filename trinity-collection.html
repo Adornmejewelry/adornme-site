@@ -109,7 +109,8 @@
       return PRODUCTS;
     }
     function fromPriceFor(p){
-      if (livePrices[p.id] != null) return livePrices[p.id];
+      // Use SIMPLIFIED gallery from-price (silver/14k, pearl/diamond only)
+      if (window.adornmeGetGalleryFromPrice) return window.adornmeGetGalleryFromPrice(p);
       if (window.adornmeGetFromPrice) return window.adornmeGetFromPrice(p);
       return p.price || 0;
     }
