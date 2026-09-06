@@ -143,7 +143,7 @@
         stone: isStone ? "pink-topaz" : null,
         goldColor: "yellow",
         heartSize: hasHeartSize ? product.heartSizes[0] : null,
-        size: product.defaultSize || null,
+        size: (product.gallerySizes && product.gallerySizes[0]) || product.defaultSize || null,
         initial: product.initialRequired ? "M" : "—",
         engraving: ""
       };
@@ -235,7 +235,8 @@
       }
 
       function render() {
-        const sizeOptions = product.sizes ? product.sizes.map((s)=>`<button class="opt ${state.size===s?"active":""}" data-action="set-size" data-value="${s}" type="button">${s}</button>`).join("") : "";
+        const displaySizes = product.gallerySizes || product.sizes;
+        const sizeOptions = displaySizes ? displaySizes.map((s)=>`<button class="opt ${state.size===s?"active":""}" data-action="set-size" data-value="${s}" type="button">${s}</button>`).join("") : "";
 
         let initialHtml = "";
         if (product.canHaveInitial) {
@@ -271,7 +272,7 @@
                   ${hasDrops ? `<div class="control-group"><div class="label">Drop</div><div class="control-options">${dropButtons()}</div></div>` : ""}
                   ${isStone ? `<div class="control-group"><div class="label">Heart Stone</div><div class="control-options">${stoneButtons()}</div><p class="helper">${isGold()?"Pink Lab Diamond available in solid gold.":"Pink Lab Diamond is available on solid gold only."}</p></div>` : ""}
                   ${hasHeartSize ? `<div class="control-group"><div class="label">Heart Size</div><div class="control-options">${heartSizeButtons()}</div><p class="helper">21mm gives more room for engraving.</p></div>` : ""}
-                  ${product.sizes ? `<div class="control-group"><div class="label">${product.category==="rings"?"Ring Size":"Length"}</div><div class="control-options">${sizeOptions}</div></div>` : ""}
+                  ${displaySizes ? `<div class="control-group"><div class="label">${product.category==="rings"?"Ring Size":"Length"}</div><div class="control-options">${sizeOptions}</div>${product.gallerySizes ? `<p class="helper">More lengths available on the <a href="customize.html?piece=${product.id}" style="color:var(--antique-gold);text-decoration:underline;">Customize page</a>.</p>` : ""}</div>` : ""}
                   ${initialHtml}
                   ${engravingHtml}
                 </div>
