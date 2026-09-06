@@ -6,8 +6,8 @@
 const HEART_STONE_OPTIONS = [
   { id: "rose-quartz",   label: "Rose Quartz",       priceAdjust: 10,   priceAdjustPair: 20,   goldOnly: false },
   { id: "pink-topaz",    label: "Pink Topaz",        priceAdjust: 15,   priceAdjustPair: 25,   goldOnly: false },
-  { id: "pink-sapphire", label: "Pink Lab Sapphire", priceAdjust: 580,  priceAdjustPair: 1000, goldOnly: true  },
-  { id: "pink-diamond",  label: "Pink Lab Diamond",  priceAdjust: 975,  priceAdjustPair: 1690, goldOnly: true  },
+  { id: "pink-sapphire", label: "Pink Lab Sapphire", priceAdjust: 580,  priceAdjustPair: 1000, goldOnly: false },
+  { id: "pink-diamond",  label: "Pink Lab Diamond",  priceAdjust: 975,  priceAdjustPair: 1690, goldOnly: false },
 ];
 const DROP_OPTIONS = [
   { id: "pearl",   label: "Freshwater Pearl" },
@@ -24,6 +24,19 @@ const METAL_LABELS = {
   gold10: "Solid 10k Gold", gold14: "Solid 14k Gold", gold18: "Solid 18k Gold",
 };
 
+// ============================================================
+// GALLERY / PRODUCT PAGE display config (SIMPLIFIED view).
+// The gallery and product pages show ONLY this subset.
+// The CUSTOMIZE page ignores this and shows everything.
+// ============================================================
+const GALLERY_METALS = ["silver", "gold14"];            // only silver + 14k
+const GALLERY_DROPS = ["pearl", "diamond"];             // only pearl + lab diamond (no CZ)
+const GALLERY_GOLD_COLORS = ["yellow", "rose"];         // 14k in yellow + rose (no white)
+const GALLERY_STONES = ["pink-sapphire", "pink-diamond", "pink-topaz"]; // 3 stones, both metals
+const GALLERY_DEFAULT_METAL = "gold14";                 // opens on 14k
+const GALLERY_DEFAULT_GOLD_COLOR = "yellow";            // yellow first
+const GALLERY_DEFAULT_DROP = "pearl";                   // pearl (cheapest) first
+
 const PRODUCTS = [
   {
     id: "engravable-necklace",
@@ -38,6 +51,7 @@ const PRODUCTS = [
     imageInitial: "assets/products/engravable-necklace.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["14\u201316\u2033", "16\u201318\u2033", "20\u201322\u2033"],
+    gallerySizes: ["16–18″ adjustable"],
     defaultSize: "16\u201318\u2033",
     heartSizes: ["17mm", "21mm"],
     canHaveInitial: true,
@@ -92,6 +106,29 @@ const PRODUCTS = [
     shipDays: "2–3 weeks",
     lede: "The original rounded Bleeding Heart \u2014 soft, dimensional, worn as the pure bloom. 15mm.",
     materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Freshwater pearl, CZ, or lab diamond drop. The rounded heart is not engravable.",
+  },
+  {
+    id: "stone-pendant",
+    title: "The Bleeding Heart Stone Pendant",
+    collection: "bleeding-heart",
+    category: "pendants",
+    prices: { silver:190, vermeil:315, gold10:444, gold14:560, gold18:650 },
+    pricesByDrop: { pearl: { silver:190, vermeil:315, gold10:444, gold14:560, gold18:650 }, cz: { silver:175, vermeil:300, gold10:435, gold14:550, gold18:640 }, diamond: { silver:390, vermeil:515, gold10:550, gold14:665, gold18:755 } },
+    price: 175,
+    image: "assets/products/stone-pendant.jpeg",
+    imageInitial: "assets/products/stone-pendant.jpeg",
+    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
+    sizes: null,
+    canHaveInitial: false,
+    canEngrave: false,
+    hasDrops: true,
+    hasStoneOptions: true,
+    stoneOptions: HEART_STONE_OPTIONS,
+    hasGoldColors: true,
+    dropOptions: DROP_OPTIONS,
+    shipDays: "2\u20133 weeks",
+    lede: "A carved stone heart pendant \u2014 10mm. Choose your stone and drop.",
+    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Carved 10mm heart stone. Drop of pearl, CZ, or lab diamond. Sapphire and Lab Diamond stones available in solid gold.",
   },
   {
     id: "engravable-ring",
@@ -227,29 +264,6 @@ const PRODUCTS = [
     lede: "Carved stone heart drop earrings on chain \u2014 12mm. Choose your stone and drop.",
     materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Two carved heart stones. Drops. Chain and backings.",
   },
-  {
-    id: "stone-pendant",
-    title: "The Bleeding Heart Stone Pendant",
-    collection: "bleeding-heart",
-    category: "pendants",
-    prices: { silver:145, vermeil:220, gold10:260, gold14:350, gold18:430 },
-    pricesByDrop: { pearl: { silver:145, vermeil:220, gold10:260, gold14:350, gold18:430 }, cz: { silver:130, vermeil:205, gold10:250, gold14:340, gold18:420 }, diamond: { silver:265, vermeil:340, gold10:360, gold14:450, gold18:530 } },
-    price: 130,
-    image: "assets/products/stone-pendant.jpeg",
-    imageInitial: "assets/products/stone-pendant.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: null,
-    canHaveInitial: false,
-    canEngrave: false,
-    hasDrops: true,
-    hasStoneOptions: true,
-    stoneOptions: HEART_STONE_OPTIONS,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2\u20133 weeks",
-    lede: "A carved stone heart pendant \u2014 10mm. Choose your stone and drop.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Carved 10mm heart stone. Drop of pearl, CZ, or lab diamond. Sapphire and Lab Diamond stones available in solid gold.",
-  },
     {
     id: "classic-chain-ear",
     title: "The Bleeding Heart Classic Chain Earrings",
@@ -283,6 +297,7 @@ const PRODUCTS = [
     imageInitial: "assets/products/flower-cross.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["16\u201318\u2033", "20\u201322\u2033"],
+    gallerySizes: ["16–18″ adjustable"],
     defaultSize: "20\u201322\u2033",
     canHaveInitial: false,
     canEngrave: true,
@@ -305,6 +320,7 @@ const PRODUCTS = [
     imageInitial: "assets/products/heart-cross.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["16\u201318\u2033", "20\u201322\u2033"],
+    gallerySizes: ["16–18″ adjustable"],
     defaultSize: "20\u201322\u2033",
     canHaveInitial: false,
     canEngrave: true,
@@ -327,6 +343,7 @@ const PRODUCTS = [
     imageInitial: "assets/products/christ-risen.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["16\u201318\u2033", "20\u201322\u2033"],
+    gallerySizes: ["16–18″ adjustable"],
     defaultSize: "20\u201322\u2033",
     canHaveInitial: false,
     canEngrave: true,
@@ -413,6 +430,7 @@ const PRODUCTS = [
     imageInitial: "assets/products/open-heart.jpeg",
     metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
     sizes: ["14\u201316\u2033", "16\u201318\u2033", "20\u201322\u2033"],
+    gallerySizes: ["16–18″ adjustable"],
     defaultSize: "16\u201318\u2033",
     canHaveInitial: true,
     initialRequired: true,
@@ -480,9 +498,32 @@ function adornmeGetFromPrice(product) {
   else if (product.prices) { all = Object.values(product.prices).filter(x=>typeof x==="number"); }
   return all.length ? Math.min(...all) : (product.price || 0);
 }
+// From-price for the SIMPLIFIED gallery view (silver/14k, pearl/diamond only)
+function adornmeGetGalleryFromPrice(product) {
+  let all = [];
+  const metals = GALLERY_METALS;
+  const drops = product.hasDrops ? GALLERY_DROPS : [null];
+  for (const m of metals) {
+    for (const d of drops) {
+      let v = null;
+      if (d && product.pricesByDrop && product.pricesByDrop[d]) v = product.pricesByDrop[d][m];
+      else if (product.prices) v = product.prices[m];
+      if (typeof v === "number") all.push(v);
+    }
+  }
+  return all.length ? Math.min(...all) : (product.price || 0);
+}
 if (typeof window !== "undefined") {
   window.ADORNME_METAL_LABELS = METAL_LABELS;
   window.adornmeGetMetalPrice = adornmeGetMetalPrice;
   window.adornmeGetFromPrice = adornmeGetFromPrice;
+  window.adornmeGetGalleryFromPrice = adornmeGetGalleryFromPrice;
   window.ADORNME_GOLD_COLORS = GOLD_COLOR_OPTIONS;
+  window.GALLERY_METALS = GALLERY_METALS;
+  window.GALLERY_DROPS = GALLERY_DROPS;
+  window.GALLERY_GOLD_COLORS = GALLERY_GOLD_COLORS;
+  window.GALLERY_STONES = GALLERY_STONES;
+  window.GALLERY_DEFAULT_METAL = GALLERY_DEFAULT_METAL;
+  window.GALLERY_DEFAULT_GOLD_COLOR = GALLERY_DEFAULT_GOLD_COLOR;
+  window.GALLERY_DEFAULT_DROP = GALLERY_DEFAULT_DROP;
 }
