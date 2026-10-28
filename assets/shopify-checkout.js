@@ -1,11 +1,15 @@
 /**
- * Adornme — Shopify Storefront API Integration (v32.0)
+ * Adornme — Shopify Storefront API Integration (v40.0, Oct 28 2026)
  * Shopify = source of truth for prices.
  *
- * Variant option model (must match the product CSV):
- *   - Non-stone pieces: Option1 = Metal, Option2 = Drop
- *   - Stone pieces:     Option1 = Metal, Option2 = Drop, Option3 = Stone
- *   Gold Color / Size / Heart Size / Initial / Engraving = line-item PROPERTIES (no price change)
+ * Variant option model (must match Adornme_Shopify_Import_v40.csv):
+ *   - Pieces with a drop:    Option1 = Metal, Option2 = Drop
+ *   - Pieces without a drop: Option1 = Metal
+ *   - The Adornme Chain:     Option1 = Metal, Option2 = Length
+ *   Metal values: "Sterling Silver", "Gold Plated"
+ *   Drop values:  "Synthetic Stone", "Freshwater Pearl"
+ *   Size / Length (necklaces) / Initial / Engraving / Gift note = order notes (no price change)
+ *   14K / 18K gold are NOT sold through checkout — they are "Request a quote" on the Customize page.
  */
 
 const ADORNME_SHOPIFY = {
@@ -23,16 +27,13 @@ async function fetchShopifyProducts() {
       products(first: 100) {
         edges {
           node {
-            id
             handle
-            title
             variants(first: 100) {
               edges {
                 node {
                   id
-                  title
                   availableForSale
-                  price { amount currencyCode }
+                  price { amount }
                   selectedOptions { name value }
                 }
               }
@@ -53,20 +54,13 @@ async function fetchShopifyProducts() {
   if (data.errors) throw new Error(`Shopify GraphQL error: ${JSON.stringify(data.errors)}`);
 
   const productMap = new Map();
-  for (const productEdge of data.data.products.edges) {
-    const node = productEdge.node;
-    const variants = [];
-    for (const vEdge of node.variants.edges) {
-      const v = vEdge.node;
-      const opts = {};
-      for (const o of v.selectedOptions) opts[o.name] = o.value;
-      variants.push({
-        options: opts,                     // { Metal, Drop, Stone? }
-        price: Math.round(parseFloat(v.price.amount)),
-        id: v.id.split("/").pop(),
-        available: v.availableForSale,
-      });
-    }
+  for (const edge of data.data.products.edges) {
+    const node = edge.node;
+    const variants = node.variants.edges.map(({ node: v }) => {
+      const options = {};
+      for (const o of v.selectedOptions) options[o.name] = o.value;
+      return { options, price: Math.round(parseFloat(v.price.amount)), id: v.id.split("/").pop(), available: v.availableForSale };
+    });
     const prices = variants.map((x) => x.price).filter((n) => !isNaN(n));
     productMap.set(node.handle, { variants, from: prices.length ? Math.min(...prices) : null });
   }
@@ -75,34 +69,34 @@ async function fetchShopifyProducts() {
   return productMap;
 }
 
-/**
- * Live pricing for a product.
- * index keyed by "Metal|Drop" (non-stone) or "Metal|Drop|Stone" (stone).
- */
+/** A variant matches when every option it has equals the requested value.
+ *  Shopify adds a "Title: Default Title" option to products with no options; that one is ignored. */
+function variantMatches(variant, wanted) {
+  for (const [name, value] of Object.entries(variant.options)) {
+    if (name === "Title" && value === "Default Title") continue;
+    if ((wanted[name] || "") !== value) return false;
+  }
+  return true;
+}
+
+/** Find a variant by option values, e.g. { Metal: "Gold Plated", Drop: "Freshwater Pearl" }. */
+function findShopifyVariant(handle, wanted) {
+  const entry = ADORNME_SHOPIFY.productMap && ADORNME_SHOPIFY.productMap.get(handle);
+  if (!entry) return null;
+  return entry.variants.find((v) => variantMatches(v, wanted || {})) || null;
+}
+
+/** Live pricing for a product: { variants, from }. Resolves to null when Shopify is unreachable. */
 async function getProductPricing(handle) {
   if (!ADORNME_SHOPIFY.ready) await ADORNME_SHOPIFY.readyPromise;
   const entry = ADORNME_SHOPIFY.productMap && ADORNME_SHOPIFY.productMap.get(handle);
-  if (!entry) return null;
-  const index = new Map();
-  for (const v of entry.variants) {
-    const parts = [ v.options.Metal || "" ];
-    if (v.options.Drop) parts.push(v.options.Drop);
-    if (v.options.Stone) parts.push(v.options.Stone);
-    index.set(parts.join("|"), { price: v.price, variantId: v.id, available: v.available });
-  }
-  return { index, from: entry.from };
+  return entry || null;
 }
 
-/** Find a variant by metal + drop + optional stone. */
-function findShopifyVariant(handle, metalLabel, dropLabel, stoneLabel) {
-  const entry = ADORNME_SHOPIFY.productMap && ADORNME_SHOPIFY.productMap.get(handle);
-  if (!entry) return null;
-  return entry.variants.find((v) => {
-    if ((v.options.Metal || "") !== metalLabel) return false;
-    if (dropLabel)  { if ((v.options.Drop  || "") !== dropLabel)  return false; }
-    if (stoneLabel) { if ((v.options.Stone || "") !== stoneLabel) return false; }
-    return true;
-  }) || null;
+/** Live price for one selection, or null when Shopify has no matching variant (page falls back to its data file). */
+function liveShopifyPrice(handle, wanted) {
+  const v = findShopifyVariant(handle, wanted);
+  return v ? v.price : null;
 }
 
 function buildCheckoutUrl(variantId, attributes = {}) {
@@ -116,6 +110,13 @@ function buildCheckoutUrl(variantId, attributes = {}) {
   return url;
 }
 
+/**
+ * config = {
+ *   productId,                       // Shopify handle (= PRODUCTS id)
+ *   options: { Metal, Drop?, Length? },
+ *   size, initial, engraving, giftNote, notes   // order notes
+ * }
+ */
 function addToShopifyCart(config) {
   const checkoutTab = window.open("about:blank", "_blank");
   if (checkoutTab) {
@@ -130,7 +131,7 @@ function addToShopifyCart(config) {
 async function completeCheckoutAsync(checkoutTab, config) {
   try {
     if (!ADORNME_SHOPIFY.ready) await ADORNME_SHOPIFY.readyPromise;
-    const variant = findShopifyVariant(config.productId, config.metalLabel, config.dropLabel || "", config.stoneLabel || "");
+    const variant = findShopifyVariant(config.productId, config.options || {});
     if (!variant) {
       console.error("[Adornme] Variant not found for:", config);
       if (checkoutTab && !checkoutTab.closed) checkoutTab.close();
@@ -138,12 +139,11 @@ async function completeCheckoutAsync(checkoutTab, config) {
       return;
     }
     const attributes = {};
-    if (config.goldColor)  attributes["Gold Color"]  = config.goldColor;
-    if (config.heartSize)  attributes["Heart Size"]  = config.heartSize;
-    if (config.size)       attributes["Size"]        = config.size;
+    if (config.size)      attributes["Size"]      = config.size;
     if (config.initial && config.initial !== "—") attributes["Initial"] = config.initial;
-    if (config.engraving)  attributes["Engraving"]   = config.engraving;
-    if (config.giftNote)   attributes["Gift note"]   = config.giftNote;
+    if (config.engraving) attributes["Engraving"] = config.engraving;
+    if (config.giftNote)  attributes["Gift note"] = config.giftNote;
+    if (config.notes)     attributes["Notes"]     = config.notes;
 
     const url = buildCheckoutUrl(variant.id, attributes);
     if (checkoutTab && !checkoutTab.closed) checkoutTab.location.href = url;
@@ -165,4 +165,5 @@ window.AdornmeShopify = {
   addToCart: addToShopifyCart,
   getProductPricing: getProductPricing,
   findVariant: findShopifyVariant,
+  livePrice: liveShopifyPrice,
 };
