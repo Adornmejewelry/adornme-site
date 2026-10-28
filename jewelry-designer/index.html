@@ -15,6 +15,7 @@
       --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     }
     * { box-sizing:border-box; }
+    [hidden] { display:none !important; }
     html { scroll-behavior:smooth; }
     body { margin:0; background:var(--ivory); color:var(--ink); font:16px/1.65 var(--sans); }
     .announce{display:block !important;width:100%;box-sizing:border-box;background:#2D4D58;color:#FAF6F0;text-align:center;padding:11px 16px;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:12px;font-weight:500;line-height:1.5;letter-spacing:.04em;}
@@ -47,8 +48,8 @@
     .preview-label { margin-bottom:18px; color:var(--ink-soft); font:italic 400 clamp(15px,1.7vw,17px)/1.5 var(--serif); text-align:center; }
     .preview-box { position:relative; width:100%; aspect-ratio:1; background:var(--paper) center/cover no-repeat; border:1px solid var(--rule); overflow:hidden; transition:opacity .3s ease; }
     .preview-box img.preview-img { width:100%; height:100%; object-fit:cover; display:block; transition:opacity .25s ease, filter .35s ease; }
-    .preview-box img.preview-img.metal-gold10, .preview-box img.preview-img.metal-gold14, .preview-box img.preview-img.metal-gold18 { filter:none; }
-    .preview-box img.preview-img.metal-vermeil { filter:saturate(1.15) brightness(1.04) hue-rotate(-4deg); }
+    .preview-box img.preview-img.metal-gold14, .preview-box img.preview-img.metal-gold18 { filter:none; }
+    .preview-box img.preview-img.metal-plated { filter:saturate(1.15) brightness(1.04) hue-rotate(-4deg); }
     .preview-box img.preview-img.metal-silver { filter:grayscale(.85) brightness(1.12) contrast(.98); }
     .preview-box img.preview-img.gc-white { filter:grayscale(.82) brightness(1.14) contrast(.97) !important; }
     .preview-box img.preview-img.gc-rose { filter:saturate(1.35) hue-rotate(-18deg) brightness(1.03) !important; }
@@ -82,6 +83,8 @@
     .cta-order:hover { background:var(--aegean-deep); }
     .cta-order[disabled] { opacity:.5; cursor:not-allowed; }
     .cta-order strong { color:var(--buttercup); font-weight:500; letter-spacing:.02em; text-transform:none; }
+    .cta-order.quote { justify-content:center; }
+    .price.on-request { font:italic 400 clamp(18px,2.2vw,22px)/1.2 var(--serif); color:var(--ink-soft); text-align:right; }
     .gallery { padding:clamp(50px,6vw,80px) clamp(20px,4vw,56px); background:var(--cream); text-align:center; }
     .gallery-inner { width:min(620px,100%); margin:0 auto; }
     .gallery .eyebrow { color:var(--antique-gold); }
@@ -141,12 +144,11 @@
     <section class="controls" aria-label="Customize your piece">
       <div class="group"><div class="eyebrow">Collection</div><div class="chip-row" id="collectionChips"></div></div>
       <div class="group"><div class="eyebrow">Piece</div><div class="chip-row" id="pieceChips"></div></div>
-      <div class="group"><div class="eyebrow">Metal</div><div class="chip-row" id="metalChips"></div><p class="helper" style="font-style:italic;opacity:.75;">Color shown in preview is approximate — final finish renders the chosen metal exactly.</p></div>
-      <div class="group" id="goldColorGroup" hidden><div class="eyebrow">Gold Color</div><div class="chip-row" id="goldColorChips"></div><p class="helper" style="font-style:italic;opacity:.75;">Same price in yellow, white, or rose.</p></div>
-      <div class="group" id="heartSizeGroup" hidden><div class="eyebrow">Heart Size</div><div class="chip-row" id="heartSizeChips"></div><p class="helper" style="font-style:italic;opacity:.75;">21mm gives more room for engraving.</p></div>
+      <div class="group"><div class="eyebrow">Metal</div><div class="chip-row" id="metalChips"></div><p class="helper" id="metalHelper"></p><p class="helper" style="font-style:italic;opacity:.75;">Color shown in preview is approximate — final finish renders the chosen metal exactly.</p></div>
+      <div class="group" id="goldColorGroup" hidden><div class="eyebrow">Gold Color</div><div class="chip-row" id="goldColorChips"></div></div>
 
       <div class="group" id="stoneGroup" hidden><div class="eyebrow">Heart Stone</div><div class="chip-row" id="stoneChips"></div><p class="helper" id="stoneHelper"></p></div>
-      <div class="group" id="dropGroup" hidden><div class="eyebrow">Drop</div><div class="chip-row" id="dropChips"></div></div>
+      <div class="group" id="dropGroup" hidden><div class="eyebrow">Drop</div><div class="chip-row" id="dropChips"></div><p class="helper" id="dropHelper"></p></div>
 
       <div class="group" id="initialGroup"><div class="eyebrow">Initial <span class="label-note">— or wear it without</span></div><div class="chip-row" id="initialChips"></div><p class="helper" id="initialHelper">Free engraved initial on this piece.</p></div>
       <div class="group" id="sizeGroup"><div class="eyebrow" id="sizeLabel">Length</div><div class="chip-row" id="sizeChips"></div><p class="helper" id="sizeHelper"></p></div>
@@ -156,9 +158,9 @@
       <div class="group"><div class="eyebrow">Anything else? <span class="label-note">— optional</span></div><textarea class="field" id="aiNotes" maxlength="400" rows="3" placeholder="e.g. Please use a slightly smaller pearl, or wrap as a baby gift."></textarea><p class="helper">Our studio reviews every custom note and confirms before we begin.</p></div>
 
       <div class="summary"><div><div class="eyebrow">Your piece</div><p class="summary-line" id="summaryLine"></p></div><div class="price" id="price">—</div></div>
-      <div class="trust">Designed in Newport Beach · Hand-finished in Downtown LA · Free engraving · Ships in 2–3 weeks</div>
+      <div class="trust">Designed in Newport Beach · Hand-finished in Downtown LA · Free engraving</div>
       <button type="button" class="cta-order" id="addToCartBtn"><span>Add to bag</span><strong id="ctaPrice">—</strong></button>
-      <p class="helper">Free engraving · Ships in 2–3 weeks</p>
+      <p class="helper" id="ctaHelper">Free engraving · Ships in 2–3 weeks</p>
     </section>
   </main>
 
@@ -184,32 +186,16 @@
   <script src="../assets/shopify-checkout.js"></script>
   <script>
     // ============================================================
-    // ADORNME CUSTOMIZE — v32.0
-    // Reads shared PRODUCTS + live Shopify prices (source of truth).
-    // All pieces: metal + gold color + drop (+ stone) + heart size + initial + engraving.
+    // ADORNME CUSTOMIZE — v40.0
+    // Sterling Silver + 18K Gold Plated → price + Add to bag (Shopify).
+    // 14K / 18K solid gold, or a lab diamond drop/heart (silver or solid gold only)
+    //   → "Price on request" + Request a quote (email).
+    // Wrapped in a function so nothing here collides with products-data.js globals.
     // ============================================================
+    (function () {
     const $ = (s) => document.querySelector(s);
     const money = (v) => `$${Math.round(v).toLocaleString()}`;
     const fixPath = (p) => p && p.indexOf("http")!==0 && p.indexOf("../")!==0 ? "../"+p : p;
-
-    // METAL_LABELS provided globally by products-data.js
-    const METAL_SHORT  = { silver:"Silver", vermeil:"Gold Vermeil", gold10:"10k Gold", gold14:"14k Gold", gold18:"18k Gold" };
-    const METAL_DOT = { silver:["#C9CDCF","#999"], vermeil:["#D9A856","#B07D2D"], gold10:["#E7CE8F","#C0982F"], gold14:["#E9C66B","#B98C24"], gold18:["#E8B84B","#A87A18"] };
-    const METAL_ORDER = ["silver","vermeil","gold10","gold14","gold18"];
-    const METAL_SHOPIFY = METAL_LABELS;
-
-    // NOTE: stone ids match products-data.js HEART_STONE_OPTIONS: rose-quartz, pink-topaz, pink-sapphire, pink-diamond
-    const STONE_LABELS = { "rose-quartz":"Rose Quartz", "pink-topaz":"Pink Topaz", "pink-sapphire":"Pink Lab Sapphire", "pink-diamond":"Pink Lab Diamond" };
-    const STONE_ORDER = ["rose-quartz","pink-topaz","pink-sapphire","pink-diamond"];
-    const STONE_DOT = { "rose-quartz":["#F3C6CE","#D98B9A"], "pink-topaz":["#F5A9C4","#D96C97"], "pink-sapphire":["#F17FA8","#C64E7E"], "pink-diamond":["#F5B9D0","#C77"] };
-    const STONE_SHOPIFY = STONE_LABELS;
-
-    // drop ids match products-data.js DROP_OPTIONS: pearl, cz, diamond
-    const DROP_LABELS = { "pearl":"Freshwater Pearl", "cz":"Synthetic / CZ", "diamond":"Lab Diamond" };
-    const DROP_ORDER = ["pearl","cz","diamond"];
-    const DROP_SHOPIFY = DROP_LABELS;
-
-    const GOLD_COLORS = [ {id:"yellow",label:"Yellow Gold",dot:["#E9C66B","#B98C24"]}, {id:"white",label:"White Gold",dot:["#E8E9EB","#AAB"]}, {id:"rose",label:"Rose Gold",dot:["#E7B7A3","#C98A72"]} ];
 
     const COLLECTIONS = [
       { id:"bleeding-heart", label:"The Bleeding Heart" },
@@ -217,75 +203,58 @@
       { id:"for-him", label:"For Him" },
       { id:"chain", label:"The Adornme Chain" }
     ];
-
     const sizeHints = {
-      "14–16″":"Sits high on the neck — flatters with open necklines.",
-      "16–18″":"Falls at the base of the neck — Adornme's most versatile length.",
-      "18–20″":"Sits just below the collarbone.",
-      "20–22″":"Sits just above the chest — perfect for layering.",
+      "16″":"Sits at the collarbone.", "18″":"Standard length — Adornme's default.", "24″":"Longer — perfect for layering or a longer drop.",
       "4":"A very petite ring size.","4.5":"A petite ring size.","5":"A smaller women's size, delicate fit.",
       "5.5":"A slightly smaller everyday size.","6":"The most-purchased women's size — Adornme's default.",
       "6.5":"A common women's size.","7":"A versatile size.","7.5":"For larger fingers.","8":"A larger women's size.",
-      "8.5":"A larger fit with extra ease.","9":"A larger women's size or men's small.",
-      "16″":"Choker length — sits at the collarbone.","18″":"Standard length — Adornme's default.","20″":"Longer — perfect for layering."
+      "8.5":"A larger fit with extra ease.","9":"A larger women's size or men's small.","10":"The most common men's size — the default for this ring.",
+      "6.5–7″":"For a smaller wrist.","7–7.5″":"Adornme's standard bracelet length."
     };
 
     const state = {
-      collection:"bleeding-heart", pieceId:null, metal:"vermeil",
-      goldColor:"yellow", stone:"rose-quartz", drop:"cz", heartSize:null,
+      collection:"bleeding-heart", pieceId:null, metal:"silver",
+      goldColor:"yellow", heartStone:"synthetic", drop:null,
       initial:"—", size:null, engraving:"", giftNote:"", aiNotes:""
     };
-
-    let livePricing = {};
+    let shopifyLoaded = false;
 
     const piecesIn = (cid) => PRODUCTS.filter((p)=>p.collection===cid);
     const piece = () => PRODUCTS.find((p)=>p.id===state.pieceId) || PRODUCTS[0];
-    const isStone = () => !!piece().hasStoneOptions;
-    const hasDrops = () => !!piece().hasDrops;
-    const hasColors = () => !!piece().hasGoldColors;
-    const hasHeartSize = () => Array.isArray(piece().heartSizes) && piece().heartSizes.length>0;
-    const isGold = () => state.metal.startsWith("gold");
+    const isGold = () => !!(METALS[state.metal] && METALS[state.metal].quote);
+    const isStone = () => !!piece().stoneHeart;
+    // Lab diamond (drop or heart) can be requested in Sterling Silver or solid gold — not Gold Plated.
+    const labDiamondOk = () => state.metal === "silver" || isGold();
+    // Drop choices: Silver = the piece's drops + lab diamond; Gold Plated = the piece's drops; solid gold = pearl or lab diamond.
+    const dropChoices = () => {
+      const d = piece().drops || [];
+      if (!d.length) return [];
+      if (isGold()) return GOLD_QUOTE_DROPS;
+      return labDiamondOk() ? [...d, "diamond"] : d;
+    };
+    // Drop chips shown: the choices, plus a greyed-out Lab Diamond on Gold Plated so customers know it exists.
+    const dropChipsShown = () => {
+      const c = dropChoices();
+      return c.length && !c.includes("diamond") ? [...c, "diamond"] : c;
+    };
+    // Heart stone choices: synthetic always; pink lab diamond in silver or solid gold.
+    const heartChoices = () => labDiamondOk() ? ["synthetic","diamond"] : ["synthetic"];
+    // Quote mode: solid gold, or any lab diamond choice. Price on request + email instead of checkout.
+    const hasLabDiamond = () => state.drop === "diamond" || (isStone() && state.heartStone === "diamond");
+    const isQuote = () => isGold() || hasLabDiamond();
 
     function firstPieceOf(cid){ const list=piecesIn(cid); return list.length?list[0].id:null; }
     function chip(label, active, attrs="", extra=""){ return `<button class="chip ${active?"active":""} ${extra}" type="button" ${attrs}>${label}</button>`; }
     function dotted(label,color,border){ return `<span class="dot" style="background:${color};border:1px solid ${border||color}"></span>${label}`; }
 
-    // Drop + heart-size aware price (fallback to data file when offline)
-    function stoneUpcharge(){
-      const p = piece();
-      if (!isStone() || !state.stone) return 0;
-      const opt = (p.stoneOptions||[]).find((o)=>o.id===state.stone);
-      if (!opt) return 0;
-      const isPair = p.category === "earrings";
-      return isPair ? (opt.priceAdjustPair||0) : (opt.priceAdjust||0);
-    }
-    function localPrice(){
-      const p = piece();
-      let base;
-      if (hasHeartSize() && state.heartSize==="21mm" && p.pricesByDrop21){
-        const t = p.pricesByDrop21[state.drop];
-        if (t && t[state.metal]!=null) base = t[state.metal];
-      }
-      if (base==null && p.pricesByDrop && state.drop && p.pricesByDrop[state.drop]){
-        const v = p.pricesByDrop[state.drop][state.metal];
-        if (v!=null) base = v;
-      }
-      if (base==null && p.prices && p.prices[state.metal]!=null) base = p.prices[state.metal];
-      if (base==null) base = window.adornmeGetFromPrice ? window.adornmeGetFromPrice(p) : (p.price||0);
-      return base + stoneUpcharge();
-    }
     function currentPrice(){
+      if (isQuote()) return null;   // solid gold and lab diamond are quoted by email
       const p = piece();
-      const lp = livePricing[p.id];
-      // Live variant price (except 21mm, which is a property not a variant → price locally)
-      if (lp && lp.index && !(hasHeartSize() && state.heartSize==="21mm")){
-        const parts=[METAL_SHOPIFY[state.metal]];
-        if (hasDrops()) parts.push(DROP_SHOPIFY[state.drop]);
-        if (isStone()) parts.push(STONE_SHOPIFY[state.stone]);
-        const hit = lp.index.get(parts.join("|"));
-        if (hit) return hit.price;
+      if (shopifyLoaded){
+        const live = window.AdornmeShopify.livePrice(p.id, adornmeShopifyOptions(p, state.metal, state.drop, state.size));
+        if (live != null) return live;
       }
-      return localPrice();
+      return adornmeGetMetalPrice(p, state.metal, state.drop, state.size);
     }
 
     function renderCollections(){
@@ -295,38 +264,37 @@
       $("#pieceChips").innerHTML = piecesIn(state.collection).map((p)=>chip(p.title.replace(/^The /,""), p.id===state.pieceId, `data-piece="${p.id}"`)).join("");
     }
     function renderMetals(){
-      const metals = piece().metals.filter((m)=>METAL_ORDER.includes(m));
-      $("#metalChips").innerHTML = metals.map((m)=>chip(dotted(METAL_SHORT[m], METAL_DOT[m][0], METAL_DOT[m][1]), m===state.metal, `data-metal="${m}"`)).join("");
+      $("#metalChips").innerHTML = CUSTOMIZE_METALS.map((m)=>chip(dotted(METALS[m].short, METALS[m].dot[0], METALS[m].dot[1]), m===state.metal, `data-metal="${m}"`)).join("");
+      $("#metalHelper").textContent = isGold()
+        ? "Solid gold is made to order. Send us your design and Mira will reply with your price."
+        : "14K and 18K solid gold available by request.";
     }
     function renderGoldColor(){
-      const show = hasColors() && isGold();
+      const show = isGold();
       $("#goldColorGroup").hidden = !show;
       if (!show) return;
       $("#goldColorChips").innerHTML = GOLD_COLORS.map((c)=>chip(dotted(c.label,c.dot[0],c.dot[1]), state.goldColor===c.id, `data-color="${c.id}"`)).join("");
-    }
-    function renderDrop(){
-      const show = hasDrops();
-      $("#dropGroup").hidden = !show;
-      if (!show) return;
-      $("#dropChips").innerHTML = DROP_ORDER.map((d)=>chip(DROP_LABELS[d], state.drop===d, `data-drop="${d}"`)).join("");
     }
     function renderStone(){
       const show = isStone();
       $("#stoneGroup").hidden = !show;
       if (!show) return;
-      $("#stoneChips").innerHTML = STONE_ORDER.map((s)=>{
-        const _opt = (piece().stoneOptions||[]).find((o)=>o.id===s);
-        const goldOnly = _opt ? _opt.goldOnly : (s==="pink-diamond"||s==="pink-sapphire");
-        const disabled = goldOnly && !isGold();
-        return chip(dotted(STONE_LABELS[s], STONE_DOT[s][0], STONE_DOT[s][1]), state.stone===s, `data-stone="${s}" ${disabled?"disabled":""}`, disabled?"disabled":"");
+      const choices = heartChoices();
+      $("#stoneChips").innerHTML = ["synthetic","diamond"].map((h)=>{
+        const disabled = !choices.includes(h);
+        return chip(HEART_STONES[h], state.heartStone===h, `data-stone="${h}" ${disabled?"disabled":""}`, disabled?"disabled":"");
       }).join("");
-      $("#stoneHelper").textContent = isGold() ? "Pink Lab Diamond available in solid gold." : "Pink Lab Diamond is available on solid gold only.";
+      $("#stoneHelper").textContent = labDiamondOk() ? "Pink lab diamond heart — price on request." : "Pink lab diamond heart is available in sterling silver or solid gold.";
     }
-    function renderHeartSize(){
-      const show = hasHeartSize();
-      $("#heartSizeGroup").hidden = !show;
-      if (!show) return;
-      $("#heartSizeChips").innerHTML = piece().heartSizes.map((h)=>chip(h, state.heartSize===h, `data-heartsize="${h}"`)).join("");
+    function renderDrop(){
+      const choices = dropChoices();
+      $("#dropGroup").hidden = !choices.length;
+      if (!choices.length) return;
+      $("#dropChips").innerHTML = dropChipsShown().map((d)=>{
+        const disabled = !choices.includes(d);
+        return chip(DROPS[d].label, state.drop===d, `data-drop="${d}" ${disabled?"disabled":""}`, disabled?"disabled":"");
+      }).join("");
+      $("#dropHelper").textContent = labDiamondOk() ? "Lab diamond drop — price on request." : "Lab diamond drop is available in sterling silver or solid gold.";
     }
     function renderInitial(){
       const p = piece();
@@ -342,7 +310,7 @@
       const sizes = p.sizes;
       $("#sizeGroup").hidden = !sizes || !sizes.length;
       if (!sizes || !sizes.length) return;
-      $("#sizeLabel").textContent = (p.category==="rings") ? "Size" : "Length";
+      $("#sizeLabel").textContent = p.category==="rings" ? "Size" : (p.category==="bracelets" ? "Bracelet size" : "Length");
       $("#sizeChips").innerHTML = sizes.map((s)=>chip(s, state.size===s, `data-size="${s}"`)).join("");
       $("#sizeHelper").textContent = sizeHints[state.size] || "";
     }
@@ -352,37 +320,58 @@
       const src = fixPath(useInitial ? p.imageInitial : p.image);
       const img = $("#previewImg");
       if (img.getAttribute("src") !== src){ img.style.opacity=0; setTimeout(()=>{ img.src=src; img.alt=p.title; img.style.opacity=1; },150); }
-      img.classList.remove("metal-silver","metal-vermeil","metal-gold10","metal-gold14","metal-gold18");
+      img.classList.remove("metal-silver","metal-plated","metal-gold14","metal-gold18","gc-white","gc-rose");
       img.classList.add("metal-"+state.metal);
-      img.classList.remove("gc-white","gc-rose");
       if (isGold() && state.goldColor==="white") img.classList.add("gc-white");
       if (isGold() && state.goldColor==="rose") img.classList.add("gc-rose");
-      if ($("#previewTitle")) $("#previewTitle").textContent = p.title;
-      if ($("#previewSub")) $("#previewSub").textContent = p.lede || "";
-      if ($("#previewLabel")) $("#previewLabel").textContent = `Start with ${p.title}. Customize it to make it yours.`;
+      $("#previewTitle").textContent = p.title;
+      $("#previewSub").textContent = p.lede || "";
+      $("#previewLabel").textContent = `Start with ${p.title}. Customize it to make it yours.`;
       $("#liveEngraving").textContent = state.engraving.trim();
+    }
+    function selectionLines(){
+      const p = piece();
+      const lines = [`Piece: ${p.title}`, `Metal: ${METALS[state.metal].label}`];
+      if (isGold()) lines.push(`Gold color: ${GOLD_COLORS.find((c)=>c.id===state.goldColor).label}`);
+      if (isStone()) lines.push(`Heart stone: ${HEART_STONES[state.heartStone]}`);
+      if (dropChoices().length) lines.push(`Drop: ${DROPS[state.drop].label}`);
+      if (p.canHaveInitial) lines.push(`Initial: ${state.initial==="—" ? "none" : state.initial}`);
+      if (p.sizes && p.sizes.length) lines.push(`${p.category==="rings" ? "Ring size" : (p.category==="bracelets" ? "Bracelet size" : "Length")}: ${state.size}`);
+      if (state.engraving.trim()) lines.push(`Engraving: ${state.engraving.trim()}`);
+      if (state.giftNote.trim()) lines.push(`Gift note: ${state.giftNote.trim()}`);
+      if (state.aiNotes.trim()) lines.push(`Notes: ${state.aiNotes.trim()}`);
+      return lines;
     }
     function renderSummary(){
       const p = piece();
-      const parts = [p.title, METAL_SHORT[state.metal]];
-      if (hasColors() && isGold() && state.goldColor!=="yellow") parts.push(GOLD_COLORS.find((c)=>c.id===state.goldColor).label);
-      if (hasDrops()) parts.push(DROP_LABELS[state.drop]+" drop");
-      if (isStone()) parts.push(STONE_LABELS[state.stone]);
-      if (hasHeartSize()) parts.push(state.heartSize);
+      const parts = [p.title, METALS[state.metal].short];
+      if (isGold()) parts.push(GOLD_COLORS.find((c)=>c.id===state.goldColor).label);
+      if (isStone()) parts.push(HEART_STONES[state.heartStone]);
+      if (dropChoices().length) parts.push(DROPS[state.drop].label+" drop");
       if (p.canHaveInitial) parts.push(state.initial==="—"?"no initial":`initial ${state.initial}`);
       if (p.sizes && p.sizes.length) parts.push(state.size);
       $("#summaryLine").textContent = parts.join(" · ");
-      const pr = currentPrice();
-      $("#price").textContent = money(pr);
-      if ($("#ctaPrice")) $("#ctaPrice").textContent = money(pr);
+      const btn = $("#addToCartBtn");
+      if (isQuote()){
+        $("#price").textContent = "Price on request";
+        $("#price").classList.add("on-request");
+        if (!btn.disabled){ btn.innerHTML = "<span>Request a quote</span>"; btn.classList.add("quote"); }
+        $("#ctaHelper").innerHTML = `${isGold() ? "Solid gold" : "Lab diamond"} pieces are priced by quote. This opens an email to Mira with your design. Or write to <a href="mailto:${QUOTE_EMAIL}" style="text-decoration:underline;">${QUOTE_EMAIL}</a>.`;
+      } else {
+        const pr = currentPrice();
+        $("#price").textContent = pr!=null ? money(pr) : "—";
+        $("#price").classList.remove("on-request");
+        if (!btn.disabled){ btn.innerHTML = `<span>Add to bag</span><strong id="ctaPrice">${pr!=null?money(pr):"—"}</strong>`; btn.classList.remove("quote"); }
+        $("#ctaHelper").textContent = `Free engraving · Ships in ${piece().shipDays || "2–3 weeks"}`;
+      }
     }
     function applyConditionals(){
       const p = piece();
-      if (!p.metals.includes(state.metal)) state.metal = p.metals.find((m)=>METAL_ORDER.includes(m)) || "gold14";
-      if (hasDrops()){ if (!DROP_ORDER.includes(state.drop)) state.drop="pearl"; }
-      if (isStone()){ if ((state.stone==="pink-diamond"||state.stone==="pink-sapphire") && !isGold()) state.stone="rose-quartz"; }
-      if (hasHeartSize()){ if (!p.heartSizes.includes(state.heartSize)) state.heartSize=p.heartSizes[0]; }
-      else state.heartSize=null;
+      if (!CUSTOMIZE_METALS.includes(state.metal)) state.metal = "silver";
+      const drops = dropChoices();
+      if (drops.length){ if (!drops.includes(state.drop)) state.drop = drops.includes("pearl") ? "pearl" : drops[0]; }
+      else state.drop = null;
+      if (!heartChoices().includes(state.heartStone)) state.heartStone = "synthetic";
       if (p.sizes && p.sizes.length){ if (!p.sizes.includes(state.size)) state.size = p.defaultSize || p.sizes[0]; }
       else state.size = null;
       if (!p.canHaveInitial) state.initial="—";
@@ -392,42 +381,42 @@
       if (!state.pieceId) state.pieceId = firstPieceOf(state.collection);
       applyConditionals();
       renderCollections(); renderPieces(); renderMetals(); renderGoldColor();
-      renderDrop(); renderStone(); renderHeartSize();
+      renderStone(); renderDrop();
       renderInitial(); renderSize(); renderPreview(); renderSummary(); bindButtons();
     }
     function bindButtons(){
       document.querySelectorAll("[data-collection]").forEach((b)=>b.addEventListener("click",()=>{ state.collection=b.dataset.collection; state.pieceId=firstPieceOf(state.collection); render(); }));
       document.querySelectorAll("[data-piece]").forEach((b)=>b.addEventListener("click",()=>{ state.pieceId=b.dataset.piece; render(); }));
-      document.querySelectorAll("[data-metal]").forEach((b)=>b.addEventListener("click",()=>{ state.metal=b.dataset.metal; if(isStone()&&state.stone==="pink-diamond"&&!isGold())state.stone="rose-quartz"; render(); }));
+      document.querySelectorAll("[data-metal]").forEach((b)=>b.addEventListener("click",()=>{ state.metal=b.dataset.metal; render(); }));
       document.querySelectorAll("[data-color]").forEach((b)=>b.addEventListener("click",()=>{ state.goldColor=b.dataset.color; render(); }));
-      document.querySelectorAll("[data-drop]").forEach((b)=>b.addEventListener("click",()=>{ state.drop=b.dataset.drop; render(); }));
-      document.querySelectorAll("[data-stone]").forEach((b)=>b.addEventListener("click",()=>{ if(b.hasAttribute("disabled"))return; state.stone=b.dataset.stone; render(); }));
-      document.querySelectorAll("[data-heartsize]").forEach((b)=>b.addEventListener("click",()=>{ state.heartSize=b.dataset.heartsize; render(); }));
+      document.querySelectorAll("[data-drop]").forEach((b)=>b.addEventListener("click",()=>{ if(b.hasAttribute("disabled"))return; state.drop=b.dataset.drop; render(); }));
+      document.querySelectorAll("[data-stone]").forEach((b)=>b.addEventListener("click",()=>{ if(b.hasAttribute("disabled"))return; state.heartStone=b.dataset.stone; render(); }));
       document.querySelectorAll("[data-initial]").forEach((b)=>b.addEventListener("click",()=>{ state.initial=b.dataset.initial; render(); }));
       document.querySelectorAll("[data-size]").forEach((b)=>b.addEventListener("click",()=>{ state.size=b.dataset.size; render(); }));
     }
 
     $("#engraving").addEventListener("input",(e)=>{ state.engraving=e.target.value; $("#liveEngraving").textContent=state.engraving.trim(); });
-    if ($("#giftNote")) $("#giftNote").addEventListener("input",(e)=>{ state.giftNote=e.target.value; });
-    if ($("#aiNotes")) $("#aiNotes").addEventListener("input",(e)=>{ state.aiNotes=e.target.value; });
-    if ($("#preorderForm")) $("#preorderForm").addEventListener("submit",(e)=>{ e.preventDefault(); $("#submitButton").textContent="✓ Subscribed"; });
+    $("#giftNote").addEventListener("input",(e)=>{ state.giftNote=e.target.value; });
+    $("#aiNotes").addEventListener("input",(e)=>{ state.aiNotes=e.target.value; });
+    $("#preorderForm").addEventListener("submit",(e)=>{ e.preventDefault(); $("#submitButton").textContent="✓ Subscribed"; });
 
     $("#addToCartBtn").addEventListener("click", async ()=>{
+      const p = piece();
+      if (isQuote()){
+        window.location.href = adornmeQuoteMailto(selectionLines(), p.title);
+        return;
+      }
       const btn=$("#addToCartBtn"); const original=btn.innerHTML;
       btn.disabled=true; btn.innerHTML="<span>Preparing checkout…</span>";
       try {
-        const p = piece();
         const config = {
           productId: p.id,
-          metal: state.metal, metalLabel: METAL_SHOPIFY[state.metal],
-          drop: hasDrops()?state.drop:"", dropLabel: hasDrops()?DROP_SHOPIFY[state.drop]:"",
-          stone: isStone()?state.stone:"", stoneLabel: isStone()?STONE_SHOPIFY[state.stone]:"",
-          goldColor: (hasColors() && isGold()) ? state.goldColor : "",
-          heartSize: hasHeartSize() ? state.heartSize : "",
-          size: state.size||"",
+          options: adornmeShopifyOptions(p, state.metal, state.drop, state.size),
+          size: p.lengthPricing ? "" : (state.size||""),
           initial: state.initial && state.initial!=="—" ? state.initial : "",
           engraving: state.engraving||"",
           giftNote: state.giftNote||"",
+          notes: state.aiNotes||"",
         };
         if (window.AdornmeShopify && window.AdornmeShopify.addToCart){
           await window.AdornmeShopify.addToCart(config);
@@ -442,10 +431,14 @@
       const rm = params.get("metal");
       const ri = params.get("initial");
       const rs = params.get("size");
+      const rd = params.get("drop");
+      const rh = params.get("stone");
       if (rp){ const m=PRODUCTS.find((p)=>p.id===rp); if(m){ state.pieceId=m.id; state.collection=m.collection; } }
-      if (rm && METAL_ORDER.includes(rm)) state.metal=rm;
+      if (rm && CUSTOMIZE_METALS.includes(rm)) state.metal=rm;
       if (ri && (ri==="—" || /^[A-Z]$/.test(ri))) state.initial=ri;
       if (rs) state.size=rs;
+      if (rd && DROPS[rd]) state.drop=rd;
+      if (rh && HEART_STONES[rh]) state.heartStone=rh;
     }
 
     applyUrlParams();
@@ -454,12 +447,12 @@
     (async function loadLive(){
       try {
         if (window.AdornmeShopify && window.AdornmeShopify.getProductPricing){
-          await Promise.all(PRODUCTS.map(async (p)=>{
-            try { const d=await window.AdornmeShopify.getProductPricing(p.id); if(d) livePricing[p.id]=d; } catch(e){}
-          }));
+          await window.AdornmeShopify.getProductPricing(piece().id);
+          shopifyLoaded = true;
           renderSummary();
         }
       } catch(e){ console.warn("[Adornme] Customize live pricing fallback:", e); }
+    })();
     })();
     </script>
   <script src="../assets/mobile-menu.js"></script>
