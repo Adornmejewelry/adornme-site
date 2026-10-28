@@ -156,21 +156,21 @@
       <div class="chains-head">
         <div class="eyebrow">Build it your way</div>
         <h2>The Adornme Chain</h2>
-        <p class="chains-intro">Sold separately, in three lengths and five metals. For layering, for adding a second pendant, or for pairing with a chain you already own.</p>
+        <p class="chains-intro">Sold separately, in three lengths, in sterling silver or 18K gold plated. For layering, for adding a second pendant, or for pairing with a chain you already own.</p>
       </div>
       <div class="chains-grid">
         <div class="chains-image">
-          <a href="product.html?id=adornme-chain" aria-label="Shop The Adornme Chain"><img src="assets/products/adornme-chain.png" alt="The Adornme Chain — 16 inch, 18 inch, and 20 inch lengths shown side by side"></a>
+          <a href="product.html?id=adornme-chain" aria-label="Shop The Adornme Chain"><img src="assets/products/adornme-chain.png" alt="The Adornme Chain in three lengths, shown side by side"></a>
         </div>
         <div class="chains-copy">
           <ul class="chains-options">
             <li><strong>16″</strong> · sits at the collarbone</li>
             <li><strong>18″</strong> · standard length</li>
-            <li><strong>20″</strong> · for layering or longer drop</li>
+            <li><strong>24″</strong> · for layering or a longer drop</li>
           </ul>
-          <p class="chains-detail">Metals: Sterling silver · gold vermeil · solid 10k, 14k &amp; 18k gold</p>
-          <p class="chains-detail">Choose your length and metal at checkout. Each chain comes ready to thread any Adornme pendant or any of your own.</p>
-          <p class="chains-price" id="homeChainPrice">From $65</p>
+          <p class="chains-detail">Metals: Sterling silver · 18K gold plated · 14K &amp; 18K solid gold by request</p>
+          <p class="chains-detail">Choose your length and metal. Each chain comes ready to thread any Adornme pendant or any of your own.</p>
+          <p class="chains-price" id="homeChainPrice">From $15</p>
           <a class="link-arrow" href="product.html?id=adornme-chain">Shop the chain →</a>
         </div>
       </div>
@@ -226,9 +226,9 @@
         <p>Every Adornme piece is sketched in Newport Beach and hand-finished in our Downtown Los Angeles studio — never mass-produced, never offshore.</p>
       </article>
       <article class="trust-item">
-        <div class="eyebrow">Five metals</div>
+        <div class="eyebrow">Silver, gold plated &amp; solid gold</div>
         <h4>One promise</h4>
-        <p>Sterling silver, gold vermeil, and solid 10k, 14k &amp; 18k gold — available from day one, in every piece we make.</p>
+        <p>Every piece in sterling silver or 18K gold plated sterling silver — and in 14K or 18K solid gold, made to order by request.</p>
       </article>
       <article class="trust-item">
         <div class="eyebrow">A quiet vow</div>
@@ -303,20 +303,21 @@
   <script src="assets/shopify-checkout.js"></script>
   <script>
     // ============================================================
-    // HOMEPAGE product grids — v31.0
+    // HOMEPAGE product grids — v40.0
     // Data-driven from PRODUCTS with live Shopify "from" prices.
     // This prevents stale/broken cards when the catalog changes.
     // ============================================================
     const livePrices = {};
 
     function fromPriceFor(p){
-      if (window.adornmeGetGalleryFromPrice) return window.adornmeGetGalleryFromPrice(p);
-      if (window.adornmeGetFromPrice) return window.adornmeGetFromPrice(p);
-      return p.price || 0;
+      // Live Shopify from-price when loaded; otherwise the products-data.js price.
+      if (livePrices[p.id] != null) return livePrices[p.id];
+      return adornmeGetFromPrice(p);
     }
+    function priceText(p){ const n = fromPriceFor(p); return n != null ? `From $${n.toLocaleString()}` : ""; }
     function card(p){
       const img = p.image;
-      return `<a class="product-card" href="product.html?id=${p.id}"><div class="product-image"><img src="${img}" alt="${p.title}"></div><h3>${p.title}</h3><p class="price">From $${fromPriceFor(p).toLocaleString()}</p></a>`;
+      return `<a class="product-card" href="product.html?id=${p.id}"><div class="product-image"><img src="${img}" alt="${p.title}"></div><h3>${p.title}</h3><p class="price">${priceText(p)}</p></a>`;
     }
     function studyCard(p){
       return `<a class="study-card" href="product.html?id=${p.id}" style="text-decoration:none;color:inherit;display:block;"><div class="product-image"><img src="${p.image}" alt="${p.title}"></div><h3>${p.title}</h3><p>${p.lede || ""}</p></a>`;
@@ -335,7 +336,7 @@
       // chain price
       const chain = PRODUCTS.find((p)=>p.id==="adornme-chain");
       const chainEl = document.getElementById("homeChainPrice");
-      if (chain && chainEl) chainEl.textContent = "From $"+fromPriceFor(chain).toLocaleString();
+      if (chain && chainEl) chainEl.textContent = priceText(chain);
     }
 
     renderHomeGrids();

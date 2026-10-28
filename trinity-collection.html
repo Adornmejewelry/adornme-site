@@ -33,10 +33,7 @@
     .shop-card-metals { display:flex; gap:5px; }
     .metal-swatch { width:11px; height:11px; border-radius:50%; }
     .metal-swatch.silver { background:#C9CDCF; border:1px solid #999; }
-    .metal-swatch.vermeil { background:#D9A856; border:1px solid #B07D2D; }
-    .metal-swatch.gold10 { background:#E7CE8F; border:1px solid #C0982F; }
-    .metal-swatch.gold14 { background:#E9C66B; border:1px solid #B98C24; }
-    .metal-swatch.gold18 { background:#E8B84B; border:1px solid #A87A18; }
+    .metal-swatch.plated { background:#E2BA62; border:1px solid #B08A2E; }
     .shop-empty { grid-column:1 / -1; padding:60px 0; text-align:center; color:var(--ink-soft); font:italic 400 18px/1.5 var(--serif); }
   </style>
 <style id="adornme-launch-banner-style">
@@ -54,7 +51,7 @@
 
   <header class="gallery-hero">
     <h1>The Gallery</h1>
-    <p class="lede">Heart. Flower. Devotion. — Three forms. One love story.<br>Each piece can be made yours with a drop, a stone, or an engraving.</p>
+    <p class="lede">Heart. Flower. Devotion. — Three forms. One love story.<br>Each piece can be made yours with a drop, an initial, or an engraving.</p>
   </header>
 
   <section class="filter-bar" aria-label="Filter products">
@@ -109,10 +106,9 @@
       return PRODUCTS;
     }
     function fromPriceFor(p){
-      // Use SIMPLIFIED gallery from-price (silver/14k, pearl/diamond only)
-      if (window.adornmeGetGalleryFromPrice) return window.adornmeGetGalleryFromPrice(p);
-      if (window.adornmeGetFromPrice) return window.adornmeGetFromPrice(p);
-      return p.price || 0;
+      // Live Shopify from-price when loaded; otherwise the products-data.js price.
+      if (livePrices[p.id] != null) return livePrices[p.id];
+      return adornmeGetFromPrice(p);
     }
     function renderFilters(){
       const group = document.getElementById("filterGroup");
@@ -129,10 +125,10 @@
       const products = filteredProducts();
       if (!products.length){ grid.innerHTML = `<div class="shop-empty">No pieces match that filter yet — try another.</div>`; return; }
       grid.innerHTML = products.map((p)=>{
-        const metals = (p.metals||["gold14"]).map((m)=>`<span class="metal-swatch ${m}" title="${m}"></span>`).join("");
+        const metals = SHOP_METALS.map((m)=>`<span class="metal-swatch ${m}" title="${METALS[m].label}"></span>`).join("");
         const tag = p.tag ? `<span class="shop-card-tag">${p.tag}</span>` : "";
         const galleryImg = p.imageInitial || p.image;
-        return `<a class="shop-card" href="product.html?id=${p.id}"><div class="shop-card-image">${tag}<img src="${galleryImg}" alt="${p.title}"></div><h3>${p.title}</h3><p class="shop-card-price">From $${fromPriceFor(p).toLocaleString()}</p><div class="shop-card-metals">${metals}</div></a>`;
+        return `<a class="shop-card" href="product.html?id=${p.id}"><div class="shop-card-image">${tag}<img src="${galleryImg}" alt="${p.title}"></div><h3>${p.title}</h3><p class="shop-card-price">${fromPriceFor(p)!=null ? `From $${fromPriceFor(p).toLocaleString()}` : ""}</p><div class="shop-card-metals">${metals}</div></a>`;
       }).join("");
     }
 
