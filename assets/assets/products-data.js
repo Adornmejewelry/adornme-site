@@ -1,529 +1,311 @@
 // ============================================================
-// ADORNME — Central product data (v33.0) — 19 products
-// Adds: Open Heart Pendant, Christ Risen Pendant/Ring for Men.
+// ADORNME — Central product data (v40.0, Oct 28 2026)
+// Launch pricing: Sterling Silver + 18K Gold Plated on every page.
+// 14K / 18K solid gold and lab diamond (drop or heart; silver or solid gold): "Request a quote" on the Customize page.
+// Shopify is the source of truth for prices; the prices below are the
+// fallback and MUST match the Shopify import file (Adornme_Shopify_Import_v40.csv).
 // ============================================================
 
-const HEART_STONE_OPTIONS = [
-  { id: "rose-quartz",   label: "Rose Quartz",       priceAdjust: 10,   priceAdjustPair: 20,   goldOnly: false },
-  { id: "pink-topaz",    label: "Pink Topaz",        priceAdjust: 15,   priceAdjustPair: 25,   goldOnly: false },
-  { id: "pink-sapphire", label: "Pink Lab Sapphire", priceAdjust: 580,  priceAdjustPair: 1000, goldOnly: false },
-  { id: "pink-diamond",  label: "Pink Lab Diamond",  priceAdjust: 975,  priceAdjustPair: 1690, goldOnly: false },
-];
-const DROP_OPTIONS = [
-  { id: "pearl",   label: "Freshwater Pearl" },
-  { id: "cz",      label: "Synthetic / CZ"  },
-  { id: "diamond", label: "Lab Diamond"     },
-];
-const GOLD_COLOR_OPTIONS = [
-  { id: "yellow", label: "Yellow Gold" },
-  { id: "white",  label: "White Gold"  },
-  { id: "rose",   label: "Rose Gold"   },
-];
-const METAL_LABELS = {
-  silver: "Sterling Silver", vermeil: "Gold Vermeil",
-  gold10: "Solid 10k Gold", gold14: "Solid 14k Gold", gold18: "Solid 18k Gold",
+// ---- Metals ----
+// `shopify` = the exact Option1 ("Metal") value in Shopify.
+const METALS = {
+  silver: { label: "Sterling Silver",  short: "Silver",      shopify: "Sterling Silver", dot: ["#C9CDCF", "#999999"] },
+  plated: { label: "18K Gold Plated",  short: "Gold Plated", shopify: "Gold Plated",     dot: ["#E2BA62", "#B08A2E"] },
+  gold14: { label: "14K Solid Gold",   short: "14K Gold",    quote: true,                dot: ["#E9C66B", "#B98C24"] },
+  gold18: { label: "18K Solid Gold",   short: "18K Gold",    quote: true,                dot: ["#E8B84B", "#A87A18"] },
 };
+const SHOP_METALS = ["silver", "plated"];                        // Gallery, Home, product pages, For Him
+const CUSTOMIZE_METALS = ["silver", "plated", "gold14", "gold18"]; // gold = request a quote
+const METAL_LABELS = Object.fromEntries(Object.entries(METALS).map(([k, v]) => [k, v.label]));
 
-// ============================================================
-// GALLERY / PRODUCT PAGE display config (SIMPLIFIED view).
-// The gallery and product pages show ONLY this subset.
-// The CUSTOMIZE page ignores this and shows everything.
-// ============================================================
-const GALLERY_METALS = ["silver", "gold14"];            // only silver + 14k
-const GALLERY_DROPS = ["pearl", "diamond"];             // only pearl + lab diamond (no CZ)
-const GALLERY_GOLD_COLORS = ["yellow", "rose"];         // 14k in yellow + rose (no white)
-const GALLERY_STONES = ["pink-sapphire", "pink-diamond", "pink-topaz"]; // 3 stones, both metals
-const GALLERY_DEFAULT_METAL = "gold14";                 // opens on 14k
-const GALLERY_DEFAULT_GOLD_COLOR = "yellow";            // yellow first
-const GALLERY_DEFAULT_DROP = "pearl";                   // pearl (cheapest) first
+// ---- Drops ----
+// `shopify` = the exact Option2 ("Drop") value in Shopify.
+const DROPS = {
+  synthetic: { label: "Synthetic Stone",  shopify: "Synthetic Stone" },
+  pearl:     { label: "Freshwater Pearl", shopify: "Freshwater Pearl" },
+  diamond:   { label: "Lab Diamond",      shopify: null },   // quote only (silver or solid gold)
+};
+const GOLD_QUOTE_DROPS = ["pearl", "diamond"];               // drop choices for a 14K / 18K quote
+const HEART_STONES = {                                       // Stone pieces
+  synthetic: "Synthetic Pink Heart",
+  diamond:   "Pink Lab Diamond Heart",                       // quote only (silver or solid gold)
+};
+const GOLD_COLORS = [
+  { id: "yellow", label: "Yellow Gold", dot: ["#E9C66B", "#B98C24"] },
+  { id: "white",  label: "White Gold",  dot: ["#E8E9EB", "#AABBBB"] },
+  { id: "rose",   label: "Rose Gold",   dot: ["#E7B7A3", "#C98A72"] },
+];
+const QUOTE_EMAIL = "mira@adornme.ai";
 
+const NECKLACE_LENGTHS = ["16″", "18″", "24″"];
+const RING_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"];
+const SHIP = "2–3 weeks";
+const GOLD_NOTE = "14K and 18K solid gold available by request.";
+
+// prices[metal][drop]  — drop key is "synthetic" / "pearl"; pieces without a drop use "none";
+// the Adornme Chain uses its length ("16″", "18″", "24″") instead of a drop.
 const PRODUCTS = [
   {
-    id: "engravable-necklace",
-    title: "The Bleeding Heart Engravable Necklace",
-    collection: "bleeding-heart",
-    category: "necklaces",
-    prices: { silver:350, vermeil:425, gold10:1245, gold14:1730, gold18:2280 },
-    pricesByDrop: { pearl: { silver:350, vermeil:425, gold10:1245, gold14:1730, gold18:2280 }, cz: { silver:265, vermeil:340, gold10:1175, gold14:1660, gold18:2210 }, diamond: { silver:590, vermeil:665, gold10:1435, gold14:1920, gold18:2470 } },
-    pricesByDrop21: { pearl: { silver:455, vermeil:530, gold10:1840, gold14:2635, gold18:3505 }, cz: { silver:365, vermeil:440, gold10:1770, gold14:2565, gold18:3435 }, diamond: { silver:690, vermeil:765, gold10:2030, gold14:2825, gold18:3695 } },
-    price: 265,
-    image: "assets/products/engravable-necklace.jpeg",
-    imageInitial: "assets/products/engravable-necklace.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["14\u201316\u2033", "16\u201318\u2033", "20\u201322\u2033"],
-    gallerySizes: ["16–18″ adjustable"],
-    defaultSize: "16\u201318\u2033",
-    heartSizes: ["17mm", "21mm"],
-    canHaveInitial: true,
-    canEngrave: true,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "Our engravable signature heart on a fine chain \u2014 17mm, or 21mm for more room to engrave.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Freshwater pearl, CZ, or lab diamond drop. Fine cable chain.",
+    id: "engravable-necklace", title: "The Bleeding Heart Engravable Necklace",
+    collection: "bleeding-heart", category: "necklaces",
+    drops: ["synthetic", "pearl"],
+    prices: { silver: { synthetic: 105, pearl: 110 }, plated: { synthetic: 115, pearl: 120 } },
+    image: "assets/products/engravable-necklace.jpeg", imageInitial: "assets/products/engravable-necklace.jpeg",
+    sizes: NECKLACE_LENGTHS, defaultSize: "18″",
+    canHaveInitial: true, canEngrave: true, shipDays: SHIP,
+    lede: "Our engravable 17mm signature heart on a fine chain.",
+    materials: "Sterling silver or 18K gold plated sterling silver. A synthetic stone or freshwater pearl drop. Fine cable chain in 16″, 18″, or 24″.",
   },
   {
-    id: "engravable-pendant",
-    title: "The Bleeding Heart Engravable Pendant",
-    collection: "bleeding-heart",
-    category: "pendants",
-    prices: { silver:340, vermeil:415, gold10:1000, gold14:1435, gold18:1885 },
-    pricesByDrop: { pearl: { silver:340, vermeil:415, gold10:1000, gold14:1435, gold18:1885 }, cz: { silver:255, vermeil:330, gold10:930, gold14:1365, gold18:1815 }, diamond: { silver:580, vermeil:655, gold10:1190, gold14:1625, gold18:2075 } },
-    pricesByDrop21: { pearl: { silver:445, vermeil:520, gold10:1600, gold14:2345, gold18:3110 }, cz: { silver:355, vermeil:430, gold10:1530, gold14:2275, gold18:3040 }, diamond: { silver:680, vermeil:755, gold10:1790, gold14:2535, gold18:3300 } },
-    price: 255,
-    image: "assets/products/engravable-pendant.jpeg",
-    imageInitial: "assets/products/engravable-pendant.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: null,
-    heartSizes: ["17mm", "21mm"],
-    canHaveInitial: true,
-    canEngrave: true,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "The engravable heart, pendant only \u2014 flatter face made to hold your engraving. 17mm or 21mm.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Freshwater pearl, CZ, or lab diamond drop. Pendant bail.",
+    id: "engravable-pendant", title: "The Bleeding Heart Engravable Pendant",
+    collection: "bleeding-heart", category: "pendants",
+    drops: ["synthetic", "pearl"],
+    prices: { silver: { synthetic: 99, pearl: 105 }, plated: { synthetic: 110, pearl: 115 } },
+    image: "assets/products/engravable-pendant.jpeg", imageInitial: "assets/products/engravable-pendant.jpeg",
+    sizes: null, canHaveInitial: true, canEngrave: true, shipDays: SHIP,
+    lede: "The engravable 17mm heart, pendant only — a flatter face made to hold your engraving.",
+    materials: "Sterling silver or 18K gold plated sterling silver. A synthetic stone or freshwater pearl drop. Pendant bail; chain sold separately.",
   },
   {
-    id: "classic-pendant",
-    title: "The Bleeding Heart Classic Pendant",
-    collection: "bleeding-heart",
-    category: "pendants",
-    prices: { silver:280, vermeil:355, gold10:690, gold14:975, gold18:1260 },
-    pricesByDrop: { pearl: { silver:280, vermeil:355, gold10:690, gold14:975, gold18:1260 }, cz: { silver:190, vermeil:265, gold10:620, gold14:905, gold18:1190 }, diamond: { silver:515, vermeil:590, gold10:880, gold14:1165, gold18:1450 } },
-    price: 190,
-    image: "assets/products/classic-pendant.jpeg",
-    imageInitial: "assets/products/classic-pendant.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: null,
-    canHaveInitial: false,
-    canEngrave: false,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "The original rounded Bleeding Heart \u2014 soft, dimensional, worn as the pure bloom. 15mm.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Freshwater pearl, CZ, or lab diamond drop. The rounded heart is not engravable.",
+    id: "classic-pendant", title: "The Bleeding Heart Classic Pendant",
+    collection: "bleeding-heart", category: "pendants",
+    drops: ["synthetic", "pearl"],
+    prices: { silver: { synthetic: 85, pearl: 90 }, plated: { synthetic: 95, pearl: 100 } },
+    image: "assets/products/classic-pendant.jpeg", imageInitial: "assets/products/classic-pendant.jpeg",
+    sizes: null, canHaveInitial: false, canEngrave: false, shipDays: SHIP,
+    lede: "The original rounded Bleeding Heart — soft, dimensional, worn as the pure bloom. 15mm.",
+    materials: "Sterling silver or 18K gold plated sterling silver. A synthetic stone or freshwater pearl drop. Pendant bail; chain sold separately.",
   },
   {
-    id: "stone-pendant",
-    title: "The Bleeding Heart Stone Pendant",
-    collection: "bleeding-heart",
-    category: "pendants",
-    prices: { silver:190, vermeil:315, gold10:444, gold14:560, gold18:650 },
-    pricesByDrop: { pearl: { silver:190, vermeil:315, gold10:444, gold14:560, gold18:650 }, cz: { silver:175, vermeil:300, gold10:435, gold14:550, gold18:640 }, diamond: { silver:390, vermeil:515, gold10:550, gold14:665, gold18:755 } },
-    price: 175,
-    image: "assets/products/stone-pendant.jpeg",
-    imageInitial: "assets/products/stone-pendant.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: null,
-    canHaveInitial: false,
-    canEngrave: false,
-    hasDrops: true,
-    hasStoneOptions: true,
-    stoneOptions: HEART_STONE_OPTIONS,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2\u20133 weeks",
-    lede: "A carved stone heart pendant \u2014 10mm. Choose your stone and drop.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Carved 10mm heart stone. Drop of pearl, CZ, or lab diamond. Sapphire and Lab Diamond stones available in solid gold.",
+    id: "stone-pendant", title: "The Bleeding Heart Stone Pendant",
+    collection: "bleeding-heart", category: "pendants",
+    drops: ["synthetic"], stoneHeart: true,
+    prices: { silver: { synthetic: 95 }, plated: { synthetic: 105 } },
+    image: "assets/products/stone-pendant.jpeg", imageInitial: "assets/products/stone-pendant.jpeg",
+    sizes: null, canHaveInitial: false, canEngrave: false, shipDays: SHIP,
+    lede: "A carved 10mm pink heart stone, set as a pendant with a sparkling drop.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Carved 10mm synthetic pink heart stone and synthetic stone drop. Pendant bail; chain sold separately.",
   },
   {
-    id: "engravable-ring",
-    title: "The Bleeding Heart Engravable Ring",
-    collection: "bleeding-heart",
-    category: "rings",
-    prices: { silver:250, vermeil:325, gold10:520, gold14:715, gold18:910 },
-    pricesByDrop: { pearl: { silver:250, vermeil:325, gold10:520, gold14:715, gold18:910 }, cz: { silver:165, vermeil:240, gold10:450, gold14:645, gold18:840 }, diamond: { silver:490, vermeil:565, gold10:710, gold14:905, gold18:1100 } },
-    price: 165,
-    image: "assets/products/engravable-ring.jpeg",
-    imageInitial: "assets/products/engravable-ring.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"],
-    defaultSize: "4.5",
-    canHaveInitial: true,
-    canEngrave: true,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "The engravable heart on a slim band \u2014 12mm.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Freshwater pearl, CZ, or lab diamond drop.",
+    id: "engravable-ring", title: "The Bleeding Heart Engravable Ring",
+    collection: "bleeding-heart", category: "rings",
+    drops: ["synthetic", "pearl"],
+    prices: { silver: { synthetic: 95, pearl: 100 }, plated: { synthetic: 105, pearl: 110 } },
+    image: "assets/products/engravable-ring.jpeg", imageInitial: "assets/products/engravable-ring.jpeg",
+    sizes: RING_SIZES, defaultSize: "6",
+    canHaveInitial: true, canEngrave: true, shipDays: SHIP,
+    lede: "The engravable heart on a slim band — 12mm.",
+    materials: "Sterling silver or 18K gold plated sterling silver. A synthetic stone or freshwater pearl drop.",
   },
   {
-    id: "engravable-stud",
-    title: "The Bleeding Heart Engravable Stud Earrings",
-    collection: "bleeding-heart",
-    category: "earrings",
-    prices: { silver:495, vermeil:575, gold10:1055, gold14:1445, gold18:1850 },
-    pricesByDrop: { pearl: { silver:495, vermeil:575, gold10:1055, gold14:1445, gold18:1850 }, cz: { silver:320, vermeil:400, gold10:915, gold14:1305, gold18:1710 }, diamond: { silver:970, vermeil:1050, gold10:1435, gold14:1825, gold18:2230 } },
-    price: 320,
-    image: "assets/products/engravable-stud.jpeg",
-    imageInitial: "assets/products/engravable-stud.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: null,
-    canHaveInitial: true,
-    canEngrave: true,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "A pair of engravable heart studs with drops \u2014 12mm.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Two drops (pearl, CZ, or lab diamond). Posts and backings.",
+    id: "stone-ring", title: "The Bleeding Heart Stone Ring",
+    collection: "bleeding-heart", category: "rings",
+    drops: ["synthetic"], stoneHeart: true,
+    prices: { silver: { synthetic: 95 }, plated: { synthetic: 105 } },
+    image: "assets/products/stone-ring.jpeg", imageInitial: "assets/products/stone-ring.jpeg",
+    sizes: RING_SIZES, defaultSize: "6",
+    canHaveInitial: false, canEngrave: false, shipDays: SHIP,
+    lede: "A carved 10mm pink heart stone on a slim band.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Carved 10mm synthetic pink heart stone and synthetic stone drop.",
   },
   {
-    id: "engravable-chain-ear",
-    title: "The Bleeding Heart Engravable Chain Earrings",
-    collection: "bleeding-heart",
-    category: "earrings",
-    prices: { silver:490, vermeil:565, gold10:1045, gold14:1435, gold18:1835 },
-    pricesByDrop: { pearl: { silver:490, vermeil:565, gold10:1045, gold14:1435, gold18:1835 }, cz: { silver:315, vermeil:390, gold10:905, gold14:1295, gold18:1695 }, diamond: { silver:965, vermeil:1040, gold10:1425, gold14:1815, gold18:2215 } },
-    price: 315,
-    image: "assets/products/engravable-chain-ear.jpeg",
-    imageInitial: "assets/products/engravable-chain-ear.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: null,
-    canHaveInitial: true,
-    canEngrave: true,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "Engravable heart drop earrings on delicate chain \u2014 12mm.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Two drops (pearl, CZ, or lab diamond). Chain and backings.",
+    id: "engravable-stud", title: "The Bleeding Heart Engravable Stud Earrings",
+    collection: "bleeding-heart", category: "earrings",
+    drops: ["synthetic", "pearl"],
+    prices: { silver: { synthetic: 135, pearl: 140 }, plated: { synthetic: 145, pearl: 150 } },
+    image: "assets/products/engravable-stud.jpeg", imageInitial: "assets/products/engravable-stud.jpeg",
+    sizes: null, canHaveInitial: true, canEngrave: true, shipDays: SHIP,
+    lede: "A pair of engravable 12mm heart studs, each with a drop.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Two synthetic stone or freshwater pearl drops. Posts and backings.",
   },
   {
-    id: "stone-ring",
-    title: "The Bleeding Heart Stone Ring",
-    collection: "bleeding-heart",
-    category: "rings",
-    prices: { silver:250, vermeil:325, gold10:520, gold14:715, gold18:910 },
-    pricesByDrop: { pearl: { silver:250, vermeil:325, gold10:520, gold14:715, gold18:910 }, cz: { silver:165, vermeil:240, gold10:450, gold14:645, gold18:840 }, diamond: { silver:490, vermeil:565, gold10:710, gold14:905, gold18:1100 } },
-    price: 165,
-    image: "assets/products/stone-ring.jpeg",
-    imageInitial: "assets/products/stone-ring.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"],
-    defaultSize: "4.5",
-    canHaveInitial: false,
-    canEngrave: false,
-    hasDrops: true,
-    hasStoneOptions: true,
-    stoneOptions: HEART_STONE_OPTIONS,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "A carved stone heart on a band \u2014 12mm. Choose your stone and drop.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Carved heart stone. Drop of pearl, CZ, or lab diamond.",
+    id: "engravable-chain-ear", title: "The Bleeding Heart Engravable Chain Earrings",
+    collection: "bleeding-heart", category: "earrings",
+    drops: ["synthetic", "pearl"],
+    prices: { silver: { synthetic: 145, pearl: 150 }, plated: { synthetic: 155, pearl: 160 } },
+    image: "assets/products/engravable-chain-ear.jpeg", imageInitial: "assets/products/engravable-chain-ear.jpeg",
+    sizes: null, canHaveInitial: true, canEngrave: true, shipDays: SHIP,
+    lede: "Engravable 12mm heart drop earrings on delicate chain.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Two synthetic stone or freshwater pearl drops. Chain and backings.",
   },
   {
-    id: "stone-stud",
-    title: "The Bleeding Heart Stone Stud Earrings",
-    collection: "bleeding-heart",
-    category: "earrings",
-    prices: { silver:455, vermeil:535, gold10:830, gold14:1100, gold18:1385 },
-    pricesByDrop: { pearl: { silver:455, vermeil:535, gold10:830, gold14:1100, gold18:1385 }, cz: { silver:280, vermeil:360, gold10:690, gold14:960, gold18:1245 }, diamond: { silver:930, vermeil:1010, gold10:1210, gold14:1480, gold18:1765 } },
-    price: 280,
-    image: "assets/products/stone-stud.jpeg",
-    imageInitial: "assets/products/stone-stud.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: null,
-    canHaveInitial: false,
-    canEngrave: false,
-    hasDrops: true,
-    hasStoneOptions: true,
-    stoneOptions: HEART_STONE_OPTIONS,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "Carved stone heart studs \u2014 10mm, kept light for the ears. Choose your stone and drop.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Two carved heart stones. Drops. Posts and backings.",
+    id: "stone-stud", title: "The Bleeding Heart Stone Stud Earrings",
+    collection: "bleeding-heart", category: "earrings",
+    drops: ["synthetic"], stoneHeart: true,
+    prices: { silver: { synthetic: 125 }, plated: { synthetic: 135 } },
+    image: "assets/products/stone-stud.jpeg", imageInitial: "assets/products/stone-stud.jpeg",
+    sizes: null, canHaveInitial: false, canEngrave: false, shipDays: SHIP,
+    lede: "Carved 8mm pink heart stone studs — kept light for the ears.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Two carved 8mm synthetic pink heart stones and synthetic stone drops. Posts and backings.",
   },
   {
-    id: "stone-chain-ear",
-    title: "The Bleeding Heart Stone Chain Earrings",
-    collection: "bleeding-heart",
-    category: "earrings",
-    prices: { silver:490, vermeil:565, gold10:1045, gold14:1435, gold18:1835 },
-    pricesByDrop: { pearl: { silver:490, vermeil:565, gold10:1045, gold14:1435, gold18:1835 }, cz: { silver:315, vermeil:390, gold10:905, gold14:1295, gold18:1695 }, diamond: { silver:965, vermeil:1040, gold10:1425, gold14:1815, gold18:2215 } },
-    price: 315,
-    image: "assets/products/stone-chain-ear.jpeg",
-    imageInitial: "assets/products/stone-chain-ear.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: null,
-    canHaveInitial: false,
-    canEngrave: false,
-    hasDrops: true,
-    hasStoneOptions: true,
-    stoneOptions: HEART_STONE_OPTIONS,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "Carved stone heart drop earrings on chain \u2014 12mm. Choose your stone and drop.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Two carved heart stones. Drops. Chain and backings.",
+    id: "stone-hook", title: "The Bleeding Heart Stone Hook Earrings",
+    collection: "bleeding-heart", category: "earrings",
+    drops: ["synthetic"], stoneHeart: true,
+    prices: { silver: { synthetic: 125 }, plated: { synthetic: 135 } },
+    image: "assets/products/stone-hook.jpeg", imageInitial: "assets/products/stone-hook.jpeg",
+    sizes: null, canHaveInitial: false, canEngrave: false, shipDays: SHIP,
+    lede: "Carved 10mm pink heart stones on easy hook earrings.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Two carved 10mm synthetic pink heart stones and synthetic stone drops. Ear hooks.",
   },
-    {
-    id: "classic-chain-ear",
-    title: "The Bleeding Heart Classic Chain Earrings",
-    collection: "bleeding-heart",
-    category: "earrings",
-    prices: { silver:545, vermeil:620, gold10:1390, gold14:1955, gold18:2540 },
-    pricesByDrop: { pearl: { silver:545, vermeil:620, gold10:1390, gold14:1955, gold18:2540 }, cz: { silver:370, vermeil:445, gold10:1250, gold14:1815, gold18:2400 }, diamond: { silver:1020, vermeil:1095, gold10:1770, gold14:2335, gold18:2920 } },
-    price: 370,
-    image: "assets/products/classic-chain-ear.jpeg",
-    imageInitial: "assets/products/classic-chain-ear.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: null,
-    canHaveInitial: false,
-    canEngrave: false,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
+  {
+    id: "stone-chain-ear", title: "The Bleeding Heart Stone Chain Earrings",
+    collection: "bleeding-heart", category: "earrings",
+    drops: ["synthetic"], stoneHeart: true,
+    prices: { silver: { synthetic: 135 }, plated: { synthetic: 145 } },
+    image: "assets/products/stone-chain-ear.jpeg", imageInitial: "assets/products/stone-chain-ear.jpeg",
+    sizes: null, canHaveInitial: false, canEngrave: false, shipDays: SHIP,
+    lede: "Carved 10mm pink heart stone drop earrings on chain.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Two carved 10mm synthetic pink heart stones and synthetic stone drops. Chain and backings.",
+  },
+  {
+    id: "classic-chain-ear", title: "The Bleeding Heart Classic Chain Earrings",
+    collection: "bleeding-heart", category: "earrings",
+    drops: ["synthetic", "pearl"],
+    prices: { silver: { synthetic: 115, pearl: 120 }, plated: { synthetic: 125, pearl: 130 } },
+    image: "assets/products/classic-chain-ear.jpeg", imageInitial: "assets/products/classic-chain-ear.jpeg",
+    sizes: null, canHaveInitial: false, canEngrave: false, shipDays: SHIP,
     lede: "The rounded 15mm Classic heart as chain drop earrings.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Two drops. Chain and backings.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Two synthetic stone or freshwater pearl drops. Chain and backings.",
   },
   {
-    id: "flower-cross",
-    title: "Flower Cross",
-    collection: "devotion",
-    category: "necklaces",
-    prices: { silver:320, vermeil:395, gold10:615, gold14:820, gold18:1040 },
-    pricesByDrop: { pearl: { silver:320, vermeil:395, gold10:615, gold14:820, gold18:1040 }, cz: { silver:230, vermeil:305, gold10:545, gold14:750, gold18:970 }, diamond: { silver:555, vermeil:630, gold10:805, gold14:1010, gold18:1230 } },
-    price: 230,
-    image: "assets/products/flower-cross.jpeg",
-    imageInitial: "assets/products/flower-cross.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["16\u201318\u2033", "20\u201322\u2033"],
-    gallerySizes: ["16–18″ adjustable"],
-    defaultSize: "20\u201322\u2033",
-    canHaveInitial: false,
-    canEngrave: true,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "A cross softened by a flowering bloom and a drop.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Enamel bloom. Drop of pearl, CZ, or lab diamond. Fine chain.",
+    id: "flower-cross", title: "Flower Cross",
+    collection: "devotion", category: "necklaces",
+    drops: ["pearl"],
+    prices: { silver: { pearl: 95 }, plated: { pearl: 105 } },
+    image: "assets/products/flower-cross.jpeg", imageInitial: "assets/products/flower-cross.jpeg",
+    sizes: NECKLACE_LENGTHS, defaultSize: "18″",
+    canHaveInitial: false, canEngrave: true, shipDays: SHIP,
+    lede: "A cross softened by a flowering bloom and a pearl drop.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Enamel bloom. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″.",
   },
   {
-    id: "heart-cross",
-    title: "Heart Cross",
-    collection: "devotion",
-    category: "necklaces",
-    prices: { silver:310, vermeil:385, gold10:680, gold14:925, gold18:1185 },
-    pricesByDrop: { pearl: { silver:310, vermeil:385, gold10:680, gold14:925, gold18:1185 }, cz: { silver:220, vermeil:295, gold10:610, gold14:855, gold18:1115 }, diamond: { silver:545, vermeil:620, gold10:870, gold14:1115, gold18:1375 } },
-    price: 220,
-    image: "assets/products/heart-cross.jpeg",
-    imageInitial: "assets/products/heart-cross.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["16\u201318\u2033", "20\u201322\u2033"],
-    gallerySizes: ["16–18″ adjustable"],
-    defaultSize: "20\u201322\u2033",
-    canHaveInitial: false,
-    canEngrave: true,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "A cross holding a heart at its center, with a drop below.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Ruby accent. Drop of pearl, CZ, or lab diamond. Fine chain.",
+    id: "heart-cross", title: "Heart Cross",
+    collection: "devotion", category: "necklaces",
+    drops: ["pearl"],
+    prices: { silver: { pearl: 85 }, plated: { pearl: 95 } },
+    image: "assets/products/heart-cross.jpeg", imageInitial: "assets/products/heart-cross.jpeg",
+    sizes: NECKLACE_LENGTHS, defaultSize: "18″",
+    canHaveInitial: false, canEngrave: true, shipDays: SHIP,
+    lede: "A cross holding a heart at its center, with a pearl drop below.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Red synthetic ruby accent. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″.",
   },
   {
-    id: "christ-risen",
-    title: "Christ Risen",
-    collection: "devotion",
-    category: "necklaces",
-    prices: { silver:305, vermeil:380, gold10:660, gold14:895, gold18:1145 },
-    pricesByDrop: { pearl: { silver:305, vermeil:380, gold10:660, gold14:895, gold18:1145 }, cz: { silver:215, vermeil:290, gold10:590, gold14:825, gold18:1075 }, diamond: { silver:540, vermeil:615, gold10:850, gold14:1085, gold18:1335 } },
-    price: 215,
-    image: "assets/products/christ-risen.jpeg",
-    imageInitial: "assets/products/christ-risen.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["16\u201318\u2033", "20\u201322\u2033"],
-    gallerySizes: ["16–18″ adjustable"],
-    defaultSize: "20\u201322\u2033",
-    canHaveInitial: false,
-    canEngrave: true,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
+    id: "christ-risen", title: "Christ Risen",
+    collection: "devotion", category: "necklaces",
+    drops: ["pearl"],
+    prices: { silver: { pearl: 105 }, plated: { pearl: 115 } },
+    image: "assets/products/christ-risen.jpeg", imageInitial: "assets/products/christ-risen.jpeg",
+    sizes: NECKLACE_LENGTHS, defaultSize: "18″",
+    canHaveInitial: false, canEngrave: true, shipDays: SHIP,
     lede: "Christ rising in triumph, arms raised, heart held below.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Ruby accent. Drop of pearl, CZ, or lab diamond. Fine chain.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Red synthetic ruby accent. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″.",
   },
   {
-    id: "adornme-chain",
-    title: "The Adornme Chain",
-    collection: "chain",
-    category: "chains",
-    prices: { silver:20, vermeil:100, gold10:255, gold14:300, gold18:405 },
-    price: 20,
-    image: "assets/products/adornme-chain.png",
-    imageInitial: "assets/products/adornme-chain.png",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["16\u2033", "18\u2033", "20\u2033"],
-    defaultSize: "18\u2033",
-    canHaveInitial: false,
-    canEngrave: false,
-    hasDrops: false,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "Sold separately, in three lengths and five metals.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Fine cable-link.",
+    id: "adornme-chain", title: "The Adornme Chain",
+    collection: "chain", category: "chains",
+    drops: [], lengthPricing: true,
+    prices: { silver: { "16″": 15, "18″": 20, "24″": 20 }, plated: { "16″": 25, "18″": 30, "24″": 30 } },
+    image: "assets/products/adornme-chain.png", imageInitial: "assets/products/adornme-chain.png",
+    sizes: NECKLACE_LENGTHS, defaultSize: "18″",
+    canHaveInitial: false, canEngrave: false, shipDays: SHIP,
+    lede: "Sold separately, in three lengths — ready for any Adornme pendant.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Fine cable-link in 16″, 18″, or 24″.",
   },
   {
-    id: "pearl-bracelet",
-    title: "The Bleeding Heart Pearl Bracelet",
-    collection: "bleeding-heart",
-    category: "bracelets",
-    prices: { silver:830, vermeil:885, gold10:1710, gold14:2320, gold18:2945 },
-    pricesByDrop: { pearl: { silver:830, vermeil:885, gold10:1710, gold14:2320, gold18:2945 }, cz: { silver:450, vermeil:505, gold10:1400, gold14:2010, gold18:2635 }, diamond: { silver:1870, vermeil:1925, gold10:2545, gold14:3160, gold18:3785 } },
-    price: 450,
-    image: "assets/products/pearl-bracelet.jpeg",
-    imageInitial: "assets/products/pearl-bracelet.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["6.5\u20137\u2033", "7\u20137.5\u2033"],
-    defaultSize: "7\u20137.5\u2033",
-    canHaveInitial: true,
-    canEngrave: true,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "Six little engravable hearts along a fine chain \u2014 a bracelet of initials, dates, or names.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Six hearts, each with a drop of pearl, CZ, or lab diamond. Fine chain.",
+    id: "pearl-bracelet", title: "The Bleeding Heart Pearl Bracelet",
+    collection: "bleeding-heart", category: "bracelets",
+    drops: ["pearl"],
+    prices: { silver: { pearl: 125 }, plated: { pearl: 135 } },
+    image: "assets/products/pearl-bracelet.jpeg", imageInitial: "assets/products/pearl-bracelet.jpeg",
+    sizes: ["6.5–7″", "7–7.5″"], defaultSize: "7–7.5″",
+    canHaveInitial: true, canEngrave: true, shipDays: SHIP,
+    lede: "Little engravable hearts along a fine chain, each with a pearl — a bracelet of initials, dates, or names.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Engravable hearts, each with a freshwater pearl drop. Fine chain.",
   },
   {
-    id: "cuff",
-    title: "The Bleeding Heart Cuff in Mother-of-Pearl",
-    collection: "bleeding-heart",
-    category: "bracelets",
-    prices: { silver:695, vermeil:750, gold10:2815, gold14:4130, gold18:5480 },
-    pricesByDrop: { pearl: { silver:695, vermeil:750, gold10:2815, gold14:4130, gold18:5480 }, cz: { silver:635, vermeil:690, gold10:2765, gold14:4080, gold18:5425 }, diamond: { silver:870, vermeil:925, gold10:2955, gold14:4270, gold18:5620 } },
-    price: 635,
-    image: "assets/products/cuff.jpeg",
-    imageInitial: "assets/products/cuff.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: null,
-    canHaveInitial: false,
-    canEngrave: false,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "A solid heart cuff inlaid with mother-of-pearl \u2014 the collection's boldest piece.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Mother-of-pearl inlays. Drop of pearl, CZ, or lab diamond.",
+    id: "open-heart", title: "The Open Heart Pendant",
+    collection: "bleeding-heart", category: "pendants",
+    drops: ["synthetic", "pearl"],
+    prices: { silver: { synthetic: 110, pearl: 115 }, plated: { synthetic: 120, pearl: 125 } },
+    image: "assets/products/open-heart.jpeg", imageInitial: "assets/products/open-heart.jpeg",
+    sizes: NECKLACE_LENGTHS, defaultSize: "18″",
+    canHaveInitial: true, initialRequired: true, canEngrave: false, shipDays: SHIP,
+    lede: "An open 21mm heart with your initial suspended within — framed by leaves set with pink and yellow stones.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Open heart with a dangling initial. Leaves set with small pink and yellow synthetic stones. A synthetic stone or freshwater pearl drop. Fine chain in 16″, 18″, or 24″.",
   },
   {
-    id: "open-heart",
-    title: "The Open Heart Pendant",
-    collection: "bleeding-heart",
-    category: "pendants",
-    prices: { silver:480, vermeil:555, gold10:1045, gold14:1300, gold18:1660 },
-    pricesByDrop: { pearl: { silver:480, vermeil:555, gold10:1045, gold14:1300, gold18:1660 }, cz: { silver:395, vermeil:470, gold10:975, gold14:1230, gold18:1590 }, diamond: { silver:720, vermeil:795, gold10:1235, gold14:1490, gold18:1850 } },
-    price: 395,
-    image: "assets/products/open-heart.jpeg",
-    imageInitial: "assets/products/open-heart.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["14\u201316\u2033", "16\u201318\u2033", "20\u201322\u2033"],
-    gallerySizes: ["16–18″ adjustable"],
-    defaultSize: "16\u201318\u2033",
-    canHaveInitial: true,
-    initialRequired: true,
-    canEngrave: false,
-    hasDrops: true,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "An open 21mm heart with your initial suspended within \u2014 framed by leaves set with pink and yellow stones.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Open heart with a dangling initial. Leaves set with pink and yellow stones. Drop of pearl, CZ, or lab diamond.",
+    id: "mens-christ-pendant", title: "Christ Risen Pendant for Men",
+    collection: "for-him", category: "pendants",
+    drops: [],
+    prices: { silver: { none: 150 }, plated: { none: 160 } },
+    image: "assets/products/christ-risen-mens-pendant.jpeg", imageInitial: "assets/products/christ-risen-mens-pendant.jpeg",
+    sizes: ["18″", "24″"], defaultSize: "24″",
+    canHaveInitial: false, canEngrave: true, shipDays: SHIP,
+    lede: "Christ rising in triumph, arms open, a small golden heart-stone at his center — designed for him.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Small yellow synthetic center stone. A larger, bolder figure. Chain in 18″ or 24″.",
   },
   {
-    id: "mens-christ-pendant",
-    title: "Christ Risen Pendant for Men",
-    collection: "for-him",
-    category: "pendants",
-    prices: { silver:225, vermeil:300, gold10:745, gold14:1090, gold18:1440 },
-    price: 225,
-    image: "assets/products/christ-risen-mens-pendant.jpeg",
-    imageInitial: "assets/products/christ-risen-mens-pendant.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["20\u201322\u2033", "22\u201324\u2033"],
-    defaultSize: "22\u201324\u2033",
-    canHaveInitial: false,
-    canEngrave: true,
-    hasDrops: false,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "Christ rising in triumph, arms open, a small golden heart-stone at his center \u2014 designed for him.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Small yellow center stone. A larger, bolder figure. Fine chain.",
-  },
-  {
-    id: "mens-christ-ring",
-    title: "Christ Risen Ring for Men",
-    collection: "for-him",
-    category: "rings",
-    prices: { silver:365, vermeil:440, gold10:1580, gold14:2285, gold18:3055 },
-    price: 365,
-    image: "assets/products/christ-risen-mens-ring.jpeg",
-    imageInitial: "assets/products/christ-risen-mens-ring.jpeg",
-    metals: ["silver", "vermeil", "gold10", "gold14", "gold18"],
-    sizes: ["8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "13"],
-    defaultSize: "8.5",
-    canHaveInitial: false,
-    canEngrave: true,
-    hasDrops: false,
-    hasGoldColors: true,
-    dropOptions: DROP_OPTIONS,
-    shipDays: "2–3 weeks",
-    lede: "A bold, substantial ring carrying the risen Christ \u2014 a statement of faith in solid metal.",
-    materials: "Solid gold (10k/14k/18k) in yellow, white, or rose, gold vermeil, or sterling silver. Small yellow center stone. A heavy, bulky band.",
+    id: "mens-christ-ring", title: "Christ Risen Ring for Men",
+    collection: "for-him", category: "rings",
+    drops: [],
+    prices: { silver: { none: 175 }, plated: { none: 185 } },
+    image: "assets/products/christ-risen-mens-ring.jpeg", imageInitial: "assets/products/christ-risen-mens-ring.jpeg",
+    sizes: ["8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "13"], defaultSize: "10",
+    canHaveInitial: false, canEngrave: true, shipDays: SHIP,
+    lede: "A bold, substantial ring carrying the risen Christ — a statement of faith you can feel.",
+    materials: "Sterling silver or 18K gold plated sterling silver. Small yellow synthetic center stone. A heavy, substantial band.",
   },
 ];
 
-function adornmeGetMetalPrice(product, metal, drop) {
-  if (product.pricesByDrop && drop && product.pricesByDrop[drop]) { const v=product.pricesByDrop[drop][metal]; if(v!=null)return v; }
-  if (product.prices && product.prices[metal] != null) return product.prices[metal];
-  const vals = product.prices ? Object.values(product.prices).filter(x=>typeof x==="number") : [];
-  return vals.length ? Math.min(...vals) : (product.price || 0);
+// Hidden for now (not shown anywhere, not in Shopify). Kept so it can come back later.
+const HIDDEN_PRODUCTS = [
+  { id: "cuff", title: "The Bleeding Heart Cuff in Mother-of-Pearl", collection: "bleeding-heart", category: "bracelets",
+    image: "assets/products/cuff.jpeg", note: "Hidden Oct 28 2026 until overseas production." },
+];
+
+// ---- Helpers ----
+// Price key for a selection: the drop id, "none", or the chain length.
+function adornmePriceKey(product, drop, size) {
+  if (product.lengthPricing) return size || product.defaultSize;
+  if (product.drops && product.drops.length) return drop || product.drops[0];
+  return "none";
 }
+// Local (fallback) price for one selection. Gold metals have no price (quote only).
+function adornmeGetMetalPrice(product, metal, drop, size) {
+  const table = product.prices && product.prices[metal];
+  if (!table) return null;
+  const v = table[adornmePriceKey(product, drop, size)];
+  return typeof v === "number" ? v : null;
+}
+// Lowest price across the shop metals (Silver, Gold Plated).
 function adornmeGetFromPrice(product) {
-  let all = [];
-  if (product.pricesByDrop) { for (const d of Object.values(product.pricesByDrop)) all.push(...Object.values(d).filter(x=>typeof x==="number")); }
-  else if (product.prices) { all = Object.values(product.prices).filter(x=>typeof x==="number"); }
-  return all.length ? Math.min(...all) : (product.price || 0);
-}
-// From-price for the SIMPLIFIED gallery view (silver/14k, pearl/diamond only)
-function adornmeGetGalleryFromPrice(product) {
-  let all = [];
-  const metals = GALLERY_METALS;
-  const drops = product.hasDrops ? GALLERY_DROPS : [null];
-  for (const m of metals) {
-    for (const d of drops) {
-      let v = null;
-      if (d && product.pricesByDrop && product.pricesByDrop[d]) v = product.pricesByDrop[d][m];
-      else if (product.prices) v = product.prices[m];
-      if (typeof v === "number") all.push(v);
-    }
+  const all = [];
+  for (const m of SHOP_METALS) {
+    const t = product.prices && product.prices[m];
+    if (t) all.push(...Object.values(t).filter((x) => typeof x === "number"));
   }
-  return all.length ? Math.min(...all) : (product.price || 0);
+  return all.length ? Math.min(...all) : null;
 }
+// Option values Shopify expects for a selection (names match the CSV option names).
+function adornmeShopifyOptions(product, metal, drop, size) {
+  const opts = { Metal: METALS[metal] && METALS[metal].shopify };
+  if (product.lengthPricing) opts.Length = size || product.defaultSize;
+  else if (product.drops && product.drops.length) opts.Drop = DROPS[drop || product.drops[0]].shopify;
+  return opts;
+}
+// Mail link for a quote request (solid gold or lab diamond).
+function adornmeQuoteMailto(lines, pieceTitle) {
+  const subject = `Quote request: ${pieceTitle}`;
+  const body = `Hi Mira,\n\nI'd love a quote for this piece:\n\n${lines.join("\n")}\n\nThank you!`;
+  return `mailto:${QUOTE_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
 if (typeof window !== "undefined") {
+  Object.assign(window, {
+    METALS, SHOP_METALS, CUSTOMIZE_METALS, METAL_LABELS, DROPS, GOLD_QUOTE_DROPS, HEART_STONES, GOLD_COLORS,
+    QUOTE_EMAIL, GOLD_NOTE, PRODUCTS, HIDDEN_PRODUCTS,
+    adornmePriceKey, adornmeGetMetalPrice, adornmeGetFromPrice, adornmeShopifyOptions, adornmeQuoteMailto,
+  });
   window.ADORNME_METAL_LABELS = METAL_LABELS;
-  window.adornmeGetMetalPrice = adornmeGetMetalPrice;
-  window.adornmeGetFromPrice = adornmeGetFromPrice;
-  window.adornmeGetGalleryFromPrice = adornmeGetGalleryFromPrice;
-  window.ADORNME_GOLD_COLORS = GOLD_COLOR_OPTIONS;
-  window.GALLERY_METALS = GALLERY_METALS;
-  window.GALLERY_DROPS = GALLERY_DROPS;
-  window.GALLERY_GOLD_COLORS = GALLERY_GOLD_COLORS;
-  window.GALLERY_STONES = GALLERY_STONES;
-  window.GALLERY_DEFAULT_METAL = GALLERY_DEFAULT_METAL;
-  window.GALLERY_DEFAULT_GOLD_COLOR = GALLERY_DEFAULT_GOLD_COLOR;
-  window.GALLERY_DEFAULT_DROP = GALLERY_DEFAULT_DROP;
 }
