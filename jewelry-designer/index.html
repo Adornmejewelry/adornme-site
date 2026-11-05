@@ -157,7 +157,7 @@
       <div class="summary"><div><div class="eyebrow">Your piece</div><p class="summary-line" id="summaryLine"></p></div><div class="price" id="price">—</div></div>
       <div class="trust">Designed in Newport Beach · Hand-finished in Downtown LA · Free engraving</div>
       <button type="button" class="cta-order" id="addToCartBtn"><span>Add to bag</span><strong id="ctaPrice">—</strong></button>
-      <p class="helper" id="ctaHelper">Free engraving · Ships in 2–3 weeks</p>
+      <p class="helper" id="ctaHelper">Free engraving</p>
     </section>
   </main>
 
@@ -359,7 +359,7 @@
         $("#price").textContent = pr!=null ? money(pr) : "—";
         $("#price").classList.remove("on-request");
         if (!btn.disabled){ btn.innerHTML = `<span>Add to bag</span><strong id="ctaPrice">${pr!=null?money(pr):"—"}</strong>`; btn.classList.remove("quote"); }
-        $("#ctaHelper").textContent = `Free engraving · Ships in ${piece().shipDays || "2–3 weeks"}`;
+        $("#ctaHelper").textContent = "Free engraving";
       }
     }
     function applyConditionals(){
