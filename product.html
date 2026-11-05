@@ -194,13 +194,12 @@
                   <button class="cta-primary" id="addToCartBtn" type="button" ${price==null?"disabled":""}>${btnLabel}</button>
                   <a class="cta-secondary" href="customize.html?piece=${product.id}&metal=gold14">Want it in 14K or 18K solid gold? Request a quote →</a>
                 </div>
-                <div class="trust-strip">Designed in Newport Beach · Hand-finished in Downtown LA · Ships in ${product.shipDays}</div>
+                <div class="trust-strip">Designed in Newport Beach · Hand-finished in Downtown LA</div>
                 <div class="product-meta"><h3>The piece</h3><p>${product.materials}</p>
                   <dl class="product-meta-detail">
                     <dt>Metals</dt><dd>${SHOP_METALS.map((m) => METALS[m].label).join(" · ")}</dd>
                     <dt>Solid gold</dt><dd>14K or 18K by request</dd>
                     ${drops.length ? `<dt>Drop</dt><dd>${drops.map((d) => DROPS[d].label).join(" · ")}</dd>` : ""}
-                    <dt>Ship time</dt><dd>${product.shipDays}</dd>
                   </dl>
                 </div>
               </div>
