@@ -107,10 +107,16 @@
       document.title = `${product.title} | Adornme`;
       const drops = product.drops || [];
       const urlMetal = params.get("metal");
+      const startMetal = SHOP_METALS.includes(urlMetal) ? urlMetal : "silver";
+      const sizes = product.sizes || [];
+      const defaultSize = sizes.length ? (product.defaultSize || sizes[0]) : null;
+      // Open on the lowest-priced choice, so the first price shown matches the "From $…" on the gallery and home cards.
+      const cheapest = (list, priceOf) => list.reduce((best, x) => ((priceOf(x) ?? Infinity) < (priceOf(best) ?? Infinity) ? x : best), list[0]);
+      const startSize = (product.lengthPricing && sizes.length) ? cheapest(sizes, (s) => adornmeGetMetalPrice(product, startMetal, null, s)) : defaultSize;
       const state = {
-        metal: SHOP_METALS.includes(urlMetal) ? urlMetal : "silver",
-        drop: drops.length ? (drops.includes("pearl") ? "pearl" : drops[0]) : null,
-        size: (product.sizes && product.sizes.length) ? (product.defaultSize || product.sizes[0]) : null,
+        metal: startMetal,
+        drop: drops.length ? cheapest(drops, (d) => adornmeGetMetalPrice(product, startMetal, d, startSize)) : null,
+        size: startSize,
         initial: product.initialRequired ? "M" : "—",
         engraving: ""
       };

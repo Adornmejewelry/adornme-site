@@ -56,7 +56,7 @@
         <div class="eyebrow">For Him</div>
         <h3>Christ Risen Pendant for Men</h3>
         <p class="lede">Christ rising in triumph, arms open, a small golden heart-stone at his center. A larger, bolder figure — designed for him.</p>
-        <p class="price-display" id="pendantPrice">$170</p>
+        <p class="price-display" id="pendantPrice">$225</p>
 
         <div class="control-group">
           <div class="label">Metal</div>
@@ -75,7 +75,7 @@
         </div>
 
         <div class="product-actions">
-          <button class="cta-primary" id="pendantAddBtn" type="button">Add to bag — $170</button>
+          <button class="cta-primary" id="pendantAddBtn" type="button">Add to bag — $225</button>
           <a class="cta-secondary" id="pendantDesignLink" href="product.html?id=mens-christ-pendant">View full details</a>
           <a class="cta-secondary" href="customize.html?piece=mens-christ-pendant&amp;metal=gold14">14K or 18K gold? Request a quote →</a>
         </div>
@@ -95,7 +95,7 @@
         <div class="eyebrow">For Him</div>
         <h3>Christ Risen Ring for Men</h3>
         <p class="lede">A bold, substantial ring carrying the risen Christ — a statement of faith in solid metal. Heavy in the hand, built to last decades of wear.</p>
-        <p class="price-display" id="ringPrice">$195</p>
+        <p class="price-display" id="ringPrice">$295</p>
 
         <div class="control-group">
           <div class="label">Metal</div>
@@ -114,7 +114,7 @@
         </div>
 
         <div class="product-actions">
-          <button class="cta-primary" id="ringAddBtn" type="button">Add to bag — $195</button>
+          <button class="cta-primary" id="ringAddBtn" type="button">Add to bag — $295</button>
           <a class="cta-secondary" id="ringDesignLink" href="product.html?id=mens-christ-ring">View full details</a>
           <a class="cta-secondary" href="customize.html?piece=mens-christ-ring&amp;metal=gold14">14K or 18K gold? Request a quote →</a>
         </div>
@@ -207,7 +207,7 @@
           };
           if (window.AdornmeShopify && window.AdornmeShopify.addToCart) {
             await window.AdornmeShopify.addToCart(config);
-            setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 2000);
+            setTimeout(() => { btn.disabled = false; updatePrice(piece); }, 2000);   // label shows the current metal's price
           } else { alert("Checkout system is loading. Please try again in a moment."); btn.textContent = orig; btn.disabled = false; }
         } catch (err) { console.error("[Adornme] Add to bag error:", err); alert("Sorry — something went wrong. Please email mira@adornme.ai."); btn.textContent = orig; btn.disabled = false; }
       }
