@@ -1,5 +1,5 @@
 // ============================================================
-// ADORNME — Central product data (v42.0, Nov 8 2026: Mira's new price list; chains unchanged; new Pearl Necklace)
+// ADORNME — Central product data (v42.1, Nov 9 2026: Open Heart $225/$230 silver, $245/$250 gold plated; v42.0 Nov 8: Mira's new price list, new Pearl Necklace)
 // Launch pricing: Sterling Silver + 18K Gold Plated on every page.
 // 14K / 18K solid gold and lab diamond (drop or heart; silver or solid gold): "Request a quote" on the Customize page.
 // Shopify is the source of truth for prices; the prices below are the
@@ -237,7 +237,7 @@ const PRODUCTS = [
     id: "open-heart", title: "The Open Heart Pendant",
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 160, pearl: 165 }, plated: { synthetic: 180, pearl: 185 } },
+    prices: { silver: { synthetic: 225, pearl: 230 }, plated: { synthetic: 245, pearl: 250 } },
     image: "assets/products/open-heart.jpeg", imageInitial: "assets/products/open-heart.jpeg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: true, initialRequired: true, canEngrave: false,
