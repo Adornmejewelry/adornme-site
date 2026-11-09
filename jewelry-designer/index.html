@@ -263,7 +263,7 @@
     function renderMetals(){
       $("#metalChips").innerHTML = CUSTOMIZE_METALS.map((m)=>chip(dotted(METALS[m].short, METALS[m].dot[0], METALS[m].dot[1]), m===state.metal, `data-metal="${m}"`)).join("");
       $("#metalHelper").textContent = isGold()
-        ? "Solid gold is made to order. Send us your design and Mira will reply with your price."
+        ? "Solid gold is priced by quote. Send us your design and Mira will reply with your price."
         : "14K and 18K solid gold available by request.";
     }
     function renderGoldColor(){
