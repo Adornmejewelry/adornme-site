@@ -1,5 +1,5 @@
 // ============================================================
-// ADORNME — Central product data (v42.1, Nov 9 2026: Open Heart $225/$230 silver, $245/$250 gold plated; v42.0 Nov 8: Mira's new price list, new Pearl Necklace)
+// ADORNME — Central product data (v42.2, Nov 11 2026: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
 // Launch pricing: Sterling Silver + 18K Gold Plated on every page.
 // 14K / 18K solid gold and lab diamond (drop or heart; silver or solid gold): "Request a quote" on the Customize page.
 // Shopify is the source of truth for prices; the prices below are the
@@ -48,7 +48,7 @@ const PRODUCTS = [
     id: "engravable-necklace", title: "The Bleeding Heart Engravable Necklace",
     collection: "bleeding-heart", category: "necklaces",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 170, pearl: 175 }, plated: { synthetic: 190, pearl: 195 } },
+    prices: { silver: { synthetic: 215, pearl: 215 }, plated: { synthetic: 235, pearl: 235 } },
     image: "assets/products/engravable-necklace.jpeg", imageInitial: "assets/products/engravable-necklace.jpeg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: true, canEngrave: true,
@@ -59,7 +59,7 @@ const PRODUCTS = [
     id: "engravable-pendant", title: "The Bleeding Heart Engravable Pendant",
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 160, pearl: 165 }, plated: { synthetic: 180, pearl: 185 } },
+    prices: { silver: { synthetic: 195, pearl: 195 }, plated: { synthetic: 215, pearl: 215 } },
     image: "assets/products/engravable-pendant.jpeg", imageInitial: "assets/products/engravable-pendant.jpeg",
     sizes: null, canHaveInitial: true, canEngrave: true,
     lede: "The engravable 17mm heart, pendant only — a flatter face made to hold your engraving.",
@@ -69,7 +69,7 @@ const PRODUCTS = [
     id: "classic-pendant", title: "The Bleeding Heart Classic Pendant",
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 135, pearl: 140 }, plated: { synthetic: 155, pearl: 160 } },
+    prices: { silver: { synthetic: 140, pearl: 140 }, plated: { synthetic: 160, pearl: 160 } },
     image: "assets/products/classic-pendant.jpeg", imageInitial: "assets/products/classic-pendant.jpeg",
     sizes: null, canHaveInitial: false, canEngrave: false,
     lede: "The original rounded Bleeding Heart — soft, dimensional, worn as the pure bloom. 15mm.",
@@ -89,7 +89,7 @@ const PRODUCTS = [
     id: "engravable-ring", title: "The Bleeding Heart Engravable Ring",
     collection: "bleeding-heart", category: "rings",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 150, pearl: 155 }, plated: { synthetic: 170, pearl: 175 } },
+    prices: { silver: { synthetic: 155, pearl: 155 }, plated: { synthetic: 175, pearl: 175 } },
     image: "assets/products/engravable-ring.jpeg", imageInitial: "assets/products/engravable-ring.jpeg",
     sizes: RING_SIZES, defaultSize: "6",
     canHaveInitial: true, canEngrave: true,
@@ -111,7 +111,7 @@ const PRODUCTS = [
     id: "engravable-stud", title: "The Bleeding Heart Engravable Stud Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 210, pearl: 215 }, plated: { synthetic: 230, pearl: 235 } },
+    prices: { silver: { synthetic: 215, pearl: 215 }, plated: { synthetic: 235, pearl: 235 } },
     image: "assets/products/engravable-stud.jpeg", imageInitial: "assets/products/engravable-stud.jpeg",
     sizes: null, canHaveInitial: true, canEngrave: true,
     lede: "A pair of engravable 12mm heart studs, each with a drop.",
@@ -121,7 +121,7 @@ const PRODUCTS = [
     id: "engravable-chain-ear", title: "The Bleeding Heart Engravable Chain Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 230, pearl: 235 }, plated: { synthetic: 250, pearl: 255 } },
+    prices: { silver: { synthetic: 235, pearl: 235 }, plated: { synthetic: 255, pearl: 255 } },
     image: "assets/products/engravable-chain-ear.jpeg", imageInitial: "assets/products/engravable-chain-ear.jpeg",
     sizes: null, canHaveInitial: true, canEngrave: true,
     lede: "Engravable 12mm heart drop earrings on delicate chain.",
@@ -161,7 +161,7 @@ const PRODUCTS = [
     id: "classic-chain-ear", title: "The Bleeding Heart Classic Chain Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 220, pearl: 225 }, plated: { synthetic: 240, pearl: 245 } },
+    prices: { silver: { synthetic: 225, pearl: 225 }, plated: { synthetic: 245, pearl: 245 } },
     image: "assets/products/classic-chain-ear.jpeg", imageInitial: "assets/products/classic-chain-ear.jpeg",
     sizes: null, canHaveInitial: false, canEngrave: false,
     lede: "The rounded 15mm Classic heart as chain drop earrings.",
@@ -237,7 +237,7 @@ const PRODUCTS = [
     id: "open-heart", title: "The Open Heart Pendant",
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 225, pearl: 230 }, plated: { synthetic: 245, pearl: 250 } },
+    prices: { silver: { synthetic: 230, pearl: 230 }, plated: { synthetic: 250, pearl: 250 } },
     image: "assets/products/open-heart.jpeg", imageInitial: "assets/products/open-heart.jpeg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: true, initialRequired: true, canEngrave: false,
