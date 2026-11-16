@@ -158,7 +158,7 @@
       <div class="group"><div class="eyebrow">Anything else? <span class="label-note">— optional</span></div><textarea class="field" id="aiNotes" maxlength="400" rows="3" placeholder="e.g. Please use a slightly smaller pearl, or wrap as a baby gift."></textarea><p class="helper">Our studio reviews every custom note and confirms before we begin.</p></div>
 
       <div class="summary"><div><div class="eyebrow">Your piece</div><p class="summary-line" id="summaryLine"></p></div><div class="price" id="price">—</div></div>
-      <div class="trust">Designed in Newport Beach · Hand-finished in Downtown LA · Free engraving</div>
+      <div class="trust">Designed in Newport Beach · Hand-finished in Downtown LA<span id="trustEngraving"> · Free engraving</span></div>
       <button type="button" class="cta-order" id="addToCartBtn"><span>Add to bag</span><strong id="ctaPrice">—</strong></button>
       <p class="helper" id="ctaHelper">Free engraving</p>
     </section>
@@ -383,8 +383,9 @@
         $("#price").textContent = pr!=null ? money(pr) : "—";
         $("#price").classList.remove("on-request");
         if (!btn.disabled){ btn.innerHTML = `<span>Add to bag</span><strong id="ctaPrice">${pr!=null?money(pr):"—"}</strong>`; btn.classList.remove("quote"); }
-        $("#ctaHelper").textContent = "Free engraving";
+        $("#ctaHelper").textContent = piece().canEngrave ? "Free engraving" : (piece().canHaveInitial ? "Free engraved initial" : "");
       }
+      $("#trustEngraving").hidden = !piece().canEngrave;
     }
     function applyConditionals(){
       const p = piece();
