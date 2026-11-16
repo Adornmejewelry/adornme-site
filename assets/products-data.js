@@ -1,5 +1,5 @@
 // ============================================================
-// ADORNME — Central product data (v42.2, Nov 11 2026: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
+// ADORNME — Central product data (v42.3, Nov 16 2026: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
 // Launch pricing: Sterling Silver + 18K Gold Plated on every page.
 // 14K / 18K solid gold and lab diamond (drop or heart; silver or solid gold): "Request a quote" on the Customize page.
 // Shopify is the source of truth for prices; the prices below are the
@@ -215,7 +215,7 @@ const PRODUCTS = [
     id: "pearl-bracelet", title: "The Bleeding Heart Pearl Bracelet",
     collection: "bleeding-heart", category: "bracelets",
     drops: ["pearl"],
-    prices: { silver: { pearl: 275 }, plated: { pearl: 295 } },
+    prices: { silver: { pearl: 395 }, plated: { pearl: 415 } },
     image: "assets/products/pearl-bracelet-six-hearts.jpg", imageInitial: "assets/products/pearl-bracelet-six-hearts.jpg",
     sizes: ["6.5–7″", "7–7.5″"], defaultSize: "7–7.5″",
     canHaveInitial: true, canEngrave: true,
@@ -226,7 +226,7 @@ const PRODUCTS = [
     id: "pearl-necklace", title: "The Bleeding Heart Pearl Necklace",
     collection: "bleeding-heart", category: "necklaces",
     drops: ["pearl"],
-    prices: { silver: { pearl: 375 }, plated: { pearl: 395 } },
+    prices: { silver: { pearl: 595 }, plated: { pearl: 615 } },
     image: "assets/products/pearl-necklace.jpg", imageInitial: "assets/products/pearl-necklace.jpg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: true, canEngrave: true,
