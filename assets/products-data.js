@@ -1,5 +1,5 @@
 // ============================================================
-// ADORNME — Central product data (v44.4, Nov 16 2026: Stone Chain Earrings 14K $950 / 18K $1,350; v44.3: Open Heart $345 / $365; v44.2: 14K chain $400 / $450 / $550, 18K $575 / $625 / $795; Engravable Studs plated $335; Classic Chain Earrings $345 / $365; v44.1: chain silver $20 / $25 / $30, gold plated $30 / $35 / $40; v44.0: Mira's new silver / gold plated prices on 17 pieces; v43.9: gold Pearl Bracelet / Necklace repriced (polishing $100 / $200; 14K × 1.6, 18K × 1.5); v43.8: Open Heart shows each chosen letter; v43.7: pieces open in Gold Plated; no engraving box on the Pearl Bracelet / Necklace (initial only); v43.6: every pendant sold without a chain (chain-length choice removed; crosses moved to Pendants); v43.5: 14K / 18K on every piece (Stone Ring, Stone Stud / Hook Earrings, both men's pieces added); v43.4 Nov 16: 14K / 18K on the Engravable, Classic and Stone Chain Earrings; v43.3 Nov 16: engraved-initial photos A–Z + blank for 5 engravable pieces; v43.2 Nov 16: Stone Ring $175/$205, Engravable Chain Earrings $265/$295, Classic Chain Earrings $305/$335 (2x on estimated weights); v43.1 Nov 16: silver / gold plated below 2x cost raised to 2x (nothing lowered); v43.0 Nov 16: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
+// ADORNME — Central product data (v44.5, Nov 16 2026: Stone Stud 14K $795 / 18K $995, Stone Pendant $550 / $850, Stone Hook $690 / $950; v44.4: Stone Chain Earrings 14K $950 / 18K $1,350; v44.3: Open Heart $345 / $365; v44.2: 14K chain $400 / $450 / $550, 18K $575 / $625 / $795; Engravable Studs plated $335; Classic Chain Earrings $345 / $365; v44.1: chain silver $20 / $25 / $30, gold plated $30 / $35 / $40; v44.0: Mira's new silver / gold plated prices on 17 pieces; v43.9: gold Pearl Bracelet / Necklace repriced (polishing $100 / $200; 14K × 1.6, 18K × 1.5); v43.8: Open Heart shows each chosen letter; v43.7: pieces open in Gold Plated; no engraving box on the Pearl Bracelet / Necklace (initial only); v43.6: every pendant sold without a chain (chain-length choice removed; crosses moved to Pendants); v43.5: 14K / 18K on every piece (Stone Ring, Stone Stud / Hook Earrings, both men's pieces added); v43.4 Nov 16: 14K / 18K on the Engravable, Classic and Stone Chain Earrings; v43.3 Nov 16: engraved-initial photos A–Z + blank for 5 engravable pieces; v43.2 Nov 16: Stone Ring $175/$205, Engravable Chain Earrings $265/$295, Classic Chain Earrings $305/$335 (2x on estimated weights); v43.1 Nov 16: silver / gold plated below 2x cost raised to 2x (nothing lowered); v43.0 Nov 16: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
 // Sterling Silver + 18K Gold Plated on every piece. 14K / 18K solid gold (yellow, white or rose) with a price and
 // Add to bag on the pieces that have `prices.gold14` / `prices.gold18`; in gold the drop can also be a lab diamond.
 // Pieces without gold prices, a lab diamond in sterling silver, and the pink lab diamond heart stay "Request a quote" (Customize).
@@ -93,7 +93,7 @@ const PRODUCTS = [
     id: "stone-pendant", title: "The Bleeding Heart Stone Pendant",
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic"], stoneHeart: true,
-    prices: { silver: { synthetic: 215 }, plated: { synthetic: 235 }, gold14: { synthetic: 410, diamond: 610 }, gold18: { synthetic: 490, diamond: 690 } },
+    prices: { silver: { synthetic: 215 }, plated: { synthetic: 235 }, gold14: { synthetic: 550, diamond: 750 }, gold18: { synthetic: 850, diamond: 1050 } },
     goldDrops: ["synthetic", "diamond"],
     image: "assets/products/stone-pendant.jpeg", imageInitial: "assets/products/stone-pendant.jpeg",
     sizes: null, canHaveInitial: false, canEngrave: false,
@@ -153,7 +153,7 @@ const PRODUCTS = [
     id: "stone-stud", title: "The Bleeding Heart Stone Stud Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic"], stoneHeart: true,
-    prices: { silver: { synthetic: 275 }, plated: { synthetic: 295 }, gold14: { synthetic: 590, diamond: 990 }, gold18: { synthetic: 745, diamond: 1145 } },
+    prices: { silver: { synthetic: 275 }, plated: { synthetic: 295 }, gold14: { synthetic: 795, diamond: 1195 }, gold18: { synthetic: 995, diamond: 1395 } },
     goldDrops: ["synthetic", "diamond"],
     image: "assets/products/stone-stud.jpeg", imageInitial: "assets/products/stone-stud.jpeg",
     sizes: null, canHaveInitial: false, canEngrave: false,
@@ -164,7 +164,7 @@ const PRODUCTS = [
     id: "stone-hook", title: "The Bleeding Heart Stone Hook Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic"], stoneHeart: true,
-    prices: { silver: { synthetic: 315 }, plated: { synthetic: 335 }, gold14: { synthetic: 750, diamond: 1150 }, gold18: { synthetic: 970, diamond: 1370 } },
+    prices: { silver: { synthetic: 315 }, plated: { synthetic: 335 }, gold14: { synthetic: 690, diamond: 1090 }, gold18: { synthetic: 950, diamond: 1350 } },
     goldDrops: ["synthetic", "diamond"],
     image: "assets/products/stone-hook.jpeg", imageInitial: "assets/products/stone-hook.jpeg",
     sizes: null, canHaveInitial: false, canEngrave: false,
