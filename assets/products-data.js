@@ -1,5 +1,5 @@
 // ============================================================
-// ADORNME — Central product data (v43.8, Nov 16 2026: Open Heart shows each chosen letter; v43.7: pieces open in Gold Plated; no engraving box on the Pearl Bracelet / Necklace (initial only); v43.6: every pendant sold without a chain (chain-length choice removed; crosses moved to Pendants); v43.5: 14K / 18K on every piece (Stone Ring, Stone Stud / Hook Earrings, both men's pieces added); v43.4 Nov 16: 14K / 18K on the Engravable, Classic and Stone Chain Earrings; v43.3 Nov 16: engraved-initial photos A–Z + blank for 5 engravable pieces; v43.2 Nov 16: Stone Ring $175/$205, Engravable Chain Earrings $265/$295, Classic Chain Earrings $305/$335 (2x on estimated weights); v43.1 Nov 16: silver / gold plated below 2x cost raised to 2x (nothing lowered); v43.0 Nov 16: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
+// ADORNME — Central product data (v43.9, Nov 16 2026: gold Pearl Bracelet / Necklace repriced (polishing $100 / $200; 14K × 1.6, 18K × 1.5); v43.8: Open Heart shows each chosen letter; v43.7: pieces open in Gold Plated; no engraving box on the Pearl Bracelet / Necklace (initial only); v43.6: every pendant sold without a chain (chain-length choice removed; crosses moved to Pendants); v43.5: 14K / 18K on every piece (Stone Ring, Stone Stud / Hook Earrings, both men's pieces added); v43.4 Nov 16: 14K / 18K on the Engravable, Classic and Stone Chain Earrings; v43.3 Nov 16: engraved-initial photos A–Z + blank for 5 engravable pieces; v43.2 Nov 16: Stone Ring $175/$205, Engravable Chain Earrings $265/$295, Classic Chain Earrings $305/$335 (2x on estimated weights); v43.1 Nov 16: silver / gold plated below 2x cost raised to 2x (nothing lowered); v43.0 Nov 16: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
 // Sterling Silver + 18K Gold Plated on every piece. 14K / 18K solid gold (yellow, white or rose) with a price and
 // Add to bag on the pieces that have `prices.gold14` / `prices.gold18`; in gold the drop can also be a lab diamond.
 // Pieces without gold prices, a lab diamond in sterling silver, and the pink lab diamond heart stay "Request a quote" (Customize).
@@ -241,7 +241,7 @@ const PRODUCTS = [
     id: "pearl-bracelet", title: "The Bleeding Heart Pearl Bracelet",
     collection: "bleeding-heart", category: "bracelets",
     drops: ["pearl"],
-    prices: { silver: { pearl: 540 }, plated: { pearl: 570 }, gold14: { pearl: 1690 }, gold18: { pearl: 2335 } },
+    prices: { silver: { pearl: 540 }, plated: { pearl: 570 }, gold14: { pearl: 2465 }, gold18: { pearl: 3235 } },
     goldDrops: ["pearl"],
     image: "assets/products/pearl-bracelet-six-hearts.jpg", imageInitial: "assets/products/pearl-bracelet-six-hearts.jpg",
     sizes: ["6.5–7″", "7–7.5″"], defaultSize: "7–7.5″",
@@ -253,7 +253,7 @@ const PRODUCTS = [
     id: "pearl-necklace", title: "The Bleeding Heart Pearl Necklace",
     collection: "bleeding-heart", category: "necklaces",
     drops: ["pearl"],
-    prices: { silver: { pearl: 810 }, plated: { pearl: 840 }, gold14: { pearl: 2820 }, gold18: { pearl: 3895 } },
+    prices: { silver: { pearl: 810 }, plated: { pearl: 840 }, gold14: { pearl: 4110 }, gold18: { pearl: 5395 } },
     goldDrops: ["pearl"],
     image: "assets/products/pearl-necklace.jpg", imageInitial: "assets/products/pearl-necklace.jpg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
