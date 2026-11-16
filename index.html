@@ -151,7 +151,7 @@
       <div class="chains-head">
         <div class="eyebrow">Build it your way</div>
         <h2>The Adornme Chain</h2>
-        <p class="chains-intro">Sold separately, in three lengths, in sterling silver or 18K gold plated. For layering, for adding a second pendant, or for pairing with a chain you already own.</p>
+        <p class="chains-intro">Sold separately, in three lengths, in sterling silver, 18K gold plated, or 14K and 18K solid gold. For layering, for adding a second pendant, or for pairing with a chain you already own.</p>
       </div>
       <div class="chains-grid">
         <div class="chains-image">
@@ -163,9 +163,10 @@
             <li><strong>18″</strong> · standard length</li>
             <li><strong>24″</strong> · for layering or a longer drop</li>
           </ul>
-          <p class="chains-detail">Metals: Sterling silver · 18K gold plated · 14K &amp; 18K solid gold by request</p>
+          <p class="chains-detail">Metals: Sterling silver · 18K gold plated · 14K &amp; 18K solid gold</p>
           <p class="chains-detail">Choose your length and metal. Each chain comes ready to thread any Adornme pendant or any of your own.</p>
           <p class="chains-price" id="homeChainPrice">From $15</p>
+          <p class="chains-detail" id="homeChainGold">14K gold from $235 · 18K from $330</p>
           <a class="link-arrow" href="product.html?id=adornme-chain">Shop the chain →</a>
         </div>
       </div>
@@ -298,11 +299,14 @@
   <script src="assets/shopify-checkout.js"></script>
   <script>
     // ============================================================
-    // HOMEPAGE product grids — v40.0
+    // HOMEPAGE product grids — v43.0 (adds "14K gold from" lines for pieces with gold prices)
     // Data-driven from PRODUCTS with live Shopify "from" prices.
     // This prevents stale/broken cards when the catalog changes.
     // ============================================================
     const livePrices = {};
+    const liveGold = {};   // id -> { gold14, gold18 } lowest live gold prices
+    function goldFrom(p, m){ const g = liveGold[p.id] || {}; return g[m] != null ? g[m] : adornmeMetalFrom(p, m); }
+    function goldText(p){ return adornmeHasGold(p) ? `14K gold from $${goldFrom(p,"gold14").toLocaleString()} · 18K from $${goldFrom(p,"gold18").toLocaleString()}` : ""; }
 
     function fromPriceFor(p){
       // Live Shopify from-price when loaded; otherwise the products-data.js price.
@@ -312,7 +316,7 @@
     function priceText(p){ const n = fromPriceFor(p); return n != null ? `From $${n.toLocaleString()}` : ""; }
     function card(p){
       const img = p.image;
-      return `<a class="product-card" href="product.html?id=${p.id}"><div class="product-image"><img src="${img}" alt="${p.title}"></div><h3>${p.title}</h3><p class="price">${priceText(p)}</p></a>`;
+      return `<a class="product-card" href="product.html?id=${p.id}"><div class="product-image"><img src="${img}" alt="${p.title}"></div><h3>${p.title}</h3><p class="price">${priceText(p)}</p>${adornmeHasGold(p) ? `<p class="price price-gold">${goldText(p)}</p>` : ""}</a>`;
     }
     function studyCard(p){
       return `<a class="study-card" href="product.html?id=${p.id}" style="text-decoration:none;color:inherit;display:block;"><div class="product-image"><img src="${p.image}" alt="${p.title}"></div><h3>${p.title}</h3><p>${p.lede || ""}</p></a>`;
@@ -332,6 +336,8 @@
       const chain = PRODUCTS.find((p)=>p.id==="adornme-chain");
       const chainEl = document.getElementById("homeChainPrice");
       if (chain && chainEl) chainEl.textContent = priceText(chain);
+      const chainGoldEl = document.getElementById("homeChainGold");
+      if (chain && chainGoldEl) chainGoldEl.textContent = goldText(chain);
     }
 
     renderHomeGrids();
@@ -340,7 +346,8 @@
       try {
         if (window.AdornmeShopify && window.AdornmeShopify.getProductPricing){
           await Promise.all(PRODUCTS.map(async (p)=>{
-            try { const d = await window.AdornmeShopify.getProductPricing(p.id); if (d && d.from!=null) livePrices[p.id]=d.from; } catch(e){}
+            try { const d = await window.AdornmeShopify.getProductPricing(p.id); if (d && d.from!=null) livePrices[p.id]=d.from;
+              if (d && adornmeHasGold(p) && window.AdornmeShopify.liveMetalFrom) liveGold[p.id] = { gold14: window.AdornmeShopify.liveMetalFrom(p.id, METALS.gold14.shopify), gold18: window.AdornmeShopify.liveMetalFrom(p.id, METALS.gold18.shopify) }; } catch(e){}
           }));
           renderHomeGrids();
         }

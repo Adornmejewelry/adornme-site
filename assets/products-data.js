@@ -1,7 +1,8 @@
 // ============================================================
-// ADORNME — Central product data (v42.3, Nov 16 2026: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
-// Launch pricing: Sterling Silver + 18K Gold Plated on every page.
-// 14K / 18K solid gold and lab diamond (drop or heart; silver or solid gold): "Request a quote" on the Customize page.
+// ADORNME — Central product data (v43.0, Nov 16 2026: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
+// Sterling Silver + 18K Gold Plated on every piece. 14K / 18K solid gold (yellow, white or rose) with a price and
+// Add to bag on the pieces that have `prices.gold14` / `prices.gold18`; in gold the drop can also be a lab diamond.
+// Pieces without gold prices, a lab diamond in sterling silver, and the pink lab diamond heart stay "Request a quote" (Customize).
 // Shopify is the source of truth for prices; the prices below are the
 // fallback and MUST match the Shopify import file (Adornme_Shopify_Import_v42_full.csv).
 // ============================================================
@@ -11,11 +12,12 @@
 const METALS = {
   silver: { label: "Sterling Silver",  short: "Silver",      shopify: "Sterling Silver", dot: ["#C9CDCF", "#999999"] },
   plated: { label: "18K Gold Plated",  short: "Gold Plated", shopify: "Gold Plated",     dot: ["#E2BA62", "#B08A2E"] },
-  gold14: { label: "14K Solid Gold",   short: "14K Gold",    quote: true,                dot: ["#E9C66B", "#B98C24"] },
-  gold18: { label: "18K Solid Gold",   short: "18K Gold",    quote: true,                dot: ["#E8B84B", "#A87A18"] },
+  gold14: { label: "14K Solid Gold",   short: "14K Gold",    shopify: "14K Gold", gold: true, dot: ["#E9C66B", "#B98C24"] },
+  gold18: { label: "18K Solid Gold",   short: "18K Gold",    shopify: "18K Gold", gold: true, dot: ["#E8B84B", "#A87A18"] },
 };
-const SHOP_METALS = ["silver", "plated"];                        // Gallery, Home, product pages, For Him
-const CUSTOMIZE_METALS = ["silver", "plated", "gold14", "gold18"]; // gold = request a quote
+const SHOP_METALS = ["silver", "plated"];                        // every piece; "From $" prices come from these
+const GOLD_METALS = ["gold14", "gold18"];                        // pieces with gold prices (see adornmeMetalsFor)
+const CUSTOMIZE_METALS = ["silver", "plated", "gold14", "gold18"]; // gold without a price = request a quote
 const METAL_LABELS = Object.fromEntries(Object.entries(METALS).map(([k, v]) => [k, v.label]));
 
 // ---- Drops ----
@@ -23,9 +25,9 @@ const METAL_LABELS = Object.fromEntries(Object.entries(METALS).map(([k, v]) => [
 const DROPS = {
   synthetic: { label: "Synthetic Stone",  shopify: "Synthetic Stone" },
   pearl:     { label: "Freshwater Pearl", shopify: "Freshwater Pearl" },
-  diamond:   { label: "Lab Diamond",      shopify: null },   // quote only (silver or solid gold)
+  diamond:   { label: "Lab Diamond",      shopify: "Lab Diamond" },   // priced in 14K / 18K gold; quote in sterling silver
 };
-const GOLD_QUOTE_DROPS = ["pearl", "diamond"];               // drop choices for a 14K / 18K quote
+const GOLD_QUOTE_DROPS = ["pearl", "diamond"];               // drop choices for a 14K / 18K quote (pieces without gold prices)
 const HEART_STONES = {                                       // Stone pieces
   synthetic: "Synthetic Pink Heart",
   diamond:   "Pink Lab Diamond Heart",                       // quote only (silver or solid gold)
@@ -40,6 +42,7 @@ const QUOTE_EMAIL = "mira@adornme.ai";
 const NECKLACE_LENGTHS = ["16″", "18″", "24″"];
 const RING_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"];
 const GOLD_NOTE = "14K and 18K solid gold available by request.";
+const GOLD_PENDANT_NOTE = "In 14K and 18K gold this piece is the pendant only. Add a gold Adornme Chain in your length.";
 
 // prices[metal][drop]  — drop key is "synthetic" / "pearl"; pieces without a drop use "none";
 // the Adornme Chain uses its length ("16″", "18″", "24″") instead of a drop.
@@ -48,53 +51,58 @@ const PRODUCTS = [
     id: "engravable-necklace", title: "The Bleeding Heart Engravable Necklace",
     collection: "bleeding-heart", category: "necklaces",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 215, pearl: 215 }, plated: { synthetic: 235, pearl: 235 } },
+    prices: { silver: { synthetic: 215, pearl: 215 }, plated: { synthetic: 235, pearl: 235 }, gold14: { synthetic: 1680, pearl: 1680, diamond: 1880 }, gold18: { synthetic: 2310, pearl: 2310, diamond: 2510 } },
+    goldDrops: ["synthetic", "pearl", "diamond"],
     image: "assets/products/engravable-necklace.jpeg", imageInitial: "assets/products/engravable-necklace.jpeg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: true, canEngrave: true,
     lede: "Our engravable 17mm signature heart on a fine chain.",
-    materials: "Sterling silver or 18K gold plated sterling silver. A synthetic stone or freshwater pearl drop. Fine cable chain in 16″, 18″, or 24″.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. A synthetic stone or freshwater pearl drop. Fine cable chain in 16″, 18″, or 24″.",
   },
   {
     id: "engravable-pendant", title: "The Bleeding Heart Engravable Pendant",
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 195, pearl: 195 }, plated: { synthetic: 215, pearl: 215 } },
+    prices: { silver: { synthetic: 195, pearl: 195 }, plated: { synthetic: 215, pearl: 215 }, gold14: { synthetic: 1140, pearl: 1140, diamond: 1340 }, gold18: { synthetic: 1530, pearl: 1530, diamond: 1730 } },
+    goldDrops: ["synthetic", "pearl", "diamond"],
     image: "assets/products/engravable-pendant.jpeg", imageInitial: "assets/products/engravable-pendant.jpeg",
     sizes: null, canHaveInitial: true, canEngrave: true,
     lede: "The engravable 17mm heart, pendant only — a flatter face made to hold your engraving.",
-    materials: "Sterling silver or 18K gold plated sterling silver. A synthetic stone or freshwater pearl drop. Pendant bail; chain sold separately.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. A synthetic stone or freshwater pearl drop. Pendant bail; chain sold separately.",
   },
   {
     id: "classic-pendant", title: "The Bleeding Heart Classic Pendant",
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 140, pearl: 140 }, plated: { synthetic: 160, pearl: 160 } },
+    prices: { silver: { synthetic: 140, pearl: 140 }, plated: { synthetic: 160, pearl: 160 }, gold14: { synthetic: 945, pearl: 945, diamond: 1145 }, gold18: { synthetic: 1285, pearl: 1285, diamond: 1485 } },
+    goldDrops: ["synthetic", "pearl", "diamond"],
     image: "assets/products/classic-pendant.jpeg", imageInitial: "assets/products/classic-pendant.jpeg",
     sizes: null, canHaveInitial: false, canEngrave: false,
     lede: "The original rounded Bleeding Heart — soft, dimensional, worn as the pure bloom. 15mm.",
-    materials: "Sterling silver or 18K gold plated sterling silver. A synthetic stone or freshwater pearl drop. Pendant bail; chain sold separately.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. A synthetic stone or freshwater pearl drop. Pendant bail; chain sold separately.",
   },
   {
     id: "stone-pendant", title: "The Bleeding Heart Stone Pendant",
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic"], stoneHeart: true,
-    prices: { silver: { synthetic: 145 }, plated: { synthetic: 165 } },
+    prices: { silver: { synthetic: 145 }, plated: { synthetic: 165 }, gold14: { synthetic: 410, diamond: 610 }, gold18: { synthetic: 490, diamond: 690 } },
+    goldDrops: ["synthetic", "diamond"],
     image: "assets/products/stone-pendant.jpeg", imageInitial: "assets/products/stone-pendant.jpeg",
     sizes: null, canHaveInitial: false, canEngrave: false,
     lede: "A carved 10mm pink heart stone, set as a pendant with a sparkling drop.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Carved 10mm synthetic pink heart stone and synthetic stone drop. Pendant bail; chain sold separately.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Carved 10mm synthetic pink heart stone and synthetic stone drop. Pendant bail; chain sold separately.",
   },
   {
     id: "engravable-ring", title: "The Bleeding Heart Engravable Ring",
     collection: "bleeding-heart", category: "rings",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 155, pearl: 155 }, plated: { synthetic: 175, pearl: 175 } },
+    prices: { silver: { synthetic: 155, pearl: 155 }, plated: { synthetic: 175, pearl: 175 }, gold14: { synthetic: 1285, pearl: 1285, diamond: 1485 }, gold18: { synthetic: 1725, pearl: 1725, diamond: 1925 } },
+    goldDrops: ["synthetic", "pearl", "diamond"],
     image: "assets/products/engravable-ring.jpeg", imageInitial: "assets/products/engravable-ring.jpeg",
     sizes: RING_SIZES, defaultSize: "6",
     canHaveInitial: true, canEngrave: true,
     lede: "The engravable heart on a slim band — 12mm.",
-    materials: "Sterling silver or 18K gold plated sterling silver. A synthetic stone or freshwater pearl drop.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. A synthetic stone or freshwater pearl drop.",
   },
   {
     id: "stone-ring", title: "The Bleeding Heart Stone Ring",
@@ -111,11 +119,12 @@ const PRODUCTS = [
     id: "engravable-stud", title: "The Bleeding Heart Engravable Stud Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 215, pearl: 215 }, plated: { synthetic: 235, pearl: 235 } },
+    prices: { silver: { synthetic: 215, pearl: 215 }, plated: { synthetic: 235, pearl: 235 }, gold14: { synthetic: 1090, pearl: 1090, diamond: 1490 }, gold18: { synthetic: 1590, pearl: 1590, diamond: 1990 } },
+    goldDrops: ["synthetic", "pearl", "diamond"],
     image: "assets/products/engravable-stud.jpeg", imageInitial: "assets/products/engravable-stud.jpeg",
     sizes: null, canHaveInitial: true, canEngrave: true,
     lede: "A pair of engravable 12mm heart studs, each with a drop.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Two synthetic stone or freshwater pearl drops. Posts and backings.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Two synthetic stone or freshwater pearl drops. Posts and backings.",
   },
   {
     id: "engravable-chain-ear", title: "The Bleeding Heart Engravable Chain Earrings",
@@ -171,78 +180,84 @@ const PRODUCTS = [
     id: "flower-cross", title: "Flower Cross",
     collection: "devotion", category: "necklaces",
     drops: ["pearl"],
-    prices: { silver: { pearl: 145 }, plated: { pearl: 165 } },
+    prices: { silver: { pearl: 145 }, plated: { pearl: 165 }, gold14: { pearl: 665 }, gold18: { pearl: 960 } },
+    goldDrops: ["pearl"], goldPendantOnly: true,
     image: "assets/products/flower-cross.jpeg", imageInitial: "assets/products/flower-cross.jpeg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: false, canEngrave: true,
     lede: "A cross softened by a flowering bloom and a pearl drop.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Enamel bloom. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Enamel bloom. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″ with silver and gold plated; in solid gold, the pendant only.",
   },
   {
     id: "heart-cross", title: "Heart Cross",
     collection: "devotion", category: "necklaces",
     drops: ["pearl"],
-    prices: { silver: { pearl: 125 }, plated: { pearl: 145 } },
+    prices: { silver: { pearl: 125 }, plated: { pearl: 145 }, gold14: { pearl: 780 }, gold18: { pearl: 1065 } },
+    goldDrops: ["pearl"], goldPendantOnly: true,
     image: "assets/products/heart-cross.jpeg", imageInitial: "assets/products/heart-cross.jpeg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: false, canEngrave: true,
     lede: "A cross holding a heart at its center, with a pearl drop below.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Red synthetic ruby accent. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Red synthetic ruby accent. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″ with silver and gold plated; in solid gold, the pendant only.",
   },
   {
     id: "christ-risen", title: "Christ Risen",
     collection: "devotion", category: "necklaces",
     drops: ["pearl"],
-    prices: { silver: { pearl: 155 }, plated: { pearl: 175 } },
+    prices: { silver: { pearl: 155 }, plated: { pearl: 175 }, gold14: { pearl: 750 }, gold18: { pearl: 1065 } },
+    goldDrops: ["pearl"], goldPendantOnly: true,
     image: "assets/products/christ-risen.jpeg", imageInitial: "assets/products/christ-risen.jpeg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: false, canEngrave: true,
     lede: "Christ rising in triumph, arms raised, heart held below.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Red synthetic ruby accent. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Red synthetic ruby accent. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″ with silver and gold plated; in solid gold, the pendant only.",
   },
   {
     id: "adornme-chain", title: "The Adornme Chain",
     collection: "chain", category: "chains",
     drops: [], lengthPricing: true,
-    prices: { silver: { "16″": 15, "18″": 20, "24″": 20 }, plated: { "16″": 25, "18″": 30, "24″": 30 } },
+    prices: { silver: { "16″": 15, "18″": 20, "24″": 20 }, plated: { "16″": 25, "18″": 30, "24″": 30 }, gold14: { "16″": 235, "18″": 265, "24″": 350 }, gold18: { "16″": 330, "18″": 370, "24″": 490 } },
     image: "assets/products/adornme-chain.png", imageInitial: "assets/products/adornme-chain.png",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: false, canEngrave: false,
     lede: "Sold separately, in three lengths — ready for any Adornme pendant.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Fine cable-link in 16″, 18″, or 24″.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Fine cable-link in 16″, 18″, or 24″.",
   },
   {
     id: "pearl-bracelet", title: "The Bleeding Heart Pearl Bracelet",
     collection: "bleeding-heart", category: "bracelets",
     drops: ["pearl"],
-    prices: { silver: { pearl: 395 }, plated: { pearl: 415 } },
+    prices: { silver: { pearl: 395 }, plated: { pearl: 415 }, gold14: { pearl: 1690 }, gold18: { pearl: 2335 } },
+    goldDrops: ["pearl"],
     image: "assets/products/pearl-bracelet-six-hearts.jpg", imageInitial: "assets/products/pearl-bracelet-six-hearts.jpg",
     sizes: ["6.5–7″", "7–7.5″"], defaultSize: "7–7.5″",
     canHaveInitial: true, canEngrave: true,
     lede: "Six engravable hearts on a strand of freshwater pearls, each with a pearl drop — a bracelet of initials, dates, or names.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Six engravable hearts, each with a freshwater pearl drop, on a strand of freshwater pearls.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Six engravable hearts, each with a freshwater pearl drop, on a strand of freshwater pearls.",
   },
   {
     id: "pearl-necklace", title: "The Bleeding Heart Pearl Necklace",
     collection: "bleeding-heart", category: "necklaces",
     drops: ["pearl"],
-    prices: { silver: { pearl: 595 }, plated: { pearl: 615 } },
+    prices: { silver: { pearl: 595 }, plated: { pearl: 615 }, gold14: { pearl: 2820 }, gold18: { pearl: 3895 } },
+    goldDrops: ["pearl"],
     image: "assets/products/pearl-necklace.jpg", imageInitial: "assets/products/pearl-necklace.jpg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: true, canEngrave: true,
     lede: "Ten engravable hearts on a strand of freshwater pearls, each with a pearl drop — a necklace of initials, dates, or names.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Ten engravable hearts, each with a freshwater pearl drop, on a strand of freshwater pearls, in 16″, 18″, or 24″.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Ten engravable hearts, each with a freshwater pearl drop, on a strand of freshwater pearls, in 16″, 18″, or 24″.",
   },
   {
     id: "open-heart", title: "The Open Heart Pendant",
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 230, pearl: 230 }, plated: { synthetic: 250, pearl: 250 } },
+    prices: { silver: { synthetic: 230, pearl: 230 }, plated: { synthetic: 250, pearl: 250 }, gold14: { synthetic: 1340, pearl: 1340, diamond: 1540 }, gold18: { synthetic: 1805, pearl: 1805, diamond: 2005 } },
+    goldDrops: ["synthetic", "pearl", "diamond"], goldPendantOnly: true,
     image: "assets/products/open-heart.jpeg", imageInitial: "assets/products/open-heart.jpeg",
     sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: true, initialRequired: true, canEngrave: false,
     lede: "An open 21mm heart with your initial suspended within — framed by leaves set with pink and yellow stones.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Open heart with a dangling initial. Leaves set with small pink and yellow synthetic stones. A synthetic stone or freshwater pearl drop. Fine chain in 16″, 18″, or 24″.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Open heart with a dangling initial. Leaves set with small pink and yellow synthetic stones. A synthetic stone or freshwater pearl drop. Fine chain in 16″, 18″, or 24″ with silver and gold plated; in solid gold, the pendant only.",
   },
   {
     id: "mens-christ-pendant", title: "Christ Risen Pendant for Men",
@@ -281,12 +296,32 @@ function adornmePriceKey(product, drop, size) {
   if (product.drops && product.drops.length) return drop || product.drops[0];
   return "none";
 }
-// Local (fallback) price for one selection. Gold metals have no price (quote only).
+// Local (fallback) price for one selection. Gold on a piece without gold prices returns null (quote).
 function adornmeGetMetalPrice(product, metal, drop, size) {
   const table = product.prices && product.prices[metal];
   if (!table) return null;
   const v = table[adornmePriceKey(product, drop, size)];
   return typeof v === "number" ? v : null;
+}
+// True when the piece has 14K / 18K gold prices (sold with Add to bag).
+function adornmeHasGold(product) {
+  return !!(product && product.prices && product.prices.gold14 && product.prices.gold18);
+}
+// Metals offered for a piece on the shop pages: Silver, Gold Plated, plus 14K / 18K when priced.
+function adornmeMetalsFor(product) {
+  return adornmeHasGold(product) ? [...SHOP_METALS, ...GOLD_METALS] : SHOP_METALS.slice();
+}
+// Drop choices for a piece in a metal. In gold: the piece's goldDrops (adds Lab Diamond where offered).
+function adornmeDropsFor(product, metal) {
+  if (METALS[metal] && METALS[metal].gold && adornmeHasGold(product) && product.goldDrops) return product.goldDrops;
+  return product.drops || [];
+}
+// Lowest price in one metal (e.g. "14K from $…"), or null.
+function adornmeMetalFrom(product, metal) {
+  const t = product.prices && product.prices[metal];
+  if (!t) return null;
+  const v = Object.values(t).filter((x) => typeof x === "number");
+  return v.length ? Math.min(...v) : null;
 }
 // Lowest price across the shop metals (Silver, Gold Plated).
 function adornmeGetFromPrice(product) {
@@ -313,9 +348,10 @@ function adornmeQuoteMailto(lines, pieceTitle) {
 
 if (typeof window !== "undefined") {
   Object.assign(window, {
-    METALS, SHOP_METALS, CUSTOMIZE_METALS, METAL_LABELS, DROPS, GOLD_QUOTE_DROPS, HEART_STONES, GOLD_COLORS,
-    QUOTE_EMAIL, GOLD_NOTE, PRODUCTS, HIDDEN_PRODUCTS,
+    METALS, SHOP_METALS, GOLD_METALS, CUSTOMIZE_METALS, METAL_LABELS, DROPS, GOLD_QUOTE_DROPS, HEART_STONES, GOLD_COLORS,
+    QUOTE_EMAIL, GOLD_NOTE, GOLD_PENDANT_NOTE, PRODUCTS, HIDDEN_PRODUCTS,
     adornmePriceKey, adornmeGetMetalPrice, adornmeGetFromPrice, adornmeShopifyOptions, adornmeQuoteMailto,
+    adornmeHasGold, adornmeMetalsFor, adornmeDropsFor, adornmeMetalFrom,
   });
   window.ADORNME_METAL_LABELS = METAL_LABELS;
 }

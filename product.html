@@ -6,7 +6,7 @@
   <title>Product | Adornme</title>
   <link rel="stylesheet" href="assets/home-gallery-v24.css">
   <style>
-    /* PRODUCT DETAIL — v40.0 (Silver + Gold Plated; gold by quote on Customize) */
+    /* PRODUCT DETAIL — v43.0 (Silver + Gold Plated; 14K / 18K gold with Add to bag where priced) */
     .product-page { padding: clamp(36px,4vw,60px) clamp(20px,4vw,56px) clamp(60px,8vw,100px); max-width:1320px; margin:0 auto; }
     .breadcrumb { margin-bottom:28px; font:500 11px/1 var(--sans); letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); }
     .breadcrumb a { color:var(--ink-soft); transition:color .25s ease; }
@@ -19,6 +19,9 @@
     .product-main-image img { width:100%; height:100%; object-fit:cover; transition:opacity .25s ease, filter .35s ease; }
     .product-main-image img.metal-silver { filter:grayscale(.85) brightness(1.12) contrast(.98); }
     .product-main-image img.metal-plated { filter:saturate(1.15) brightness(1.04) hue-rotate(-4deg); }
+    .product-main-image img.metal-gold14, .product-main-image img.metal-gold18 { filter:none; }
+    .product-main-image img.gc-white { filter:grayscale(.82) brightness(1.14) contrast(.97) !important; }
+    .product-main-image img.gc-rose { filter:saturate(1.35) hue-rotate(-18deg) brightness(1.03) !important; }
     .product-info { padding-top:4px; }
     .product-info .eyebrow { color:var(--antique-gold); }
     .product-info h1 { margin-top:12px; font:400 clamp(32px,4vw,48px)/1.1 var(--serif); color:var(--ink); letter-spacing:.005em; }
@@ -38,6 +41,9 @@
     .opt .dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
     .opt .dot.silver { background:#C9CDCF; border:1px solid #999; }
     .opt .dot.plated { background:#E2BA62; border:1px solid #B08A2E; }
+    .opt .dot.gold14 { background:#E9C66B; border:1px solid #B98C24; }
+    .opt .dot.gold18 { background:#E8B84B; border:1px solid #A87A18; }
+    .gold-note { color:var(--ink); font:italic 400 14px/1.55 var(--serif); padding:12px 14px; background:var(--cream); border-left:2px solid var(--antique-gold); }
     .opt.static { cursor:default; pointer-events:none; }
     .engraving-input { padding:14px 16px; width:100%; border:1px solid var(--rule); background:var(--ivory); color:var(--ink); font:400 15px/1.5 var(--serif); border-radius:4px; }
     .engraving-input:focus { outline:none; border-color:var(--antique-gold); }
@@ -93,8 +99,9 @@
   <script src="assets/products-data.js"></script>
   <script src="assets/shopify-checkout.js"></script>
   <script>
-    // ===== PRODUCT PAGE — v40.0 =====
-    // Silver + Gold Plated only. Drops per piece. Prices: live Shopify, falling back to products-data.js.
+    // ===== PRODUCT PAGE — v43.0 =====
+    // Silver + Gold Plated on every piece; 14K / 18K gold (yellow, white, rose) with Add to bag where the piece has gold prices.
+    // Drops per piece and metal (lab diamond in gold). Prices: live Shopify, falling back to products-data.js.
     const params = new URLSearchParams(window.location.search);
     const productId = params.get("id");
     const product = PRODUCTS.find((p) => p.id === productId);
@@ -105,9 +112,13 @@
       main.innerHTML = `<div class="product-missing"><h1>Piece not found</h1><p>We couldn't find the piece you were looking for.</p><a class="cta-secondary" href="trinity-collection.html">Back to the Gallery</a></div>`;
     } else {
       document.title = `${product.title} | Adornme`;
+      const metals = adornmeMetalsFor(product);
+      const hasGold = adornmeHasGold(product);
+      const isGoldMetal = (m) => !!(METALS[m] && METALS[m].gold);
+      const dropsFor = (m) => adornmeDropsFor(product, m);
       const drops = product.drops || [];
       const urlMetal = params.get("metal");
-      const startMetal = SHOP_METALS.includes(urlMetal) ? urlMetal : "silver";
+      const startMetal = metals.includes(urlMetal) ? urlMetal : "silver";
       const sizes = product.sizes || [];
       const defaultSize = sizes.length ? (product.defaultSize || sizes[0]) : null;
       // Open on the lowest-priced choice, so the first price shown matches the "From $…" on the gallery and home cards.
@@ -115,8 +126,9 @@
       const startSize = (product.lengthPricing && sizes.length) ? cheapest(sizes, (s) => adornmeGetMetalPrice(product, startMetal, null, s)) : defaultSize;
       const state = {
         metal: startMetal,
-        drop: drops.length ? cheapest(drops, (d) => adornmeGetMetalPrice(product, startMetal, d, startSize)) : null,
+        drop: dropsFor(startMetal).length ? cheapest(dropsFor(startMetal), (d) => adornmeGetMetalPrice(product, startMetal, d, startSize)) : null,
         size: startSize,
+        goldColor: "yellow",
         initial: product.initialRequired ? "M" : "—",
         engraving: ""
       };
@@ -143,24 +155,34 @@
       }
 
       function metalButtons() {
-        return SHOP_METALS.map((m) => `<button class="opt ${state.metal===m?"active":""}" data-action="set-metal" data-value="${m}" type="button"><span class="dot ${m}"></span>${METALS[m].short}</button>`).join("");
+        return metals.map((m) => `<button class="opt ${state.metal===m?"active":""}" data-action="set-metal" data-value="${m}" type="button"><span class="dot ${m}"></span>${METALS[m].short}</button>`).join("");
+      }
+      function goldColorButtons() {
+        return GOLD_COLORS.map((c) => `<button class="opt ${state.goldColor===c.id?"active":""}" data-action="set-gold-color" data-value="${c.id}" type="button"><span class="dot" style="background:${c.dot[0]};border:1px solid ${c.dot[1]}"></span>${c.label}</button>`).join("");
       }
       function dropButtons() {
-        if (drops.length === 1) return `<span class="opt active static">${DROPS[drops[0]].label}</span>`;
-        return drops.map((d) => `<button class="opt ${state.drop===d?"active":""}" data-action="set-drop" data-value="${d}" type="button">${DROPS[d].label}</button>`).join("");
+        const list = dropsFor(state.metal);
+        if (list.length === 1) return `<span class="opt active static">${DROPS[list[0]].label}</span>`;
+        return list.map((d) => `<button class="opt ${state.drop===d?"active":""}" data-action="set-drop" data-value="${d}" type="button">${DROPS[d].label}</button>`).join("");
       }
-      // Lab diamond (drop, or heart on stone pieces) is quoted on the Customize page — silver or solid gold only.
+      // Lab diamond: a priced drop in 14K / 18K gold (on pieces with gold prices); in sterling silver, and the pink
+      // lab diamond heart on stone pieces, it is quoted on the Customize page.
       function labDiamondLine() {
+        const goldDiamond = hasGold && (product.goldDrops || []).includes("diamond");
+        if (isGoldMetal(state.metal)) return (product.stoneHeart ? `<p class="helper">Prefer a pink lab diamond heart? <a class="lab-diamond-link" href="customize.html?piece=${product.id}&metal=${state.metal}&stone=diamond" style="text-decoration:underline;">Request a quote →</a></p>` : "");
         const what = product.stoneHeart ? "heart or drop" : "drop";
         const href = `customize.html?piece=${product.id}&metal=silver&${product.stoneHeart ? "stone" : "drop"}=diamond`;
-        return `<p class="helper">Prefer a lab diamond ${what}? Available in sterling silver or solid gold. <a class="lab-diamond-link" href="${href}" style="text-decoration:underline;">Request a quote →</a></p>`;
+        const goldPart = goldDiamond ? "Choose 14K or 18K gold above for a lab diamond drop, or request one in sterling silver." : `Prefer a lab diamond ${what}? Available in sterling silver or solid gold.`;
+        return `<p class="helper">${goldPart} <a class="lab-diamond-link" href="${href}" style="text-decoration:underline;">Request a quote →</a></p>`;
       }
+      // Gold on a pendant-only piece hides the chain length (the gold piece comes without a chain).
+      const showSizes = () => !(isGoldMetal(state.metal) && product.goldPendantOnly);
       function currentImage() {
         return (product.canHaveInitial && state.initial !== "—" && product.imageInitial !== product.image) ? product.imageInitial : product.image;
       }
 
       function render() {
-        const sizes = product.sizes || null;
+        const sizes = (product.sizes && showSizes()) ? product.sizes : null;
         const sizeOptions = sizes ? sizes.map((s) => `<button class="opt ${state.size===s?"active":""}" data-action="set-size" data-value="${s}" type="button">${s}</button>`).join("") : "";
 
         let initialHtml = "";
@@ -183,7 +205,7 @@
           <section class="product-page">
             <p class="breadcrumb"><a href="index.html">Home</a><span>·</span><a href="trinity-collection.html">Gallery</a><span>·</span>${product.title}</p>
             <div class="product-layout">
-              <div class="product-image-wrap"><div class="product-main-image"><img id="productMainImg" class="metal-${state.metal}" src="${currentImage()}" alt="${product.title}"></div></div>
+              <div class="product-image-wrap"><div class="product-main-image"><img id="productMainImg" class="metal-${state.metal}${isGoldMetal(state.metal) && state.goldColor!=="yellow" ? " gc-"+state.goldColor : ""}" src="${currentImage()}" alt="${product.title}"></div></div>
               <div class="product-info">
                 <div class="eyebrow">${COLLECTION_NAMES[product.collection] || ""}</div>
                 <h1>${product.title}</h1>
@@ -191,21 +213,22 @@
                 <p class="product-price" id="productPrice">${priceHtml}</p>
                 <div class="product-controls">
                   <div class="control-group"><div class="label">Metal</div><div class="control-options">${metalButtons()}</div></div>
-                  ${drops.length ? `<div class="control-group"><div class="label">Drop</div><div class="control-options">${dropButtons()}</div>${labDiamondLine()}</div>` : ""}
+                  ${isGoldMetal(state.metal) ? `<div class="control-group"><div class="label">Gold Color</div><div class="control-options">${goldColorButtons()}</div>${product.goldPendantOnly ? `<p class="gold-note">${GOLD_PENDANT_NOTE} <a href="product.html?id=adornme-chain&metal=${state.metal}" style="text-decoration:underline;">Shop the chain →</a></p>` : ""}</div>` : ""}
+                  ${dropsFor(state.metal).length ? `<div class="control-group"><div class="label">Drop</div><div class="control-options">${dropButtons()}</div>${labDiamondLine()}</div>` : ""}
                   ${sizes ? `<div class="control-group"><div class="label">${sizeLabel}</div><div class="control-options">${sizeOptions}</div></div>` : ""}
                   ${initialHtml}
                   ${engravingHtml}
                 </div>
                 <div class="product-actions">
                   <button class="cta-primary" id="addToCartBtn" type="button" ${price==null?"disabled":""}>${btnLabel}</button>
-                  <a class="cta-secondary" href="customize.html?piece=${product.id}&metal=gold14">Want it in 14K or 18K solid gold? Request a quote →</a>
+                  ${hasGold ? "" : `<a class="cta-secondary" href="customize.html?piece=${product.id}&metal=gold14">Want it in 14K or 18K solid gold? Request a quote →</a>`}
                 </div>
                 <div class="trust-strip">Designed in Newport Beach · Hand-finished in Downtown LA</div>
                 <div class="product-meta"><h3>The piece</h3><p>${product.materials}</p>
                   <dl class="product-meta-detail">
-                    <dt>Metals</dt><dd>${SHOP_METALS.map((m) => METALS[m].label).join(" · ")}</dd>
-                    <dt>Solid gold</dt><dd>14K or 18K by request</dd>
-                    ${drops.length ? `<dt>Drop</dt><dd>${drops.map((d) => DROPS[d].label).join(" · ")}</dd>` : ""}
+                    <dt>Metals</dt><dd>${metals.map((m) => METALS[m].label).join(" · ")}</dd>
+                    ${hasGold ? `<dt>Gold colors</dt><dd>${GOLD_COLORS.map((c) => c.label).join(" · ")}</dd>` : `<dt>Solid gold</dt><dd>14K or 18K by request</dd>`}
+                    ${drops.length ? `<dt>Drop</dt><dd>${drops.map((d) => DROPS[d].label).join(" · ")}${hasGold && (product.goldDrops || []).includes("diamond") ? " · Lab Diamond (14K / 18K gold)" : ""}</dd>` : ""}
                   </dl>
                 </div>
               </div>
@@ -217,7 +240,13 @@
       }
 
       function bindControls() {
-        document.querySelectorAll('[data-action="set-metal"]').forEach((b) => b.addEventListener("click", () => { state.metal = b.dataset.value; render(); }));
+        document.querySelectorAll('[data-action="set-metal"]').forEach((b) => b.addEventListener("click", () => {
+          state.metal = b.dataset.value;
+          const list = dropsFor(state.metal);
+          if (list.length && !list.includes(state.drop)) state.drop = cheapest(list, (d) => adornmeGetMetalPrice(product, state.metal, d, state.size));
+          render();
+        }));
+        document.querySelectorAll('[data-action="set-gold-color"]').forEach((b) => b.addEventListener("click", () => { state.goldColor = b.dataset.value; render(); }));
         document.querySelectorAll('[data-action="set-drop"]').forEach((b) => b.addEventListener("click", () => { state.drop = b.dataset.value; render(); }));
         document.querySelectorAll('[data-action="set-size"]').forEach((b) => b.addEventListener("click", () => { state.size = b.dataset.value; render(); }));
         document.querySelectorAll('[data-action="set-initial"]').forEach((b) => b.addEventListener("click", () => { state.initial = b.dataset.value; render(); }));
@@ -231,7 +260,8 @@
             const config = {
               productId: product.id,
               options: shopifyOptions(),
-              size: product.lengthPricing ? "" : (state.size || ""),
+              size: (product.lengthPricing || !showSizes()) ? "" : (state.size || ""),
+              goldColor: isGoldMetal(state.metal) ? GOLD_COLORS.find((c) => c.id === state.goldColor).label : "",
               initial: state.initial !== "—" ? state.initial : "",
               engraving: state.engraving || "",
               giftNote: "",

@@ -34,6 +34,9 @@
     .metal-swatch { width:11px; height:11px; border-radius:50%; }
     .metal-swatch.silver { background:#C9CDCF; border:1px solid #999; }
     .metal-swatch.plated { background:#E2BA62; border:1px solid #B08A2E; }
+    .metal-swatch.gold14 { background:#E9C66B; border:1px solid #B98C24; }
+    .metal-swatch.gold18 { background:#E8B84B; border:1px solid #A87A18; }
+    .shop-card-gold { font:italic 400 13px/1.4 var(--serif); color:var(--ink-soft); margin:-4px 0 8px; }
     .shop-empty { grid-column:1 / -1; padding:60px 0; text-align:center; color:var(--ink-soft); font:italic 400 18px/1.5 var(--serif); }
   </style>
 </head>
@@ -85,6 +88,7 @@
     ];
     let activeFilter = "all";
     let livePrices = {};
+    let liveGold = {};   // id -> { gold14, gold18 } lowest live gold prices
 
     function countFor(f){
       if (f.id==="all") return PRODUCTS.length;
@@ -105,6 +109,14 @@
       if (livePrices[p.id] != null) return livePrices[p.id];
       return adornmeGetFromPrice(p);
     }
+    // "14K from $… · 18K from $…" for pieces with gold prices (live Shopify when loaded).
+    function goldLine(p){
+      if (!adornmeHasGold(p)) return "";
+      const g = liveGold[p.id] || {};
+      const f14 = g.gold14 != null ? g.gold14 : adornmeMetalFrom(p, "gold14");
+      const f18 = g.gold18 != null ? g.gold18 : adornmeMetalFrom(p, "gold18");
+      return `<p class="shop-card-gold">14K gold from $${f14.toLocaleString()} · 18K from $${f18.toLocaleString()}</p>`;
+    }
     function renderFilters(){
       const group = document.getElementById("filterGroup");
       group.innerHTML = FILTERS.map((f)=>{
@@ -120,10 +132,10 @@
       const products = filteredProducts();
       if (!products.length){ grid.innerHTML = `<div class="shop-empty">No pieces match that filter yet — try another.</div>`; return; }
       grid.innerHTML = products.map((p)=>{
-        const metals = SHOP_METALS.map((m)=>`<span class="metal-swatch ${m}" title="${METALS[m].label}"></span>`).join("");
+        const metals = adornmeMetalsFor(p).map((m)=>`<span class="metal-swatch ${m}" title="${METALS[m].label}"></span>`).join("");
         const tag = p.tag ? `<span class="shop-card-tag">${p.tag}</span>` : "";
         const galleryImg = p.imageInitial || p.image;
-        return `<a class="shop-card" href="product.html?id=${p.id}"><div class="shop-card-image">${tag}<img src="${galleryImg}" alt="${p.title}"></div><h3>${p.title}</h3><p class="shop-card-price">${fromPriceFor(p)!=null ? `From $${fromPriceFor(p).toLocaleString()}` : ""}</p><div class="shop-card-metals">${metals}</div></a>`;
+        return `<a class="shop-card" href="product.html?id=${p.id}"><div class="shop-card-image">${tag}<img src="${galleryImg}" alt="${p.title}"></div><h3>${p.title}</h3><p class="shop-card-price">${fromPriceFor(p)!=null ? `From $${fromPriceFor(p).toLocaleString()}` : ""}</p>${goldLine(p)}<div class="shop-card-metals">${metals}</div></a>`;
       }).join("");
     }
 
@@ -132,7 +144,8 @@
       try {
         if (window.AdornmeShopify && window.AdornmeShopify.getProductPricing) {
           await Promise.all(PRODUCTS.map(async (p)=>{
-            try { const d=await window.AdornmeShopify.getProductPricing(p.id); if(d&&d.from!=null) livePrices[p.id]=d.from; } catch(e){}
+            try { const d=await window.AdornmeShopify.getProductPricing(p.id); if(d&&d.from!=null) livePrices[p.id]=d.from;
+              if (d && adornmeHasGold(p) && window.AdornmeShopify.liveMetalFrom) liveGold[p.id] = { gold14: window.AdornmeShopify.liveMetalFrom(p.id, METALS.gold14.shopify), gold18: window.AdornmeShopify.liveMetalFrom(p.id, METALS.gold18.shopify) }; } catch(e){}
           }));
           renderGrid();
         }

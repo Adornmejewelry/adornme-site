@@ -209,6 +209,7 @@ section, .home-hero, .gallery-hero { padding: clamp(80px, 9vw, 140px) clamp(20px
 }
 .product-card h3 { margin-top: 18px; font: 500 19px/1.25 var(--serif); }
 .price { margin-top: 5px; color: var(--ink-soft); font: italic 400 14px/1.35 var(--serif); }
+.price.price-gold { margin-top: 2px; font-size: 13px; }
 .signature .link-arrow { display: table; margin-inline: auto; }
 
 .dark { background: var(--ink); color: var(--ivory); }

@@ -183,9 +183,10 @@
   <script src="../assets/shopify-checkout.js"></script>
   <script>
     // ============================================================
-    // ADORNME CUSTOMIZE — v40.0
+    // ADORNME CUSTOMIZE — v43.0
     // Sterling Silver + 18K Gold Plated → price + Add to bag (Shopify).
-    // 14K / 18K solid gold, or a lab diamond drop/heart (silver or solid gold only)
+    // 14K / 18K solid gold on pieces with gold prices → price + Add to bag, incl. a lab diamond drop where offered.
+    // Gold on other pieces, a lab diamond in sterling silver, or the pink lab diamond heart
     //   → "Price on request" + Request a quote (email).
     // Wrapped in a function so nothing here collides with products-data.js globals.
     // ============================================================
@@ -218,27 +219,35 @@
 
     const piecesIn = (cid) => PRODUCTS.filter((p)=>p.collection===cid);
     const piece = () => PRODUCTS.find((p)=>p.id===state.pieceId) || PRODUCTS[0];
-    const isGold = () => !!(METALS[state.metal] && METALS[state.metal].quote);
+    const isGold = () => !!(METALS[state.metal] && METALS[state.metal].gold);
+    // Gold with a price and Add to bag (the piece has 14K / 18K prices in products-data.js and Shopify).
+    const goldPriced = () => isGold() && adornmeHasGold(piece());
     const isStone = () => !!piece().stoneHeart;
-    // Lab diamond (drop or heart) can be requested in Sterling Silver or solid gold — not Gold Plated.
+    // Lab diamond (drop or heart) can be chosen in Sterling Silver or solid gold — not Gold Plated.
     const labDiamondOk = () => state.metal === "silver" || isGold();
-    // Drop choices: Silver = the piece's drops + lab diamond; Gold Plated = the piece's drops; solid gold = pearl or lab diamond.
+    // Drop choices: Silver = the piece's drops + lab diamond (quote); Gold Plated = the piece's drops;
+    // priced gold = the piece's gold drops (lab diamond where offered); other gold = pearl or lab diamond (quote).
     const dropChoices = () => {
       const d = piece().drops || [];
       if (!d.length) return [];
+      if (goldPriced()) return piece().goldDrops || d;
       if (isGold()) return GOLD_QUOTE_DROPS;
       return labDiamondOk() ? [...d, "diamond"] : d;
     };
     // Drop chips shown: the choices, plus a greyed-out Lab Diamond on Gold Plated so customers know it exists.
     const dropChipsShown = () => {
       const c = dropChoices();
-      return c.length && !c.includes("diamond") ? [...c, "diamond"] : c;
+      return c.length && state.metal === "plated" && !c.includes("diamond") ? [...c, "diamond"] : c;
     };
-    // Heart stone choices: synthetic always; pink lab diamond in silver or solid gold.
+    // Heart stone choices: synthetic always; pink lab diamond in silver or solid gold (quote).
     const heartChoices = () => labDiamondOk() ? ["synthetic","diamond"] : ["synthetic"];
-    // Quote mode: solid gold, or any lab diamond choice. Price on request + email instead of checkout.
-    const hasLabDiamond = () => state.drop === "diamond" || (isStone() && state.heartStone === "diamond");
-    const isQuote = () => isGold() || hasLabDiamond();
+    // Quote mode: gold on a piece without gold prices, a lab diamond drop outside priced gold, or the pink lab diamond heart.
+    const quoteDrop = () => state.drop === "diamond" && !goldPriced();
+    const quoteHeart = () => isStone() && state.heartStone === "diamond";
+    const hasLabDiamond = () => quoteDrop() || quoteHeart();
+    const isQuote = () => (isGold() && !goldPriced()) || hasLabDiamond();
+    // Gold on a pendant-only piece: no chain length (the gold piece comes without a chain).
+    const sizesShown = () => { const p = piece(); return !!(p.sizes && p.sizes.length) && !(isGold() && p.goldPendantOnly); };
 
     function firstPieceOf(cid){ const list=piecesIn(cid); return list.length?list[0].id:null; }
     function chip(label, active, attrs="", extra=""){ return `<button class="chip ${active?"active":""} ${extra}" type="button" ${attrs}>${label}</button>`; }
@@ -262,9 +271,12 @@
     }
     function renderMetals(){
       $("#metalChips").innerHTML = CUSTOMIZE_METALS.map((m)=>chip(dotted(METALS[m].short, METALS[m].dot[0], METALS[m].dot[1]), m===state.metal, `data-metal="${m}"`)).join("");
+      const p = piece();
       $("#metalHelper").textContent = isGold()
-        ? "Solid gold is priced by quote. Send us your design and Mira will reply with your price."
-        : "14K and 18K solid gold available by request.";
+        ? (goldPriced()
+            ? `Solid ${METALS[state.metal].short} — choose yellow, white or rose.${p.goldPendantOnly ? " " + GOLD_PENDANT_NOTE : ""}`
+            : "Solid gold for this piece is priced by quote. Send us your design and Mira will reply with your price.")
+        : (adornmeHasGold(p) ? "Also in 14K and 18K solid gold." : GOLD_NOTE);
     }
     function renderGoldColor(){
       const show = isGold();
@@ -291,7 +303,9 @@
         const disabled = !choices.includes(d);
         return chip(DROPS[d].label, state.drop===d, `data-drop="${d}" ${disabled?"disabled":""}`, disabled?"disabled":"");
       }).join("");
-      $("#dropHelper").textContent = labDiamondOk() ? "Lab diamond drop — price on request." : "Lab diamond drop is available in sterling silver or solid gold.";
+      $("#dropHelper").textContent = goldPriced()
+        ? (choices.includes("diamond") ? `Lab diamond drop in ${METALS[state.metal].short}.` : "")
+        : (labDiamondOk() ? "Lab diamond drop — price on request." : "Lab diamond drop is available in sterling silver or solid gold.");
     }
     function renderInitial(){
       const p = piece();
@@ -305,8 +319,8 @@
     function renderSize(){
       const p = piece();
       const sizes = p.sizes;
-      $("#sizeGroup").hidden = !sizes || !sizes.length;
-      if (!sizes || !sizes.length) return;
+      $("#sizeGroup").hidden = !sizesShown();
+      if (!sizesShown()) return;
       $("#sizeLabel").textContent = p.category==="rings" ? "Size" : (p.category==="bracelets" ? "Bracelet size" : "Length");
       $("#sizeChips").innerHTML = sizes.map((s)=>chip(s, state.size===s, `data-size="${s}"`)).join("");
       $("#sizeHelper").textContent = sizeHints[state.size] || "";
@@ -333,7 +347,8 @@
       if (isStone()) lines.push(`Heart stone: ${HEART_STONES[state.heartStone]}`);
       if (dropChoices().length) lines.push(`Drop: ${DROPS[state.drop].label}`);
       if (p.canHaveInitial) lines.push(`Initial: ${state.initial==="—" ? "none" : state.initial}`);
-      if (p.sizes && p.sizes.length) lines.push(`${p.category==="rings" ? "Ring size" : (p.category==="bracelets" ? "Bracelet size" : "Length")}: ${state.size}`);
+      if (sizesShown()) lines.push(`${p.category==="rings" ? "Ring size" : (p.category==="bracelets" ? "Bracelet size" : "Length")}: ${state.size}`);
+      else if (isGold() && p.goldPendantOnly) lines.push("Chain: none (pendant only)");
       if (state.engraving.trim()) lines.push(`Engraving: ${state.engraving.trim()}`);
       if (state.giftNote.trim()) lines.push(`Gift note: ${state.giftNote.trim()}`);
       if (state.aiNotes.trim()) lines.push(`Notes: ${state.aiNotes.trim()}`);
@@ -346,14 +361,15 @@
       if (isStone()) parts.push(HEART_STONES[state.heartStone]);
       if (dropChoices().length) parts.push(DROPS[state.drop].label+" drop");
       if (p.canHaveInitial) parts.push(state.initial==="—"?"no initial":`initial ${state.initial}`);
-      if (p.sizes && p.sizes.length) parts.push(state.size);
+      if (sizesShown()) parts.push(state.size);
+      else if (isGold() && p.goldPendantOnly) parts.push("pendant only");
       $("#summaryLine").textContent = parts.join(" · ");
       const btn = $("#addToCartBtn");
       if (isQuote()){
         $("#price").textContent = "Price on request";
         $("#price").classList.add("on-request");
         if (!btn.disabled){ btn.innerHTML = "<span>Request a quote</span>"; btn.classList.add("quote"); }
-        $("#ctaHelper").innerHTML = `${isGold() ? "Solid gold" : "Lab diamond"} pieces are priced by quote. This opens an email to Mira with your design. Or write to <a href="mailto:${QUOTE_EMAIL}" style="text-decoration:underline;">${QUOTE_EMAIL}</a>.`;
+        $("#ctaHelper").innerHTML = `${(isGold() && !goldPriced()) ? "Solid gold" : "Lab diamond"} pieces are priced by quote. This opens an email to Mira with your design. Or write to <a href="mailto:${QUOTE_EMAIL}" style="text-decoration:underline;">${QUOTE_EMAIL}</a>.`;
       } else {
         const pr = currentPrice();
         $("#price").textContent = pr!=null ? money(pr) : "—";
@@ -409,7 +425,8 @@
         const config = {
           productId: p.id,
           options: adornmeShopifyOptions(p, state.metal, state.drop, state.size),
-          size: p.lengthPricing ? "" : (state.size||""),
+          size: (p.lengthPricing || !sizesShown()) ? "" : (state.size||""),
+          goldColor: isGold() ? GOLD_COLORS.find((c)=>c.id===state.goldColor).label : "",
           initial: state.initial && state.initial!=="—" ? state.initial : "",
           engraving: state.engraving||"",
           giftNote: state.giftNote||"",

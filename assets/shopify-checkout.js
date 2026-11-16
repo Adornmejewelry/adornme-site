@@ -1,15 +1,14 @@
 /**
- * Adornme — Shopify Storefront API Integration (v40.0, Oct 28 2026)
+ * Adornme — Shopify Storefront API Integration (v43.0, Nov 16 2026)
  * Shopify = source of truth for prices.
  *
  * Variant option model (must match Adornme_Shopify_Import_v40.csv):
  *   - Pieces with a drop:    Option1 = Metal, Option2 = Drop
  *   - Pieces without a drop: Option1 = Metal
  *   - The Adornme Chain:     Option1 = Metal, Option2 = Length
- *   Metal values: "Sterling Silver", "Gold Plated"
- *   Drop values:  "Synthetic Stone", "Freshwater Pearl"
- *   Size / Length (necklaces) / Initial / Engraving / Gift note = order notes (no price change)
- *   14K / 18K gold are NOT sold through checkout — they are "Request a quote" on the Customize page.
+ *   Metal values: "Sterling Silver", "Gold Plated", "14K Gold", "18K Gold" (gold only on pieces with gold prices)
+ *   Drop values:  "Synthetic Stone", "Freshwater Pearl", "Lab Diamond" (lab diamond only in 14K / 18K gold)
+ *   Size / Length (necklaces) / Initial / Engraving / Gift note / Gold Color = order notes (no price change)
  */
 
 const ADORNME_SHOPIFY = {
@@ -93,6 +92,14 @@ async function getProductPricing(handle) {
   return entry || null;
 }
 
+/** Lowest live price for one Metal value (e.g. "14K Gold"), or null. */
+function liveMetalFrom(handle, metalValue) {
+  const entry = ADORNME_SHOPIFY.productMap && ADORNME_SHOPIFY.productMap.get(handle);
+  if (!entry) return null;
+  const p = entry.variants.filter((v) => v.options.Metal === metalValue).map((v) => v.price).filter((n) => !isNaN(n));
+  return p.length ? Math.min(...p) : null;
+}
+
 /** Live price for one selection, or null when Shopify has no matching variant (page falls back to its data file). */
 function liveShopifyPrice(handle, wanted) {
   const v = findShopifyVariant(handle, wanted);
@@ -114,7 +121,7 @@ function buildCheckoutUrl(variantId, attributes = {}) {
  * config = {
  *   productId,                       // Shopify handle (= PRODUCTS id)
  *   options: { Metal, Drop?, Length? },
- *   size, initial, engraving, giftNote, notes   // order notes
+ *   size, goldColor, initial, engraving, giftNote, notes   // order notes
  * }
  */
 function addToShopifyCart(config) {
@@ -140,6 +147,7 @@ async function completeCheckoutAsync(checkoutTab, config) {
     }
     const attributes = {};
     if (config.size)      attributes["Size"]      = config.size;
+    if (config.goldColor) attributes["Gold Color"] = config.goldColor;
     if (config.initial && config.initial !== "—") attributes["Initial"] = config.initial;
     if (config.engraving) attributes["Engraving"] = config.engraving;
     if (config.giftNote)  attributes["Gift note"] = config.giftNote;
@@ -166,4 +174,5 @@ window.AdornmeShopify = {
   getProductPricing: getProductPricing,
   findVariant: findShopifyVariant,
   livePrice: liveShopifyPrice,
+  liveMetalFrom: liveMetalFrom,
 };
