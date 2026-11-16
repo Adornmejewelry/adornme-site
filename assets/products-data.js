@@ -1,5 +1,5 @@
 // ============================================================
-// ADORNME — Central product data (v43.1, Nov 16 2026: silver / gold plated below 2x cost raised to 2x (nothing lowered); v43.0 Nov 16: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
+// ADORNME — Central product data (v43.2, Nov 16 2026: Stone Ring $175/$205, Engravable Chain Earrings $265/$295, Classic Chain Earrings $305/$335 (2x on estimated weights); v43.1 Nov 16: silver / gold plated below 2x cost raised to 2x (nothing lowered); v43.0 Nov 16: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
 // Sterling Silver + 18K Gold Plated on every piece. 14K / 18K solid gold (yellow, white or rose) with a price and
 // Add to bag on the pieces that have `prices.gold14` / `prices.gold18`; in gold the drop can also be a lab diamond.
 // Pieces without gold prices, a lab diamond in sterling silver, and the pink lab diamond heart stay "Request a quote" (Customize).
@@ -108,7 +108,7 @@ const PRODUCTS = [
     id: "stone-ring", title: "The Bleeding Heart Stone Ring",
     collection: "bleeding-heart", category: "rings",
     drops: ["synthetic"], stoneHeart: true,
-    prices: { silver: { synthetic: 155 }, plated: { synthetic: 175 } },
+    prices: { silver: { synthetic: 175 }, plated: { synthetic: 205 } },
     image: "assets/products/stone-ring.jpeg", imageInitial: "assets/products/stone-ring.jpeg",
     sizes: RING_SIZES, defaultSize: "6",
     canHaveInitial: false, canEngrave: false,
@@ -130,7 +130,7 @@ const PRODUCTS = [
     id: "engravable-chain-ear", title: "The Bleeding Heart Engravable Chain Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 235, pearl: 235 }, plated: { synthetic: 255, pearl: 255 } },
+    prices: { silver: { synthetic: 265, pearl: 265 }, plated: { synthetic: 295, pearl: 295 } },
     image: "assets/products/engravable-chain-ear.jpeg", imageInitial: "assets/products/engravable-chain-ear.jpeg",
     sizes: null, canHaveInitial: true, canEngrave: true,
     lede: "Engravable 12mm heart drop earrings on delicate chain.",
@@ -170,7 +170,7 @@ const PRODUCTS = [
     id: "classic-chain-ear", title: "The Bleeding Heart Classic Chain Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic", "pearl"],
-    prices: { silver: { synthetic: 225, pearl: 225 }, plated: { synthetic: 245, pearl: 245 } },
+    prices: { silver: { synthetic: 305, pearl: 305 }, plated: { synthetic: 335, pearl: 335 } },
     image: "assets/products/classic-chain-ear.jpeg", imageInitial: "assets/products/classic-chain-ear.jpeg",
     sizes: null, canHaveInitial: false, canEngrave: false,
     lede: "The rounded 15mm Classic heart as chain drop earrings.",
