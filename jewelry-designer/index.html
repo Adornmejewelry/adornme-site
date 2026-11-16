@@ -153,7 +153,7 @@
       <div class="group" id="initialGroup"><div class="eyebrow">Initial <span class="label-note">— or wear it without</span></div><div class="chip-row" id="initialChips"></div><p class="helper" id="initialHelper">Free engraved initial on this piece.</p></div>
       <div class="group" id="sizeGroup"><div class="eyebrow" id="sizeLabel">Length</div><div class="chip-row" id="sizeChips"></div><p class="helper" id="sizeHelper"></p></div>
 
-      <div class="group"><div class="eyebrow">Engraving <span class="label-note">— optional, up to 25 characters</span></div><input class="field" id="engraving" maxlength="25" placeholder="e.g. always · 12.04.23 · Maman"><p class="helper">A few words hand-engraved on the back by our LA studio. Free.</p></div>
+      <div class="group" id="engravingGroup"><div class="eyebrow">Engraving <span class="label-note">— optional, up to 25 characters</span></div><input class="field" id="engraving" maxlength="25" placeholder="e.g. always · 12.04.23 · Maman"><p class="helper">A few words hand-engraved on the back by our LA studio. Free.</p></div>
       <div class="group"><div class="eyebrow">A note for the gift card <span class="label-note">— optional</span></div><textarea class="field" id="giftNote" maxlength="180" rows="3" placeholder="e.g. For Mira, the way of the sun. With love, always."></textarea><p class="helper">Printed on a small cream card tucked inside the box. Up to 180 characters · free.</p></div>
       <div class="group"><div class="eyebrow">Anything else? <span class="label-note">— optional</span></div><textarea class="field" id="aiNotes" maxlength="400" rows="3" placeholder="e.g. Please use a slightly smaller pearl, or wrap as a baby gift."></textarea><p class="helper">Our studio reviews every custom note and confirms before we begin.</p></div>
 
@@ -214,7 +214,7 @@
     };
 
     const state = {
-      collection:"bleeding-heart", pieceId:null, metal:"silver",
+      collection:"bleeding-heart", pieceId:null, metal:"plated",
       goldColor:"yellow", heartStone:"synthetic", drop:null,
       initial:"—", initialPicked:false, size:null, engraving:"", giftNote:"", aiNotes:""
     };
@@ -312,6 +312,9 @@
     }
     function renderInitial(){
       const p = piece();
+      // Engraving box only on pieces that can take an engraving (not the tiny pearl hearts, chains, stone pieces).
+      $("#engravingGroup").hidden = !p.canEngrave;
+      if (!p.canEngrave && state.engraving) { state.engraving = ""; $("#engraving").value = ""; $("#liveEngraving").textContent = ""; }
       $("#initialGroup").hidden = !p.canHaveInitial;
       if (!p.canHaveInitial) return;
       const noInitial = chip("No initial", state.initial==="—", `data-initial="—"`, "no-initial");
@@ -433,7 +436,7 @@
           size: (p.lengthPricing || !sizesShown()) ? "" : (state.size||""),
           goldColor: isGold() ? GOLD_COLORS.find((c)=>c.id===state.goldColor).label : "",
           initial: state.initial && state.initial!=="—" ? state.initial : "",
-          engraving: state.engraving||"",
+          engraving: piece().canEngrave ? (state.engraving||"") : "",
           giftNote: state.giftNote||"",
           notes: state.aiNotes||"",
         };

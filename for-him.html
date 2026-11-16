@@ -167,7 +167,7 @@
       let shopifyLoaded = false;
       for (const piece of Object.keys(PIECES)) {
         const p = product(piece);
-        state[piece] = { metal: "silver", size: p && p.sizes ? (p.defaultSize || p.sizes[0]) : null, engraving: "", goldColor: "yellow" };
+        state[piece] = { metal: "plated", size: p && p.sizes ? (p.defaultSize || p.sizes[0]) : null, engraving: "", goldColor: "yellow" };
       }
       const isGold = (piece) => !!(METALS[state[piece].metal] && METALS[state[piece].metal].gold);
       const showSize = (piece) => !!product(piece).sizes;   // the pendant has no chain length (chain sold separately)

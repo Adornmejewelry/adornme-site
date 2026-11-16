@@ -120,10 +120,10 @@
       const dropsFor = (m) => adornmeDropsFor(product, m);
       const drops = product.drops || [];
       const urlMetal = params.get("metal");
-      const startMetal = metals.includes(urlMetal) ? urlMetal : "silver";
+      const startMetal = metals.includes(urlMetal) ? urlMetal : "plated";   // opens in Gold Plated (yellow), at its lowest price
       const sizes = product.sizes || [];
       const defaultSize = sizes.length ? (product.defaultSize || sizes[0]) : null;
-      // Open on the lowest-priced choice, so the first price shown matches the "From $…" on the gallery and home cards.
+      // Open on the lowest-priced Gold Plated choice. (Gallery and home cards still show the overall "From $…", the silver price.)
       const cheapest = (list, priceOf) => list.reduce((best, x) => ((priceOf(x) ?? Infinity) < (priceOf(best) ?? Infinity) ? x : best), list[0]);
       const startSize = (product.lengthPricing && sizes.length) ? cheapest(sizes, (s) => adornmeGetMetalPrice(product, startMetal, null, s)) : defaultSize;
       const state = {
