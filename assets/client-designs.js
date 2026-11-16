@@ -17,7 +17,8 @@ const CLIENT_DESIGNS = [];
 
 const ROYALTY = { rate: 5, cap: 150 };          // Designer Royalty
 const AMBASSADOR = { rate: 5, cap: 150 };       // Sales reps and creators (Shopify Collabs)
-const AMBASSADOR_APPLY_URL = "";                // Shopify Collabs application page (set once the program is live)
+const AMBASSADOR_APPLY_URL = "https://adornme-809.myshopify.com/pages/collab";   // Shopify Collabs application page
+const AMBASSADOR_CODE_OFFER = "$30 off orders of $250 or more";                   // what an Ambassador's code gives their customers
 
 function adornmeClientDesign(id) {
   return CLIENT_DESIGNS.find((d) => d.id === id) || null;
