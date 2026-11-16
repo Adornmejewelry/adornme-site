@@ -130,6 +130,7 @@
         size: startSize,
         goldColor: "yellow",
         initial: product.initialRequired ? "M" : "—",
+        initialPicked: false,   // the page opens on the original photo (e.g. the necklace with "M") until a letter is chosen
         engraving: ""
       };
       let shopifyLoaded = false;
@@ -178,6 +179,8 @@
       // Gold on a pendant-only piece hides the chain length (the gold piece comes without a chain).
       const showSizes = () => !(isGoldMetal(state.metal) && product.goldPendantOnly);
       function currentImage() {
+        const photo = (product.canHaveInitial && state.initialPicked) ? adornmeInitialPhoto(product, state.initial) : null;   // the chosen letter, engraved
+        if (photo) return photo;
         return (product.canHaveInitial && state.initial !== "—" && product.imageInitial !== product.image) ? product.imageInitial : product.image;
       }
 
@@ -249,7 +252,7 @@
         document.querySelectorAll('[data-action="set-gold-color"]').forEach((b) => b.addEventListener("click", () => { state.goldColor = b.dataset.value; render(); }));
         document.querySelectorAll('[data-action="set-drop"]').forEach((b) => b.addEventListener("click", () => { state.drop = b.dataset.value; render(); }));
         document.querySelectorAll('[data-action="set-size"]').forEach((b) => b.addEventListener("click", () => { state.size = b.dataset.value; render(); }));
-        document.querySelectorAll('[data-action="set-initial"]').forEach((b) => b.addEventListener("click", () => { state.initial = b.dataset.value; render(); }));
+        document.querySelectorAll('[data-action="set-initial"]').forEach((b) => b.addEventListener("click", () => { state.initial = b.dataset.value; state.initialPicked = true; render(); }));
         const eng = document.querySelector('[data-action="set-engraving"]');
         if (eng) eng.addEventListener("input", (e) => { state.engraving = e.target.value; });
         const addBtn = document.getElementById("addToCartBtn");

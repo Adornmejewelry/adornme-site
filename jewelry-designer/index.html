@@ -213,7 +213,7 @@
     const state = {
       collection:"bleeding-heart", pieceId:null, metal:"silver",
       goldColor:"yellow", heartStone:"synthetic", drop:null,
-      initial:"—", size:null, engraving:"", giftNote:"", aiNotes:""
+      initial:"—", initialPicked:false, size:null, engraving:"", giftNote:"", aiNotes:""
     };
     let shopifyLoaded = false;
 
@@ -328,7 +328,8 @@
     function renderPreview(){
       const p = piece();
       const useInitial = p.canHaveInitial && state.initial!=="—" && p.imageInitial && p.imageInitial!==p.image;
-      const src = fixPath(useInitial ? p.imageInitial : p.image);
+      const photo = (p.canHaveInitial && state.initialPicked) ? adornmeInitialPhoto(p, state.initial) : null;   // the chosen letter, engraved (original photo until a letter is chosen)
+      const src = fixPath(photo || (useInitial ? p.imageInitial : p.image));
       const img = $("#previewImg");
       if (img.getAttribute("src") !== src){ img.style.opacity=0; setTimeout(()=>{ img.src=src; img.alt=p.title; img.style.opacity=1; },150); }
       img.classList.remove("metal-silver","metal-plated","metal-gold14","metal-gold18","gc-white","gc-rose");
@@ -404,7 +405,7 @@
       document.querySelectorAll("[data-color]").forEach((b)=>b.addEventListener("click",()=>{ state.goldColor=b.dataset.color; render(); }));
       document.querySelectorAll("[data-drop]").forEach((b)=>b.addEventListener("click",()=>{ if(b.hasAttribute("disabled"))return; state.drop=b.dataset.drop; render(); }));
       document.querySelectorAll("[data-stone]").forEach((b)=>b.addEventListener("click",()=>{ if(b.hasAttribute("disabled"))return; state.heartStone=b.dataset.stone; render(); }));
-      document.querySelectorAll("[data-initial]").forEach((b)=>b.addEventListener("click",()=>{ state.initial=b.dataset.initial; render(); }));
+      document.querySelectorAll("[data-initial]").forEach((b)=>b.addEventListener("click",()=>{ state.initial=b.dataset.initial; state.initialPicked=true; render(); }));
       document.querySelectorAll("[data-size]").forEach((b)=>b.addEventListener("click",()=>{ state.size=b.dataset.size; render(); }));
     }
 
@@ -449,7 +450,7 @@
       const rh = params.get("stone");
       if (rp){ const m=PRODUCTS.find((p)=>p.id===rp); if(m){ state.pieceId=m.id; state.collection=m.collection; } }
       if (rm && CUSTOMIZE_METALS.includes(rm)) state.metal=rm;
-      if (ri && (ri==="—" || /^[A-Z]$/.test(ri))) state.initial=ri;
+      if (ri && (ri==="—" || /^[A-Z]$/.test(ri))) { state.initial=ri; state.initialPicked=true; }
       if (rs) state.size=rs;
       if (rd && DROPS[rd]) state.drop=rd;
       if (rh && HEART_STONES[rh]) state.heartStone=rh;

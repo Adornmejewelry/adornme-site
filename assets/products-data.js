@@ -1,5 +1,5 @@
 // ============================================================
-// ADORNME — Central product data (v43.2, Nov 16 2026: Stone Ring $175/$205, Engravable Chain Earrings $265/$295, Classic Chain Earrings $305/$335 (2x on estimated weights); v43.1 Nov 16: silver / gold plated below 2x cost raised to 2x (nothing lowered); v43.0 Nov 16: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
+// ADORNME — Central product data (v43.3, Nov 16 2026: engraved-initial photos A–Z + blank for 5 engravable pieces; v43.2 Nov 16: Stone Ring $175/$205, Engravable Chain Earrings $265/$295, Classic Chain Earrings $305/$335 (2x on estimated weights); v43.1 Nov 16: silver / gold plated below 2x cost raised to 2x (nothing lowered); v43.0 Nov 16: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
 // Sterling Silver + 18K Gold Plated on every piece. 14K / 18K solid gold (yellow, white or rose) with a price and
 // Add to bag on the pieces that have `prices.gold14` / `prices.gold18`; in gold the drop can also be a lab diamond.
 // Pieces without gold prices, a lab diamond in sterling silver, and the pink lab diamond heart stay "Request a quote" (Customize).
@@ -51,6 +51,7 @@ const PRODUCTS = [
     id: "engravable-necklace", title: "The Bleeding Heart Engravable Necklace",
     collection: "bleeding-heart", category: "necklaces",
     drops: ["synthetic", "pearl"],
+    initialPhotos: "assets/products/initials/engravable-necklace/",   // blank.jpg + A.jpg … Z.jpg (the chosen letter engraved)
     prices: { silver: { synthetic: 215, pearl: 215 }, plated: { synthetic: 240, pearl: 240 }, gold14: { synthetic: 1680, pearl: 1680, diamond: 1880 }, gold18: { synthetic: 2310, pearl: 2310, diamond: 2510 } },
     goldDrops: ["synthetic", "pearl", "diamond"],
     image: "assets/products/engravable-necklace.jpeg", imageInitial: "assets/products/engravable-necklace.jpeg",
@@ -63,6 +64,7 @@ const PRODUCTS = [
     id: "engravable-pendant", title: "The Bleeding Heart Engravable Pendant",
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic", "pearl"],
+    initialPhotos: "assets/products/initials/engravable-pendant/",   // blank.jpg + A.jpg … Z.jpg (the chosen letter engraved)
     prices: { silver: { synthetic: 195, pearl: 195 }, plated: { synthetic: 220, pearl: 220 }, gold14: { synthetic: 1140, pearl: 1140, diamond: 1340 }, gold18: { synthetic: 1530, pearl: 1530, diamond: 1730 } },
     goldDrops: ["synthetic", "pearl", "diamond"],
     image: "assets/products/engravable-pendant.jpeg", imageInitial: "assets/products/engravable-pendant.jpeg",
@@ -96,6 +98,7 @@ const PRODUCTS = [
     id: "engravable-ring", title: "The Bleeding Heart Engravable Ring",
     collection: "bleeding-heart", category: "rings",
     drops: ["synthetic", "pearl"],
+    initialPhotos: "assets/products/initials/engravable-ring/",   // blank.jpg + A.jpg … Z.jpg (the chosen letter engraved)
     prices: { silver: { synthetic: 205, pearl: 205 }, plated: { synthetic: 235, pearl: 235 }, gold14: { synthetic: 1285, pearl: 1285, diamond: 1485 }, gold18: { synthetic: 1725, pearl: 1725, diamond: 1925 } },
     goldDrops: ["synthetic", "pearl", "diamond"],
     image: "assets/products/engravable-ring.jpeg", imageInitial: "assets/products/engravable-ring.jpeg",
@@ -119,6 +122,7 @@ const PRODUCTS = [
     id: "engravable-stud", title: "The Bleeding Heart Engravable Stud Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic", "pearl"],
+    initialPhotos: "assets/products/initials/engravable-stud/",   // blank.jpg + A.jpg … Z.jpg (the chosen letter engraved)
     prices: { silver: { synthetic: 245, pearl: 245 }, plated: { synthetic: 275, pearl: 275 }, gold14: { synthetic: 1090, pearl: 1090, diamond: 1490 }, gold18: { synthetic: 1590, pearl: 1590, diamond: 1990 } },
     goldDrops: ["synthetic", "pearl", "diamond"],
     image: "assets/products/engravable-stud.jpeg", imageInitial: "assets/products/engravable-stud.jpeg",
@@ -130,6 +134,7 @@ const PRODUCTS = [
     id: "engravable-chain-ear", title: "The Bleeding Heart Engravable Chain Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic", "pearl"],
+    initialPhotos: "assets/products/initials/engravable-chain-ear/",   // blank.jpg + A.jpg … Z.jpg (the chosen letter engraved)
     prices: { silver: { synthetic: 265, pearl: 265 }, plated: { synthetic: 295, pearl: 295 } },
     image: "assets/products/engravable-chain-ear.jpeg", imageInitial: "assets/products/engravable-chain-ear.jpeg",
     sizes: null, canHaveInitial: true, canEngrave: true,
@@ -323,6 +328,11 @@ function adornmeMetalFrom(product, metal) {
   const v = Object.values(t).filter((x) => typeof x === "number");
   return v.length ? Math.min(...v) : null;
 }
+// Photo with the chosen initial engraved (pieces with `initialPhotos`), or null. "—" = the blank heart.
+function adornmeInitialPhoto(product, initial) {
+  if (!product || !product.initialPhotos) return null;
+  return product.initialPhotos + (initial && /^[A-Z]$/.test(initial) ? initial : "blank") + ".jpg";
+}
 // Lowest price across the shop metals (Silver, Gold Plated).
 function adornmeGetFromPrice(product) {
   const all = [];
@@ -351,7 +361,7 @@ if (typeof window !== "undefined") {
     METALS, SHOP_METALS, GOLD_METALS, CUSTOMIZE_METALS, METAL_LABELS, DROPS, GOLD_QUOTE_DROPS, HEART_STONES, GOLD_COLORS,
     QUOTE_EMAIL, GOLD_NOTE, GOLD_PENDANT_NOTE, PRODUCTS, HIDDEN_PRODUCTS,
     adornmePriceKey, adornmeGetMetalPrice, adornmeGetFromPrice, adornmeShopifyOptions, adornmeQuoteMailto,
-    adornmeHasGold, adornmeMetalsFor, adornmeDropsFor, adornmeMetalFrom,
+    adornmeHasGold, adornmeMetalsFor, adornmeDropsFor, adornmeMetalFrom, adornmeInitialPhoto,
   });
   window.ADORNME_METAL_LABELS = METAL_LABELS;
 }
