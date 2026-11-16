@@ -8,7 +8,9 @@
   <style>
   .earn-bar{display:block;padding:10px 16px;background:var(--ink);color:var(--ivory);text-align:center;font:500 12px/1.45 var(--sans);letter-spacing:.06em;text-decoration:none;}
   .earn-bar strong{color:var(--buttercup);font-weight:600;}
-  .earn-bar span{white-space:nowrap;text-decoration:underline;text-underline-offset:3px;}
+  .earn-bar a{color:inherit;text-decoration:none;}
+  .earn-bar a:hover{text-decoration:underline;text-underline-offset:3px;}
+  .earn-bar a.more{white-space:nowrap;text-decoration:underline;text-underline-offset:3px;}
   .earn-home{padding:clamp(60px,8vw,110px) clamp(20px,4vw,56px);background:var(--ivory);text-align:center;}
   .earn-home .eyebrow{color:var(--antique-gold);}
   .earn-home h2{margin:14px auto 0;max-width:760px;font:400 clamp(32px,4.6vw,54px)/1.08 var(--serif);color:var(--ink);}
@@ -28,7 +30,7 @@
   </style>
 </head>
 <body>
-  <a class="earn-bar" href="earn.html">Design your own piece and earn <strong>5%</strong> every time another client orders it. Or share Adornme as a Partner. <span>Earn with Adornme →</span></a>
+  <div class="earn-bar"><a href="earn.html#royalty">Design your own piece and earn <strong>5%</strong> every time another client orders it.</a> <a href="earn.html#partner">Or share Adornme as a Sales Partner.</a> <a class="more" href="earn.html">Earn with Adornme →</a></div>
   <nav class="nav" aria-label="Primary navigation">
     <div class="nav-left">
       <a href="trinity-collection.html">Gallery</a>
@@ -230,10 +232,10 @@
       </article>
       <article class="earn-card">
         <div class="eyebrow">For sales reps &amp; creators</div>
-        <h3>Adornme Partners</h3>
+        <h3>Adornme Sales Partners</h3>
         <p class="pct">Earn <strong>5%</strong> on every sale you bring, in every metal, up to $150 per order. Your clients get <strong>$30 off</strong> orders of $250 or more with your code.</p>
         <p class="copy">Get your own Adornme code, share the pieces you love, and earn on every order that comes through you, tracked automatically.</p>
-        <div class="links"><a class="primary" href="earn.html#partner">Become a Partner</a></div>
+        <div class="links"><a class="primary" href="earn.html#partner">Become a Sales Partner</a></div>
       </article>
     </div>
   </section>
