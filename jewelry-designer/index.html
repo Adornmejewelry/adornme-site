@@ -89,6 +89,11 @@
     .gallery-inner { width:min(620px,100%); margin:0 auto; }
     .gallery .eyebrow { color:var(--antique-gold); }
     .gallery p { margin-top:14px; color:var(--ink); font:italic 400 clamp(17px,1.9vw,20px)/1.6 var(--serif); }
+    .gallery-link { display:inline-block; margin-top:14px; color:var(--ink); font:600 12px/1 var(--sans); letter-spacing:.16em; text-transform:uppercase; border-bottom:1px solid var(--antique-gold); padding-bottom:4px; text-decoration:none; }
+    .optin { display:flex; gap:12px; align-items:flex-start; padding:14px 16px; background:var(--cream); border:1px solid var(--rule); border-radius:6px; cursor:pointer; color:var(--ink); font:400 15px/1.5 var(--serif); }
+    .optin input { margin-top:4px; width:18px; height:18px; accent-color:var(--ink); flex:none; }
+    .optin a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
+    #galleryCredit { margin-top:10px; }
     .join { padding:clamp(60px,8vw,100px) clamp(20px,4vw,56px); background:var(--ink); color:var(--ivory); text-align:center; }
     .join h2 { font:italic 400 clamp(32px,4.5vw,56px)/1.1 var(--serif); color:var(--ivory); }
     .join p { margin-top:16px; color:rgba(255,250,240,.85); font:400 17px/1.6 var(--serif); }
@@ -158,6 +163,7 @@
       <div class="group" id="engravingGroup"><div class="eyebrow">Engraving <span class="label-note">— optional, up to 25 characters</span></div><input class="field" id="engraving" maxlength="25" placeholder="e.g. always · 12.04.23 · Maman"><p class="helper">A few words hand-engraved on the back by our LA studio. Free.</p></div>
       <div class="group"><div class="eyebrow">A note for the gift card <span class="label-note">— optional</span></div><textarea class="field" id="giftNote" maxlength="180" rows="3" placeholder="e.g. For Mira, the way of the sun. With love, always."></textarea><p class="helper">Printed on a small cream card tucked inside the box. Up to 180 characters · free.</p></div>
       <div class="group"><div class="eyebrow">Anything else? <span class="label-note">— optional</span></div><textarea class="field" id="aiNotes" maxlength="400" rows="3" placeholder="e.g. Please use a slightly smaller pearl, or wrap as a baby gift."></textarea><p class="helper">Our studio reviews every custom note and confirms before we begin.</p></div>
+      <div class="group" id="royaltyGroup"><label class="optin"><input type="checkbox" id="galleryOptIn"><span><strong>Add my design to the Adornme Gallery</strong> and earn 5% each time another customer orders it, up to $150 per order. <a href="../earn.html#royalty">How it works</a></span></label><input class="field" id="galleryCredit" maxlength="40" placeholder="Name to credit, e.g. Sara M." aria-label="Name to credit on your design" hidden></div>
 
       <div class="summary"><div><div class="eyebrow">Your piece</div><p class="summary-line" id="summaryLine"></p></div><div class="price" id="price">—</div></div>
       <div class="trust">Designed in Newport Beach · Hand-finished in Downtown LA<span id="trustEngraving"> · Free engraving</span></div>
@@ -166,7 +172,7 @@
     </section>
   </main>
 
-  <section class="gallery"><div class="gallery-inner"><div class="eyebrow">The Gallery</div><p>Your customized piece joins the Adornme Gallery. If someone orders it, you receive a 5% royalty.</p></div></section>
+  <section class="gallery"><div class="gallery-inner"><div class="eyebrow">Designer Royalty</div><p>Design something beautiful? Add it to the Adornme Gallery and earn 5% each time another customer orders it, up to $150 per order.</p><a class="gallery-link" href="../earn.html#royalty">How it works →</a></div></section>
 
   <section class="join" id="joinForm">
     <h2>Stay close to the brand</h2>
@@ -179,7 +185,7 @@
     <div class="footer-grid">
       <div><div class="footer-mark"><img src="../assets/adornme-symbol-mark-adornme.png" alt="Adornme flower-heart symbol"></div><div class="footer-logo">ADORNME</div><p class="footer-tag">A love story you can wear</p></div>
       <div><h3>Shop</h3><a href="../trinity-collection.html">Gallery</a><a href="../for-him.html">For Him</a><a href="../customize.html">Customize</a></div>
-      <div><h3>Brand</h3><a href="../our-story.html">Our Story</a><a href="../journal.html">Journal</a></div>
+      <div><h3>Brand</h3><a href="../our-story.html">Our Story</a><a href="../journal.html">Journal</a><a href="../earn.html">Earn with Adornme</a></div>
       <div><h3>Care</h3><p><a href="mailto:hello@adornme.ai" style="color:inherit;text-decoration:none;">hello@adornme.ai</a></p><a href="../shipping.html">Shipping</a><a href="../materials.html">Sizing</a></div>
     </div>
     <div class="legal"><span>© 2026 Adornme · Dr. Mira "Mehraein" Mokhberi, Founder</span><span>Designed in Newport Beach · Made in Downtown Los Angeles</span></div>
@@ -220,7 +226,7 @@
     const state = {
       collection:"bleeding-heart", pieceId:null, metal:"plated",
       goldColor:"yellow", heartStone:"synthetic", drop:null,
-      initial:"—", initialPicked:false, size:null, engraving:"", giftNote:"", aiNotes:""
+      initial:"—", initialPicked:false, size:null, engraving:"", giftNote:"", aiNotes:"", galleryOptIn:false, galleryCredit:""
     };
     let shopifyLoaded = false;
 
@@ -365,6 +371,7 @@
       if (state.engraving.trim()) lines.push(`Engraving: ${state.engraving.trim()}`);
       if (state.giftNote.trim()) lines.push(`Gift note: ${state.giftNote.trim()}`);
       if (state.aiNotes.trim()) lines.push(`Notes: ${state.aiNotes.trim()}`);
+      if (state.galleryOptIn) lines.push(`Add my design to the Gallery (5% royalty), credit as: ${state.galleryCredit.trim() || "—"}`);
       return lines;
     }
     function renderSummary(){
@@ -424,6 +431,8 @@
     $("#engraving").addEventListener("input",(e)=>{ state.engraving=e.target.value; $("#liveEngraving").textContent=state.engraving.trim(); });
     $("#giftNote").addEventListener("input",(e)=>{ state.giftNote=e.target.value; });
     $("#aiNotes").addEventListener("input",(e)=>{ state.aiNotes=e.target.value; });
+    $("#galleryOptIn").addEventListener("change",(e)=>{ state.galleryOptIn=e.target.checked; $("#galleryCredit").hidden=!e.target.checked; if (e.target.checked) $("#galleryCredit").focus(); });
+    $("#galleryCredit").addEventListener("input",(e)=>{ state.galleryCredit=e.target.value; });
 
     $("#addToCartBtn").addEventListener("click", async ()=>{
       const p = piece();
@@ -443,6 +452,7 @@
           engraving: piece().canEngrave ? (state.engraving||"") : "",
           giftNote: state.giftNote||"",
           notes: state.aiNotes||"",
+          attributes: state.galleryOptIn ? { "Gallery design": `Yes, add to the Gallery (5% royalty). Credit as: ${state.galleryCredit.trim() || "(no name given)"}` } : {},
         };
         if (window.AdornmeShopify && window.AdornmeShopify.addToCart){
           await window.AdornmeShopify.addToCart(config);

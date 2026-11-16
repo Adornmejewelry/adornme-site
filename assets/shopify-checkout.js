@@ -121,7 +121,8 @@ function buildCheckoutUrl(variantId, attributes = {}) {
  * config = {
  *   productId,                       // Shopify handle (= PRODUCTS id)
  *   options: { Metal, Drop?, Length? },
- *   size, goldColor, initial, engraving, giftNote, notes   // order notes
+ *   size, goldColor, initial, engraving, giftNote, notes,  // order notes
+ *   attributes: { "Client design": "...", ... }           // extra order notes
  * }
  */
 function addToShopifyCart(config) {
@@ -152,6 +153,7 @@ async function completeCheckoutAsync(checkoutTab, config) {
     if (config.engraving) attributes["Engraving"] = config.engraving;
     if (config.giftNote)  attributes["Gift note"] = config.giftNote;
     if (config.notes)     attributes["Notes"]     = config.notes;
+    for (const [k, v] of Object.entries(config.attributes || {})) if (v) attributes[k] = v;   // e.g. Client design, Gallery design
 
     const url = buildCheckoutUrl(variant.id, attributes);
     if (checkoutTab && !checkoutTab.closed) checkoutTab.location.href = url;

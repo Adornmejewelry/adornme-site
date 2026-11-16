@@ -5,8 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Adornme | A love story you can wear</title>
   <link rel="stylesheet" href="assets/home-gallery-v24.css">
+  <style>
+  .earn-bar{display:block;padding:10px 16px;background:var(--ink);color:var(--ivory);text-align:center;font:500 12px/1.45 var(--sans);letter-spacing:.06em;text-decoration:none;}
+  .earn-bar strong{color:var(--buttercup);font-weight:600;}
+  .earn-bar span{white-space:nowrap;text-decoration:underline;text-underline-offset:3px;}
+  .earn-home{padding:clamp(60px,8vw,110px) clamp(20px,4vw,56px);background:var(--ivory);text-align:center;}
+  .earn-home .eyebrow{color:var(--antique-gold);}
+  .earn-home h2{margin:14px auto 0;max-width:760px;font:400 clamp(32px,4.6vw,54px)/1.08 var(--serif);color:var(--ink);}
+  .earn-home .lede{margin:18px auto 0;max-width:600px;color:var(--ink-soft);font:italic 400 clamp(17px,2vw,20px)/1.6 var(--serif);}
+  .earn-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.6vw,30px);max-width:1040px;margin:clamp(30px,4vw,48px) auto 0;text-align:left;}
+  @media (max-width:760px){.earn-cards{grid-template-columns:1fr;}}
+  .earn-card{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:clamp(24px,3.4vw,38px);display:flex;flex-direction:column;}
+  .earn-card .eyebrow{color:var(--antique-gold);}
+  .earn-card h3{margin-top:10px;font:400 clamp(26px,3vw,34px)/1.1 var(--serif);color:var(--ink);}
+  .earn-card .pct{margin-top:12px;font:400 clamp(19px,2.2vw,23px)/1.4 var(--serif);color:var(--ink);}
+  .earn-card .pct strong{font-weight:500;}
+  .earn-card p.copy{margin-top:10px;color:var(--ink-soft);font:400 16px/1.65 var(--serif);flex:1;}
+  .earn-card .links{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;}
+  .earn-card .links a{display:inline-block;padding:13px 22px;border-radius:999px;font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;}
+  .earn-card .links a.primary{background:var(--ink);color:var(--ivory);}
+  .earn-card .links a.secondary{border:1px solid var(--ink);color:var(--ink);}
+  </style>
 </head>
 <body>
+  <a class="earn-bar" href="earn.html">Design your own piece and earn <strong>5%</strong> every time another client orders it. <span>Earn with Adornme →</span></a>
   <nav class="nav" aria-label="Primary navigation">
     <div class="nav-left">
       <a href="trinity-collection.html">Gallery</a>
@@ -194,6 +216,28 @@
     </div>
   </section>
 
+  <section class="earn-home" id="earn">
+    <div class="eyebrow">Earn with Adornme</div>
+    <h2>Your design. Your story. Your share.</h2>
+    <p class="lede">Design a piece in silver, gold plated, or 14K and 18K solid gold that others fall in love with, or share Adornme with the people around you.</p>
+    <div class="earn-cards">
+      <article class="earn-card">
+        <div class="eyebrow">For designers</div>
+        <h3>Designer Royalty</h3>
+        <p class="pct">Earn <strong>5%</strong> each time another client orders your design, up to $150 per order.</p>
+        <p class="copy">Create your piece on our Customize page and add it to the Adornme Gallery when you order. Selected designs join our Client Designs, with your name.</p>
+        <div class="links"><a class="primary" href="customize.html">Design your piece</a><a class="secondary" href="earn.html#royalty">How it works</a></div>
+      </article>
+      <article class="earn-card">
+        <div class="eyebrow">For sales reps &amp; creators</div>
+        <h3>Adornme Ambassadors</h3>
+        <p class="pct">Earn <strong>5%</strong> on every sale you bring, in every metal, up to $150 per order.</p>
+        <p class="copy">Get your own Adornme link and code, share the pieces you love, and earn on every order that comes through you, tracked automatically.</p>
+        <div class="links"><a class="primary" href="earn.html#ambassador">Become an Ambassador</a></div>
+      </article>
+    </div>
+  </section>
+
   <section class="dark">
     <div class="story-grid">
       <div class="story-image">
@@ -280,6 +324,7 @@
         <h3>Brand</h3>
         <a href="our-story.html">Our Story</a>
         <a href="journal.html">Journal</a>
+        <a href="earn.html">Earn with Adornme</a>
       </div>
       <div>
         <h3>Care</h3>

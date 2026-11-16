@@ -37,6 +37,22 @@
     .metal-swatch.gold14 { background:#E9C66B; border:1px solid #B98C24; }
     .metal-swatch.gold18 { background:#E8B84B; border:1px solid #A87A18; }
     .shop-card-gold { font:italic 400 13px/1.4 var(--serif); color:var(--ink-soft); margin:-4px 0 8px; }
+    .client-section { scroll-margin-top:200px; padding:clamp(50px,6vw,90px) clamp(20px,4vw,56px); background:var(--cream); border-top:1px solid var(--rule); }
+    .client-head { max-width:640px; margin:0 auto clamp(28px,4vw,48px); text-align:center; }
+    .client-head .eyebrow { color:var(--antique-gold); }
+    .client-head h2 { margin-top:12px; font:400 clamp(30px,4vw,44px)/1.1 var(--serif); color:var(--ink); }
+    .client-head p { margin-top:14px; color:var(--ink-soft); font:italic 400 clamp(16px,1.8vw,19px)/1.6 var(--serif); }
+    .client-empty { grid-column:1 / -1; max-width:620px; margin:0 auto; padding:clamp(28px,4vw,44px); text-align:center; background:var(--ivory); border:1px solid var(--rule); border-radius:8px; }
+    .client-empty h3 { font:400 clamp(22px,2.6vw,28px)/1.2 var(--serif); color:var(--ink); }
+    .client-empty p { margin-top:10px; color:var(--ink-soft); font:400 16px/1.6 var(--serif); }
+    .client-empty .actions { margin-top:20px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .client-empty a { display:inline-block; padding:13px 22px; border-radius:999px; font:600 11px/1 var(--sans); letter-spacing:.18em; text-transform:uppercase; text-decoration:none; }
+    .client-empty a.primary { background:var(--ink); color:var(--ivory); }
+    .client-empty a.secondary { border:1px solid var(--ink); color:var(--ink); }
+    #clientGrid img.metal-silver { filter:grayscale(.85) brightness(1.12) contrast(.98); }
+    #clientGrid img.gc-white { filter:grayscale(.82) brightness(1.14) contrast(.97); }
+    #clientGrid img.gc-rose { filter:saturate(1.35) hue-rotate(-18deg) brightness(1.03); }
+    .shop-card-credit { font:italic 400 14px/1.4 var(--serif); color:var(--antique-gold); margin:-2px 0 6px; }
     .shop-empty { grid-column:1 / -1; padding:60px 0; text-align:center; color:var(--ink-soft); font:italic 400 18px/1.5 var(--serif); }
   </style>
 </head>
@@ -58,19 +74,28 @@
 
   <main>
     <section class="shop-grid-section"><div class="shop-grid" id="shopGrid"></div></section>
+    <section class="client-section" id="client-designs">
+      <div class="client-head">
+        <div class="eyebrow">Designed by our clients</div>
+        <h2>Client Designs</h2>
+        <p>Pieces designed by Adornme clients on our Customize page. Each time one is ordered, its designer earns 5% of the sale, up to $150 per order.</p>
+      </div>
+      <div class="shop-grid" id="clientGrid"></div>
+    </section>
   </main>
 
   <footer class="footer">
     <div class="footer-grid">
       <div><div class="footer-mark"><img src="assets/adornme-symbol-mark-adornme.png" alt="Adornme flower-heart symbol"></div><div class="footer-logo">ADORNME</div><p class="footer-tag">A love story you can wear</p></div>
       <div><h3>Shop</h3><a href="trinity-collection.html">Gallery</a><a href="for-him.html">For Him</a><a href="customize.html">Customize</a></div>
-      <div><h3>Brand</h3><a href="our-story.html">Our Story</a><a href="journal.html">Journal</a></div>
+      <div><h3>Brand</h3><a href="our-story.html">Our Story</a><a href="journal.html">Journal</a><a href="earn.html">Earn with Adornme</a></div>
       <div><h3>Care</h3><p><a href="mailto:hello@adornme.ai" style="color:inherit;text-decoration:none;">hello@adornme.ai</a></p><a href="shipping.html">Shipping</a><a href="materials.html">Sizing</a></div>
     </div>
     <div class="legal"><span>© 2026 Adornme · Dr. Mira "Mehraein" Mokhberi, Founder</span><span>Designed in Newport Beach · Made in Downtown Los Angeles</span></div>
   </footer>
 
   <script src="assets/products-data.js"></script>
+  <script src="assets/client-designs.js"></script>
   <script src="assets/shopify-checkout.js"></script>
   <script>
     const FILTERS = [
@@ -84,7 +109,8 @@
       { id:"_divider", label:"", type:"divider" },
       { id:"bleeding-heart", label:"The Bleeding Heart Collection", type:"collection" },
       { id:"devotion", label:"The Devotion Collection", type:"collection" },
-      { id:"for-him", label:"For Him", type:"collection" }
+      { id:"for-him", label:"For Him", type:"collection" },
+      { id:"client-designs", label:"Client Designs", type:"anchor" }
     ];
     let activeFilter = "all";
     let livePrices = {};
@@ -121,11 +147,14 @@
       const group = document.getElementById("filterGroup");
       group.innerHTML = FILTERS.map((f)=>{
         if (f.type==="divider") return `<span class="filter-divider" aria-hidden="true"></span>`;
-        const count = countFor(f);
-        const countLabel = f.id==="all" ? "" : `<span class="filter-count">(${count})</span>`;
+        const count = f.type==="anchor" ? CLIENT_DESIGNS.length : countFor(f);
+        const countLabel = (f.id==="all" || (f.type==="anchor" && !count)) ? "" : `<span class="filter-count">(${count})</span>`;
         return `<button class="filter-chip ${f.id===activeFilter?"active":""}" data-filter="${f.id}" type="button">${f.label}${countLabel}</button>`;
       }).join("");
-      group.querySelectorAll("[data-filter]").forEach((btn)=>btn.addEventListener("click",()=>{ activeFilter=btn.dataset.filter; renderFilters(); renderGrid(); }));
+      group.querySelectorAll("[data-filter]").forEach((btn)=>btn.addEventListener("click",()=>{
+        const f = FILTERS.find((x)=>x.id===btn.dataset.filter);
+        if (f && f.type==="anchor") { document.getElementById(f.id).scrollIntoView({ behavior:"smooth", block:"start" }); return; }
+        activeFilter=btn.dataset.filter; renderFilters(); renderGrid(); }));
     }
     function renderGrid(){
       const grid = document.getElementById("shopGrid");
@@ -139,7 +168,24 @@
       }).join("");
     }
 
-    renderFilters(); renderGrid();
+    // Client designs: a separate section below the collection (5% Designer Royalty).
+    function renderClientDesigns(){
+      const grid = document.getElementById("clientGrid");
+      if (!CLIENT_DESIGNS.length){
+        grid.innerHTML = `<div class="client-empty"><h3>Be the first designer in the Gallery</h3><p>Design your own piece, in silver, gold plated or 14K and 18K solid gold, and add it to the Gallery when you order. Each time another client orders your design, you earn 5% of the sale, up to $150 per order.</p><div class="actions"><a class="primary" href="customize.html">Design your piece</a><a class="secondary" href="earn.html#royalty">How it works</a></div></div>`;
+        return;
+      }
+      grid.innerHTML = CLIENT_DESIGNS.map((d)=>{
+        const p = PRODUCTS.find((x)=>x.id===d.piece); if (!p) return "";
+        const img = (d.initial && adornmeInitialPhoto(p, d.initial)) || p.image;
+        const live = window.AdornmeShopify && window.AdornmeShopify.livePrice ? window.AdornmeShopify.livePrice(p.id, adornmeShopifyOptions(p, d.metal, d.drop || null, p.defaultSize || null)) : null;
+        const price = live != null ? live : adornmeGetMetalPrice(p, d.metal, d.drop || null, p.defaultSize || null);
+        const gc = METALS[d.metal] && METALS[d.metal].gold && d.goldColor && d.goldColor!=="yellow" ? " gc-"+d.goldColor : "";
+        return `<a class="shop-card" href="${adornmeClientDesignUrl(d)}"><div class="shop-card-image"><span class="shop-card-tag">Client design</span><img class="metal-${d.metal}${gc}" src="${img}" alt="${d.name}, designed by ${d.credit}"></div><h3>${d.name}</h3><p class="shop-card-credit">Designed by ${d.credit}</p><p class="shop-card-price">${METALS[d.metal].short}${price!=null ? ` · $${price.toLocaleString()}` : ""}</p></a>`;
+      }).join("");
+    }
+
+    renderFilters(); renderGrid(); renderClientDesigns();
     (async function loadLive(){
       try {
         if (window.AdornmeShopify && window.AdornmeShopify.getProductPricing) {
@@ -147,7 +193,7 @@
             try { const d=await window.AdornmeShopify.getProductPricing(p.id); if(d&&d.from!=null) livePrices[p.id]=d.from;
               if (d && adornmeHasGold(p) && window.AdornmeShopify.liveMetalFrom) liveGold[p.id] = { gold14: window.AdornmeShopify.liveMetalFrom(p.id, METALS.gold14.shopify), gold18: window.AdornmeShopify.liveMetalFrom(p.id, METALS.gold18.shopify) }; } catch(e){}
           }));
-          renderGrid();
+          renderGrid(); renderClientDesigns();
         }
       } catch(e){ console.warn("[Adornme] Gallery live pricing fallback:", e); }
     })();
@@ -155,7 +201,8 @@
       const h = window.location.hash.slice(1);
       const f = FILTERS.find((x)=>x.id===h && x.type!=="divider");
       const t = PRODUCTS.find((p)=>p.id===h);
-      if (f){ activeFilter=f.id; renderFilters(); renderGrid(); }
+      if (f && f.type==="anchor"){ setTimeout(()=>document.getElementById(f.id).scrollIntoView({ block:"start" }), 50); }
+      else if (f){ activeFilter=f.id; renderFilters(); renderGrid(); }
       else if (t){ activeFilter=t.category; renderFilters(); renderGrid(); }
     }
   </script>
