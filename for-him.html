@@ -19,6 +19,11 @@
     .opt .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
     .opt .dot.silver { background: #C9CDCF; border: 1px solid #999; }
     .opt .dot.plated { background: #E2BA62; border: 1px solid #B08A2E; }
+    .opt .dot.gold14 { background: #E9C66B; border: 1px solid #B98C24; }
+    .opt .dot.gold18 { background: #E8B84B; border: 1px solid #A87A18; }
+    [hidden] { display: none !important; }
+    .chain-line { margin-top: 6px; color: var(--ink-soft); font: italic 400 14px/1.5 var(--serif); }
+    .chain-line a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
     .engraving-input { padding: 14px 16px; width: 100%; max-width: 420px; border: 1px solid var(--rule); background: var(--ivory); color: var(--ink); font: 400 15px/1.5 var(--serif); border-radius: 4px; box-sizing: border-box; }
     .engraving-input:focus { outline: none; border-color: var(--antique-gold); }
     .helper { color: var(--ink-soft); font: italic 400 13px/1.55 var(--serif); }
@@ -56,6 +61,7 @@
         <div class="eyebrow">For Him</div>
         <h3>Christ Risen Pendant for Men</h3>
         <p class="lede">Christ rising in triumph, arms open, a small golden heart-stone at his center. A larger, bolder figure — designed for him.</p>
+        <p class="chain-line">Chain sold separately. <a href="trinity-collection.html#chains">Choose your chain →</a></p>
         <p class="price-display" id="pendantPrice">$225</p>
 
         <div class="control-group">
@@ -63,9 +69,9 @@
           <div class="control-options" id="pendantMetal"></div>
         </div>
 
-        <div class="control-group">
-          <div class="label">Chain length</div>
-          <div class="control-options" id="pendantSize"></div>
+        <div class="control-group" id="pendantGoldColorGroup" hidden>
+          <div class="label">Gold Color</div>
+          <div class="control-options" id="pendantGoldColor"></div>
         </div>
 
         <div class="control-group">
@@ -77,7 +83,6 @@
         <div class="product-actions">
           <button class="cta-primary" id="pendantAddBtn" type="button">Add to bag — $225</button>
           <a class="cta-secondary" id="pendantDesignLink" href="product.html?id=mens-christ-pendant">View full details</a>
-          <a class="cta-secondary" href="customize.html?piece=mens-christ-pendant&amp;metal=gold14">14K or 18K gold? Request a quote →</a>
         </div>
 
         <div class="trust-strip">
@@ -102,7 +107,12 @@
           <div class="control-options" id="ringMetal"></div>
         </div>
 
-        <div class="control-group">
+        <div class="control-group" id="ringGoldColorGroup" hidden>
+          <div class="label">Gold Color</div>
+          <div class="control-options" id="ringGoldColor"></div>
+        </div>
+
+        <div class="control-group" id="ringSizeGroup">
           <div class="label">Size</div>
           <div class="control-options" id="ringSize"></div>
         </div>
@@ -116,7 +126,6 @@
         <div class="product-actions">
           <button class="cta-primary" id="ringAddBtn" type="button">Add to bag — $295</button>
           <a class="cta-secondary" id="ringDesignLink" href="product.html?id=mens-christ-ring">View full details</a>
-          <a class="cta-secondary" href="customize.html?piece=mens-christ-ring&amp;metal=gold14">14K or 18K gold? Request a quote →</a>
         </div>
 
         <div class="trust-strip">
@@ -147,8 +156,9 @@
   <script src="assets/products-data.js"></script>
   <script src="assets/shopify-checkout.js"></script>
   <script>
-    // ===== FOR HIM CONFIGURATOR — v40.0 =====
-    // Silver + Gold Plated. Gold is a quote on the Customize page.
+    // ===== FOR HIM CONFIGURATOR — v43.5 =====
+    // Silver, Gold Plated, 14K and 18K gold (yellow, white, rose), all with Add to bag.
+    // The pendant is sold without a chain, in every metal (chain sold separately).
     // Wrapped in a function so nothing here collides with products-data.js globals.
     (function () {
       const PIECES = { pendant: "mens-christ-pendant", ring: "mens-christ-ring" };
@@ -157,8 +167,10 @@
       let shopifyLoaded = false;
       for (const piece of Object.keys(PIECES)) {
         const p = product(piece);
-        state[piece] = { metal: "silver", size: p && p.sizes ? (p.defaultSize || p.sizes[0]) : null, engraving: "" };
+        state[piece] = { metal: "silver", size: p && p.sizes ? (p.defaultSize || p.sizes[0]) : null, engraving: "", goldColor: "yellow" };
       }
+      const isGold = (piece) => !!(METALS[state[piece].metal] && METALS[state[piece].metal].gold);
+      const showSize = (piece) => !!product(piece).sizes;   // the pendant has no chain length (chain sold separately)
 
       function priceFor(piece) {
         const p = product(piece), s = state[piece];
@@ -171,13 +183,21 @@
       function renderMetal(piece) {
         const s = state[piece];
         const el = document.getElementById(`${piece}Metal`);
-        el.innerHTML = SHOP_METALS.map((m) => `<button class="opt ${s.metal===m?"active":""}" data-value="${m}" type="button"><span class="dot ${m}"></span>${METALS[m].short}</button>`).join("");
+        el.innerHTML = adornmeMetalsFor(product(piece)).map((m) => `<button class="opt ${s.metal===m?"active":""}" data-value="${m}" type="button"><span class="dot ${m}"></span>${METALS[m].short}</button>`).join("");
         el.querySelectorAll(".opt").forEach((b) => b.addEventListener("click", () => { s.metal = b.dataset.value; renderAll(piece); }));
+        // Gold Color (14K / 18K only)
+        const gold = isGold(piece);
+        document.getElementById(`${piece}GoldColorGroup`).hidden = !gold;
+        const gc = document.getElementById(`${piece}GoldColor`);
+        gc.innerHTML = gold ? GOLD_COLORS.map((c) => `<button class="opt ${s.goldColor===c.id?"active":""}" data-value="${c.id}" type="button"><span class="dot" style="background:${c.dot[0]};border:1px solid ${c.dot[1]}"></span>${c.label}</button>`).join("") : "";
+        gc.querySelectorAll(".opt").forEach((b) => b.addEventListener("click", () => { s.goldColor = b.dataset.value; renderMetal(piece); }));
       }
       function renderSize(piece) {
         const p = product(piece), s = state[piece];
         const el = document.getElementById(`${piece}Size`);
-        if (!p.sizes) { el.innerHTML = ""; return; }
+        if (!el) return;
+        const grp = document.getElementById(`${piece}SizeGroup`); if (grp) grp.hidden = !showSize(piece);
+        if (!showSize(piece)) { el.innerHTML = ""; return; }
         el.innerHTML = p.sizes.map((sz) => `<button class="opt ${s.size===sz?"active":""}" data-value="${sz}" type="button">${sz}</button>`).join("");
         el.querySelectorAll(".opt").forEach((b) => b.addEventListener("click", () => { s.size = b.dataset.value; renderSize(piece); }));
       }
@@ -200,7 +220,8 @@
           const config = {
             productId: p.id,
             options: adornmeShopifyOptions(p, s.metal, null, s.size),
-            size: s.size || "",
+            size: showSize(piece) ? (s.size || "") : "",
+            goldColor: isGold(piece) ? GOLD_COLORS.find((c) => c.id === s.goldColor).label : "",
             initial: "",
             engraving: s.engraving || "",
             giftNote: "",

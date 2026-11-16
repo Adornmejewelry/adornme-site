@@ -152,8 +152,11 @@
       } catch(e){ console.warn("[Adornme] Gallery live pricing fallback:", e); }
     })();
     if (window.location.hash) {
-      const t = PRODUCTS.find((p)=>p.id===window.location.hash.slice(1));
-      if (t){ activeFilter=t.category; renderFilters(); renderGrid(); }
+      const h = window.location.hash.slice(1);
+      const f = FILTERS.find((x)=>x.id===h && x.type!=="divider");
+      const t = PRODUCTS.find((p)=>p.id===h);
+      if (f){ activeFilter=f.id; renderFilters(); renderGrid(); }
+      else if (t){ activeFilter=t.category; renderFilters(); renderGrid(); }
     }
   </script>
   <script src="assets/mobile-menu.js"></script>

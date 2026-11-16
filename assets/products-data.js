@@ -1,5 +1,5 @@
 // ============================================================
-// ADORNME — Central product data (v43.4, Nov 16 2026: 14K / 18K on the Engravable, Classic and Stone Chain Earrings; v43.3 Nov 16: engraved-initial photos A–Z + blank for 5 engravable pieces; v43.2 Nov 16: Stone Ring $175/$205, Engravable Chain Earrings $265/$295, Classic Chain Earrings $305/$335 (2x on estimated weights); v43.1 Nov 16: silver / gold plated below 2x cost raised to 2x (nothing lowered); v43.0 Nov 16: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
+// ADORNME — Central product data (v43.6, Nov 16 2026: every pendant sold without a chain (chain-length choice removed; crosses moved to Pendants); v43.5: 14K / 18K on every piece (Stone Ring, Stone Stud / Hook Earrings, both men's pieces added); v43.4 Nov 16: 14K / 18K on the Engravable, Classic and Stone Chain Earrings; v43.3 Nov 16: engraved-initial photos A–Z + blank for 5 engravable pieces; v43.2 Nov 16: Stone Ring $175/$205, Engravable Chain Earrings $265/$295, Classic Chain Earrings $305/$335 (2x on estimated weights); v43.1 Nov 16: silver / gold plated below 2x cost raised to 2x (nothing lowered); v43.0 Nov 16: 14K / 18K solid gold priced + Add to bag on 12 pieces and the chain, lab diamond drop in gold; v42.3 Nov 16: Pearl Bracelet $395/$415, Pearl Necklace $595/$615; v42.2 Nov 11: one price per metal, synthetic = pearl; Engravable Necklace $215/$235, Engravable Pendant $195/$215; v42.1 Nov 9: Open Heart raised; v42.0 Nov 8: new price list, new Pearl Necklace)
 // Sterling Silver + 18K Gold Plated on every piece. 14K / 18K solid gold (yellow, white or rose) with a price and
 // Add to bag on the pieces that have `prices.gold14` / `prices.gold18`; in gold the drop can also be a lab diamond.
 // Pieces without gold prices, a lab diamond in sterling silver, and the pink lab diamond heart stay "Request a quote" (Customize).
@@ -43,6 +43,12 @@ const NECKLACE_LENGTHS = ["16″", "18″", "24″"];
 const RING_SIZES = ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9"];
 const GOLD_NOTE = "14K and 18K solid gold available by request.";
 const GOLD_PENDANT_NOTE = "In 14K and 18K gold this piece is the pendant only. Add a gold Adornme Chain in your length.";
+// Every pendant is sold without a chain (in every metal). Only the Engravable Necklace comes on its chain.
+const CHAIN_LINK = "trinity-collection.html#chains";
+function adornmeChainLine(product) {
+  if (!product || product.category !== "pendants") return "";
+  return `Chain sold separately. <a href="${CHAIN_LINK}">Choose your chain →</a>`;
+}
 
 // prices[metal][drop]  — drop key is "synthetic" / "pearl"; pieces without a drop use "none";
 // the Adornme Chain uses its length ("16″", "18″", "24″") instead of a drop.
@@ -111,12 +117,13 @@ const PRODUCTS = [
     id: "stone-ring", title: "The Bleeding Heart Stone Ring",
     collection: "bleeding-heart", category: "rings",
     drops: ["synthetic"], stoneHeart: true,
-    prices: { silver: { synthetic: 175 }, plated: { synthetic: 205 } },
+    prices: { silver: { synthetic: 175 }, plated: { synthetic: 205 }, gold14: { synthetic: 1075, diamond: 1275 }, gold18: { synthetic: 1450, diamond: 1650 } },
+    goldDrops: ["synthetic", "diamond"],
     image: "assets/products/stone-ring.jpeg", imageInitial: "assets/products/stone-ring.jpeg",
     sizes: RING_SIZES, defaultSize: "6",
     canHaveInitial: false, canEngrave: false,
     lede: "A carved 10mm pink heart stone on a slim band.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Carved 10mm synthetic pink heart stone and synthetic stone drop.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Carved 10mm synthetic pink heart stone and synthetic stone drop.",
   },
   {
     id: "engravable-stud", title: "The Bleeding Heart Engravable Stud Earrings",
@@ -146,21 +153,23 @@ const PRODUCTS = [
     id: "stone-stud", title: "The Bleeding Heart Stone Stud Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic"], stoneHeart: true,
-    prices: { silver: { synthetic: 205 }, plated: { synthetic: 225 } },
+    prices: { silver: { synthetic: 205 }, plated: { synthetic: 225 }, gold14: { synthetic: 590, diamond: 990 }, gold18: { synthetic: 745, diamond: 1145 } },
+    goldDrops: ["synthetic", "diamond"],
     image: "assets/products/stone-stud.jpeg", imageInitial: "assets/products/stone-stud.jpeg",
     sizes: null, canHaveInitial: false, canEngrave: false,
     lede: "Carved 8mm pink heart stone studs — kept light for the ears.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Two carved 8mm synthetic pink heart stones and synthetic stone drops. Posts and backings.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Two carved 8mm synthetic pink heart stones and synthetic stone drops. Posts and backings.",
   },
   {
     id: "stone-hook", title: "The Bleeding Heart Stone Hook Earrings",
     collection: "bleeding-heart", category: "earrings",
     drops: ["synthetic"], stoneHeart: true,
-    prices: { silver: { synthetic: 215 }, plated: { synthetic: 235 } },
+    prices: { silver: { synthetic: 215 }, plated: { synthetic: 235 }, gold14: { synthetic: 750, diamond: 1150 }, gold18: { synthetic: 970, diamond: 1370 } },
+    goldDrops: ["synthetic", "diamond"],
     image: "assets/products/stone-hook.jpeg", imageInitial: "assets/products/stone-hook.jpeg",
     sizes: null, canHaveInitial: false, canEngrave: false,
     lede: "Carved 10mm pink heart stones on easy hook earrings.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Two carved 10mm synthetic pink heart stones and synthetic stone drops. Ear hooks.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Two carved 10mm synthetic pink heart stones and synthetic stone drops. Ear hooks.",
   },
   {
     id: "stone-chain-ear", title: "The Bleeding Heart Stone Chain Earrings",
@@ -186,39 +195,36 @@ const PRODUCTS = [
   },
   {
     id: "flower-cross", title: "Flower Cross",
-    collection: "devotion", category: "necklaces",
+    collection: "devotion", category: "pendants",
     drops: ["pearl"],
     prices: { silver: { pearl: 150 }, plated: { pearl: 170 }, gold14: { pearl: 665 }, gold18: { pearl: 960 } },
-    goldDrops: ["pearl"], goldPendantOnly: true,
+    goldDrops: ["pearl"],
     image: "assets/products/flower-cross.jpeg", imageInitial: "assets/products/flower-cross.jpeg",
-    sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: false, canEngrave: true,
     lede: "A cross softened by a flowering bloom and a pearl drop.",
-    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Enamel bloom. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″ with silver and gold plated; in solid gold, the pendant only.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Enamel bloom. Freshwater pearl drop. Pendant bail; chain sold separately.",
   },
   {
     id: "heart-cross", title: "Heart Cross",
-    collection: "devotion", category: "necklaces",
+    collection: "devotion", category: "pendants",
     drops: ["pearl"],
     prices: { silver: { pearl: 155 }, plated: { pearl: 175 }, gold14: { pearl: 780 }, gold18: { pearl: 1065 } },
-    goldDrops: ["pearl"], goldPendantOnly: true,
+    goldDrops: ["pearl"],
     image: "assets/products/heart-cross.jpeg", imageInitial: "assets/products/heart-cross.jpeg",
-    sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: false, canEngrave: true,
     lede: "A cross holding a heart at its center, with a pearl drop below.",
-    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Red synthetic ruby accent. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″ with silver and gold plated; in solid gold, the pendant only.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Red synthetic ruby accent. Freshwater pearl drop. Pendant bail; chain sold separately.",
   },
   {
     id: "christ-risen", title: "Christ Risen",
-    collection: "devotion", category: "necklaces",
+    collection: "devotion", category: "pendants",
     drops: ["pearl"],
     prices: { silver: { pearl: 155 }, plated: { pearl: 175 }, gold14: { pearl: 750 }, gold18: { pearl: 1065 } },
-    goldDrops: ["pearl"], goldPendantOnly: true,
+    goldDrops: ["pearl"],
     image: "assets/products/christ-risen.jpeg", imageInitial: "assets/products/christ-risen.jpeg",
-    sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: false, canEngrave: true,
     lede: "Christ rising in triumph, arms raised, heart held below.",
-    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Red synthetic ruby accent. Freshwater pearl drop. Fine chain in 16″, 18″, or 24″ with silver and gold plated; in solid gold, the pendant only.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Red synthetic ruby accent. Freshwater pearl drop. Pendant bail; chain sold separately.",
   },
   {
     id: "adornme-chain", title: "The Adornme Chain",
@@ -260,34 +266,32 @@ const PRODUCTS = [
     collection: "bleeding-heart", category: "pendants",
     drops: ["synthetic", "pearl"],
     prices: { silver: { synthetic: 230, pearl: 230 }, plated: { synthetic: 250, pearl: 250 }, gold14: { synthetic: 1340, pearl: 1340, diamond: 1540 }, gold18: { synthetic: 1805, pearl: 1805, diamond: 2005 } },
-    goldDrops: ["synthetic", "pearl", "diamond"], goldPendantOnly: true,
+    goldDrops: ["synthetic", "pearl", "diamond"],
     image: "assets/products/open-heart.jpeg", imageInitial: "assets/products/open-heart.jpeg",
-    sizes: NECKLACE_LENGTHS, defaultSize: "18″",
     canHaveInitial: true, initialRequired: true, canEngrave: false,
     lede: "An open 21mm heart with your initial suspended within — framed by leaves set with pink and yellow stones.",
-    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Open heart with a dangling initial. Leaves set with small pink and yellow synthetic stones. A synthetic stone or freshwater pearl drop. Fine chain in 16″, 18″, or 24″ with silver and gold plated; in solid gold, the pendant only.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Open heart with a dangling initial. Leaves set with small pink and yellow synthetic stones. A synthetic stone or freshwater pearl drop. Pendant bail; chain sold separately.",
   },
   {
     id: "mens-christ-pendant", title: "Christ Risen Pendant for Men",
     collection: "for-him", category: "pendants",
     drops: [],
-    prices: { silver: { none: 225 }, plated: { none: 245 } },
+    prices: { silver: { none: 225 }, plated: { none: 245 }, gold14: { none: 1500 }, gold18: { none: 2035 } },
     image: "assets/products/christ-risen-mens-pendant.jpeg", imageInitial: "assets/products/christ-risen-mens-pendant.jpeg",
-    sizes: ["18″", "24″"], defaultSize: "24″",
     canHaveInitial: false, canEngrave: true,
     lede: "Christ rising in triumph, arms open, a small golden heart-stone at his center — designed for him.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Small yellow synthetic center stone. A larger, bolder figure. Chain in 18″ or 24″.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Small yellow synthetic center stone. A larger, bolder figure. Pendant bail; chain sold separately.",
   },
   {
     id: "mens-christ-ring", title: "Christ Risen Ring for Men",
     collection: "for-him", category: "rings",
     drops: [],
-    prices: { silver: { none: 295 }, plated: { none: 315 } },
+    prices: { silver: { none: 295 }, plated: { none: 315 }, gold14: { none: 2450 }, gold18: { none: 3350 } },
     image: "assets/products/christ-risen-mens-ring.jpeg", imageInitial: "assets/products/christ-risen-mens-ring.jpeg",
     sizes: ["8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "13"], defaultSize: "10",
     canHaveInitial: false, canEngrave: true,
     lede: "A bold, substantial ring carrying the risen Christ — a statement of faith you can feel.",
-    materials: "Sterling silver or 18K gold plated sterling silver. Small yellow synthetic center stone. A heavy, substantial band.",
+    materials: "Sterling silver, 18K gold plated sterling silver, or 14K / 18K solid gold. Small yellow synthetic center stone. A heavy, substantial band.",
   },
 ];
 
@@ -362,9 +366,9 @@ function adornmeQuoteMailto(lines, pieceTitle) {
 if (typeof window !== "undefined") {
   Object.assign(window, {
     METALS, SHOP_METALS, GOLD_METALS, CUSTOMIZE_METALS, METAL_LABELS, DROPS, GOLD_QUOTE_DROPS, HEART_STONES, GOLD_COLORS,
-    QUOTE_EMAIL, GOLD_NOTE, GOLD_PENDANT_NOTE, PRODUCTS, HIDDEN_PRODUCTS,
+    QUOTE_EMAIL, GOLD_NOTE, GOLD_PENDANT_NOTE, CHAIN_LINK, PRODUCTS, HIDDEN_PRODUCTS,
     adornmePriceKey, adornmeGetMetalPrice, adornmeGetFromPrice, adornmeShopifyOptions, adornmeQuoteMailto,
-    adornmeHasGold, adornmeMetalsFor, adornmeDropsFor, adornmeMetalFrom, adornmeInitialPhoto,
+    adornmeHasGold, adornmeMetalsFor, adornmeDropsFor, adornmeMetalFrom, adornmeInitialPhoto, adornmeChainLine,
   });
   window.ADORNME_METAL_LABELS = METAL_LABELS;
 }

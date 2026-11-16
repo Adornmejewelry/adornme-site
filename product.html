@@ -43,6 +43,8 @@
     .opt .dot.plated { background:#E2BA62; border:1px solid #B08A2E; }
     .opt .dot.gold14 { background:#E9C66B; border:1px solid #B98C24; }
     .opt .dot.gold18 { background:#E8B84B; border:1px solid #A87A18; }
+    .chain-line { margin-top:10px; color:var(--ink-soft); font:italic 400 14px/1.5 var(--serif); }
+    .chain-line a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
     .gold-note { color:var(--ink); font:italic 400 14px/1.55 var(--serif); padding:12px 14px; background:var(--cream); border-left:2px solid var(--antique-gold); }
     .opt.static { cursor:default; pointer-events:none; }
     .engraving-input { padding:14px 16px; width:100%; border:1px solid var(--rule); background:var(--ivory); color:var(--ink); font:400 15px/1.5 var(--serif); border-radius:4px; }
@@ -177,7 +179,7 @@
         return `<p class="helper">${goldPart} <a class="lab-diamond-link" href="${href}" style="text-decoration:underline;">Request a quote →</a></p>`;
       }
       // Gold on a pendant-only piece hides the chain length (the gold piece comes without a chain).
-      const showSizes = () => !(isGoldMetal(state.metal) && product.goldPendantOnly);
+      const showSizes = () => true;   // pendants have no sizes (chain sold separately)
       function currentImage() {
         const photo = (product.canHaveInitial && state.initialPicked) ? adornmeInitialPhoto(product, state.initial) : null;   // the chosen letter, engraved
         if (photo) return photo;
@@ -213,10 +215,11 @@
                 <div class="eyebrow">${COLLECTION_NAMES[product.collection] || ""}</div>
                 <h1>${product.title}</h1>
                 <p class="product-lede">${product.lede}</p>
+                ${adornmeChainLine(product) ? `<p class="chain-line">${adornmeChainLine(product)}</p>` : ""}
                 <p class="product-price" id="productPrice">${priceHtml}</p>
                 <div class="product-controls">
                   <div class="control-group"><div class="label">Metal</div><div class="control-options">${metalButtons()}</div></div>
-                  ${isGoldMetal(state.metal) ? `<div class="control-group"><div class="label">Gold Color</div><div class="control-options">${goldColorButtons()}</div>${product.goldPendantOnly ? `<p class="gold-note">${GOLD_PENDANT_NOTE} <a href="product.html?id=adornme-chain&metal=${state.metal}" style="text-decoration:underline;">Shop the chain →</a></p>` : ""}</div>` : ""}
+                  ${isGoldMetal(state.metal) ? `<div class="control-group"><div class="label">Gold Color</div><div class="control-options">${goldColorButtons()}</div></div>` : ""}
                   ${dropsFor(state.metal).length ? `<div class="control-group"><div class="label">Drop</div><div class="control-options">${dropButtons()}</div>${labDiamondLine()}</div>` : ""}
                   ${sizes ? `<div class="control-group"><div class="label">${sizeLabel}</div><div class="control-options">${sizeOptions}</div></div>` : ""}
                   ${initialHtml}
